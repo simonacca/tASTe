@@ -98,7 +98,7 @@ const parseAndExtractLastNode = (parser: Parser, doc: vscode.TextDocument, sel: 
     const ASTtree = parser.parse(doc.getText())
     const ASTpath = ASTpathOfCursor(doc.languageId, ASTtree.rootNode, sel)
     return ASTpath[ASTpath.length - 1]
-    
+
 }
 
 export async function SelectNodeForward(
@@ -109,6 +109,11 @@ export async function SelectNodeForward(
     const doc = window.activeTextEditor.document
 
     setParserLanguageFromDoc(doc, languageID2Language, parser)
+
+    if (window.activeTextEditor.selection.isEmpty) {
+        ExpandSelection(languageID2Language, parser)
+        return
+    }
 
     const node = parseAndExtractLastNode(parser, doc,
         makeSelectionOfSize(movePositionChar(window.activeTextEditor.selection.end, -1), 1)
@@ -147,7 +152,7 @@ export async function SelectNodeBackward(
 ) {
     if (!parser || !window.activeTextEditor) { return }
     const doc = window.activeTextEditor.document
-    
+
     setParserLanguageFromDoc(doc, languageID2Language, parser)
 
     const node = parseAndExtractLastNode(parser, doc,
