@@ -3,6 +3,7 @@ const languageIDTranslation: { [id: string]: string | null } = {
     'javascriptreact': 'javascript',
     'shellscript': 'bash',
     'terraform': 'hcl',
+    'jsonc': 'json'
 }
 
 export const languageID2Filename = (basePath: string, languageID: string): string => {
