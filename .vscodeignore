@@ -1,0 +1,8 @@
+**
+!out
+!package.json
+!LICENSE.md
+!README.md
+!node_modules/web-tree-sitter
+!node_modules/isexe
+!media
