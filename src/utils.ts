@@ -16,3 +16,17 @@ export const syntaxNode2Selection = (innermostNode: SyntaxNode) => {
         new vscode.Position(innermostNode.startPosition.row, innermostNode.startPosition.column),
         new vscode.Position(innermostNode.endPosition.row, innermostNode.endPosition.column))
 }
+
+export const movePositionChar = (pos: vscode.Position, amount: number) => {
+    return new vscode.Position(
+        pos.line,
+        pos.character + amount
+    )
+}
+
+export const makeSelectionOfSize = (pos: vscode.Position, size: number) => {
+    return new vscode.Selection(
+        pos,
+        movePositionChar(pos, size)
+    )
+}

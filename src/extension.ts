@@ -46,6 +46,10 @@ export const activate = async (context: vscode.ExtensionContext) => {
 	context.subscriptions.push(vscode.commands.registerCommand('taste.expandSelection', () => Cmd.ExpandSelection(languageID2Language, parser)))
 	context.subscriptions.push(vscode.commands.registerCommand('taste.contractSelection', Cmd.ContractSelection))
 	context.subscriptions.push(vscode.commands.registerCommand('taste.selectTopLevel', () => Cmd.SelectTopLevel(languageID2Language, parser)))
+	context.subscriptions.push(vscode.commands.registerCommand('taste.selectNodeForward', () => Cmd.SelectNodeForward(languageID2Language, parser)))
+	context.subscriptions.push(vscode.commands.registerCommand('taste.unselectNodeForward', () => Cmd.UnSelectNodeForward(languageID2Language, parser)))
+	context.subscriptions.push(vscode.commands.registerCommand('taste.selectNodeBackward', () => Cmd.SelectNodeBackward(languageID2Language, parser)))
+
 }
 
 export function deactivate() { }

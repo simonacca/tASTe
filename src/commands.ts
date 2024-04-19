@@ -1,7 +1,7 @@
 import { window } from "vscode"
 import * as vscode from 'vscode'
 import Parser from "web-tree-sitter"
-import { logSyntaxNode, syntaxNode2Selection } from "./utils"
+import { logSyntaxNode, makeSelectionOfSize, movePositionChar, syntaxNode2Selection } from "./utils"
 import { ASTpathOfCursor } from "./ast"
 
 export type Grammar = any
@@ -92,4 +92,70 @@ export async function SelectTopLevel(
 
     if (ASTpath.length < 2) { return }
     window.activeTextEditor.selection = syntaxNode2Selection(ASTpath[1])
+}
+
+const parseAndExtractLastNode = (parser: Parser, doc: vscode.TextDocument, sel: vscode.Selection) => {
+    const ASTtree = parser.parse(doc.getText())
+    const ASTpath = ASTpathOfCursor(doc.languageId, ASTtree.rootNode, sel)
+    return ASTpath[ASTpath.length - 1]
+    
+}
+
+export async function SelectNodeForward(
+    languageID2Language: { [languageID: string]: Grammar },
+    parser?: Parser
+) {
+    if (!parser || !window.activeTextEditor) { return }
+    const doc = window.activeTextEditor.document
+
+    setParserLanguageFromDoc(doc, languageID2Language, parser)
+
+    const node = parseAndExtractLastNode(parser, doc,
+        makeSelectionOfSize(movePositionChar(window.activeTextEditor.selection.end, -1), 1)
+    )
+
+    if (!node || !node.nextNamedSibling) { return }
+
+    window.activeTextEditor.selection = new vscode.Selection(
+        window.activeTextEditor.selection.start,
+        syntaxNode2Selection(node.nextNamedSibling).end)
+}
+
+export async function UnSelectNodeForward(
+    languageID2Language: { [languageID: string]: Grammar },
+    parser?: Parser
+) {
+    if (!parser || !window.activeTextEditor) { return }
+    const doc = window.activeTextEditor.document
+
+    setParserLanguageFromDoc(doc, languageID2Language, parser)
+
+    const node = parseAndExtractLastNode(parser, doc,
+        makeSelectionOfSize(movePositionChar(window.activeTextEditor.selection.end, -1), 1)
+    )
+
+    if (!node || !node.previousNamedSibling) { return }
+
+    window.activeTextEditor.selection = new vscode.Selection(
+        window.activeTextEditor.selection.start,
+        syntaxNode2Selection(node.previousNamedSibling).end)
+}
+
+export async function SelectNodeBackward(
+    languageID2Language: { [languageID: string]: Grammar },
+    parser?: Parser
+) {
+    if (!parser || !window.activeTextEditor) { return }
+    const doc = window.activeTextEditor.document
+    
+    setParserLanguageFromDoc(doc, languageID2Language, parser)
+
+    const node = parseAndExtractLastNode(parser, doc,
+        makeSelectionOfSize(window.activeTextEditor.selection.start, 1)
+    )
+    if (!node || !node.previousNamedSibling) { return }
+
+    window.activeTextEditor.selection = new vscode.Selection(
+        syntaxNode2Selection(node.previousNamedSibling).start,
+        window.activeTextEditor.selection.end)
 }

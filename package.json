@@ -28,6 +28,18 @@
       {
         "command": "taste.selectTopLevel",
         "title": "Taste: Select Top Level"
+      },
+      {
+        "command": "taste.selectNodeForward",
+        "title": "Taste: Select Node Forward"
+      },
+      {
+        "command": "taste.unselectNodeForward",
+        "title": "Taste: Unselect Node Forward"
+      },
+      {
+        "command": "taste.selectNodeBackward",
+        "title": "Taste: Select Node Backward"
       }
     ]
   },
