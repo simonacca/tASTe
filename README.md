@@ -12,6 +12,13 @@ Taste is a collection of commands to edit text based on its structure (the AST).
 
 ![expand and contract selection](media/expand_contract_selection.gif)
 
+### Select and Unselect Node Forward
+
+- `taste.selectNodeForward`
+- `taste.unselectNodeForward`
+
+![expand and contract selection](media/select_node_forward.gif)
+
 ### Select Top Level
 
 - `taste.selectTopLevel`
