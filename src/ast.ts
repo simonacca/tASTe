@@ -2,7 +2,6 @@ import * as vscode from "vscode"
 import { SyntaxNode } from "web-tree-sitter"
 
 export const ASTpathOfCursor = (
-  languageID: string,
   node: SyntaxNode,
   cursor: vscode.Selection,
 ): SyntaxNode[] => {
@@ -25,7 +24,7 @@ export const ASTpathOfCursor = (
   }
 
   for (const child of node.children) {
-    const res = ASTpathOfCursor(languageID, child, cursor)
+    const res = ASTpathOfCursor(child, cursor)
     if (res.length > 0) {
       return [node, ...res]
     }

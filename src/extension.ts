@@ -30,15 +30,50 @@ const loadLanguage = async (basePath: string, languageID: string) => {
   }
 }
 
+const setParserLanguageFromDoc = (
+  doc: vscode.TextDocument,
+  languageID2Language: { [languageID: string]: Cmd.Grammar },
+  parser?: Parser,
+) => {
+  if (!parser || !vscode.window.activeTextEditor) {
+    return
+  }
+  const grammar = languageID2Language[doc.languageId]
+
+  if (!grammar) {
+    vscode.window.showErrorMessage(
+      `The language "${doc.languageId}" is not yet supported by TASTE. \nPlease consider contributing! https://github.com/simonacca/taste`,
+    )
+    return
+  }
+  parser.setLanguage(grammar)
+}
+
 const initCommands = (
   context: vscode.ExtensionContext,
   commands: { [key: string]: Cmd.Command },
 ) => {
   for (const cmd of Object.entries(commands)) {
     context.subscriptions.push(
-      vscode.commands.registerCommand(cmd[0], () =>
-        cmd[1](languageID2Language, parser),
-      ),
+      vscode.commands.registerCommand(cmd[0], () => {
+        if (!parser || !vscode.window.activeTextEditor) {
+          return
+        }
+        const doc = vscode.window.activeTextEditor.document
+        const selection = vscode.window.activeTextEditor.selection
+
+        setParserLanguageFromDoc(doc, languageID2Language, parser)
+
+        const ASTtree = parser.parse(doc.getText())
+
+        const newSel = cmd[1](doc, selection, ASTtree)
+
+        if (!newSel) {
+          return
+        }
+
+        vscode.window.activeTextEditor.selection = newSel
+      }),
     )
   }
 }
