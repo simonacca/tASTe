@@ -4,7 +4,7 @@ set -euo pipefail
 
 DEST_DIR="out/parsers"
 
-rm -rf "$DEST_DIR"
+# rm -rf "$DEST_DIR"
 mkdir -p "$DEST_DIR"
 
 function build_parser(){
@@ -17,6 +17,10 @@ function build_parser(){
     fi
 }
 
+# the dockerfile parser is built with docker and requires linux/amd64
+export DOCKER_DEFAULT_PLATFORM=linux/amd64
+
+
 build_parser tree-sitter-bash bash
 build_parser tree-sitter-c c
 build_parser tree-sitter-c-sharp c-sharp
@@ -27,7 +31,7 @@ build_parser tree-sitter-cobol cobol
 build_parser tree-sitter-css css
 build_parser tree-sitter-cuda cuda
 build_parser tree-sitter-dart dart
-# build_parser tree-sitter-dockerfile dockerfile # doesn't work as of 2024-04
+build_parser tree-sitter-dockerfile dockerfile
 build_parser tree-sitter-dot dot
 build_parser tree-sitter-elixir elixir
 build_parser tree-sitter-erlang erlang

@@ -85,6 +85,7 @@
     "tree-sitter-css": "^0.20.0",
     "tree-sitter-cuda": "^0.20.4",
     "tree-sitter-dart": "^1.0.0",
+    "tree-sitter-dockerfile": "github:camdencheek/tree-sitter-dockerfile",
     "tree-sitter-dot": "^0.1.5",
     "tree-sitter-elixir": "^0.2.0",
     "tree-sitter-erlang": "github:WhatsApp/tree-sitter-erlang",
