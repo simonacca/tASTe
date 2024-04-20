@@ -63,9 +63,9 @@ build_parser tree-sitter-nix nix
 build_parser tree-sitter-proto proto
 build_parser tree-sitter-python python
 build_parser tree-sitter-qmljs qmljs
-# build_parser tree-sitter-racket racket # doesn't work as of 2024-04
+build_parser tree-sitter-r r
+build_parser tree-sitter-racket racket
 build_parser tree-sitter-rust rust
-# build_parser tree-sitter-r r # doesn't work as of 2024-04
 build_parser tree-sitter-ruby ruby
 build_parser tree-sitter-scala scala
 build_parser tree-sitter-scheme scheme

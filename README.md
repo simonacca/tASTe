@@ -57,6 +57,8 @@ Taste is a collection of commands to edit text based on its structure (the AST).
 - Protobuf
 - Python
 - QML
+- R
+- Racket
 - Rust
 - Ruby
 - Scala

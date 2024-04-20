@@ -106,6 +106,8 @@
     "tree-sitter-proto": "github:mitchellh/tree-sitter-proto",
     "tree-sitter-python": "^0.21.0",
     "tree-sitter-qmljs": "^0.1.2",
+    "tree-sitter-r": "github:r-lib/tree-sitter-r",
+    "tree-sitter-racket": "github:6cdh/tree-sitter-racket",
     "tree-sitter-ruby": "^0.20.1",
     "tree-sitter-rust": "^0.21.0",
     "tree-sitter-scala": "^0.19.0",
