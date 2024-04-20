@@ -60,7 +60,7 @@ build_parser tree-sitter-nix nix
 # build_parser tree-sitter-perl perl # doesn't work as of 2024-04
 # build_parser tree-sitter-pascal pascal # doesn't work as of 2024-04
 # build_parser tree-sitter-php php # doesn't work as of 2024-04
-# build_parser tree-sitter-proto proto # doesn't work as of 2024-04
+build_parser tree-sitter-proto proto
 build_parser tree-sitter-python python
 build_parser tree-sitter-qmljs qmljs
 # build_parser tree-sitter-racket racket # doesn't work as of 2024-04
@@ -68,14 +68,14 @@ build_parser tree-sitter-rust rust
 # build_parser tree-sitter-r r # doesn't work as of 2024-04
 build_parser tree-sitter-ruby ruby
 build_parser tree-sitter-scala scala
-# build_parser tree-sitter-scheme scheme # doesn't work as of 2024-04
+build_parser tree-sitter-scheme scheme
 build_parser tree-sitter-scss scss
 build_parser tree-sitter-sql sql
 build_parser tree-sitter-swift swift
 build_parser tree-sitter-toml toml
 build_parser tree-sitter-typescript/typescript typescript
 # build_parser tree-sitter-xml xml # doesn't work as of 2024-04
-# build_parser tree-sitter-zig zig # doesn't work as of 2024-04
+build_parser tree-sitter-zig zig
 # build_parser tree-sitter-vue vue # doesn't work as of 2024-04
 
 rm -f a.out.js a.out.wasm

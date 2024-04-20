@@ -54,16 +54,19 @@ Taste is a collection of commands to edit text based on its structure (the AST).
 - Markdown
 - Matlab
 - Nix
+- Protobuf
 - Python
 - QML
 - Rust
 - Ruby
 - Scala
 - SCSS
+- Scheme
 - SQL
 - Swift
 - Toml
 - Typescript
+- Zig
 
 ## Dev HOWTOs
 
