@@ -51,9 +51,10 @@
     "build-wasm": "./build-wasm.sh",
     "watch": "tsc -watch -p ./",
     "pretest": "npm run compile && npm run lint",
-    "lint": "eslint src --ext ts",
+    "lint": "npx prettier --check . && npx eslint src --ext ts",
     "test": "vscode-test",
-    "clean": "rm -rf out"
+    "clean": "rm -rf out",
+    "format": "npx prettier --write ."
   },
   "devDependencies": {
     "@types/mocha": "^10.0.6",
@@ -65,6 +66,7 @@
     "@vscode/test-electron": "^2.3.9",
     "@vscode/vsce": "^2.25.0",
     "eslint": "^8.57.0",
+    "prettier": "^3.2.5",
     "tree-sitter": "^0.21.1",
     "tree-sitter-cli": "^0.22.5",
     "typescript": "^5.3.3"
@@ -108,5 +110,8 @@
     "tree-sitter-toml": "^0.5.1",
     "tree-sitter-typescript": "^0.20.5",
     "web-tree-sitter": "^0.22.5"
+  },
+  "prettier": {
+    "semi": false
   }
 }

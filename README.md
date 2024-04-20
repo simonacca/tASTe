@@ -2,7 +2,6 @@
 
 Taste is a collection of commands to edit text based on its structure (the AST).
 
-
 ## Commands
 
 ### Expand and Contract Selection
@@ -24,7 +23,6 @@ Taste is a collection of commands to edit text based on its structure (the AST).
 - `taste.selectTopLevel`
 
 ![select top level](media/select_top_level.gif)
-
 
 ## Supported languages
 
@@ -66,7 +64,6 @@ Taste is a collection of commands to edit text based on its structure (the AST).
 - Toml
 - Typescript
 
-
 ## Dev HOWTOs
 
 ### Bringup development environment
@@ -95,7 +92,6 @@ Taste is a collection of commands to edit text based on its structure (the AST).
 2. Add a line to the `build_wasm.sh` script to generate the grammar
 3. List the language in `languageID2ParserName`
 4. Add an entry to `excludeNodeTypes` corresponding to the language
-
 
 ### A language is installed and built but not recognized
 
