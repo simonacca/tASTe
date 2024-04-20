@@ -1,0 +1,16 @@
+FROM node:lts-bookworm-slim AS build
+
+WORKDIR /build
+
+# these packages are needed by the "npm install" and "npm run build-wasm" steps related to the grammar packages
+RUN apt-get update && apt-get install -y \
+    python3 \
+    make \
+    gcc \
+    g++
+
+COPY package.json package-lock.json /build/
+RUN npm install
+
+COPY . .
+RUN npm run check

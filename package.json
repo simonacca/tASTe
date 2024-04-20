@@ -52,6 +52,8 @@
     "watch": "tsc -watch -p ./",
     "pretest": "npm run compile && npm run lint",
     "lint": "npx prettier --check . && npx eslint src --ext ts",
+    "check": "npm run lint && npm run test",
+    "check-docker": "docker build --platform linux/amd64 -t simonacca/taste.lint -f Dockerfile.check .",
     "test": "vscode-test",
     "clean": "rm -rf out",
     "format": "npx prettier --write ."

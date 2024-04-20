@@ -1,0 +1,11 @@
+**
+!package.json
+!package-lock.json
+!.eslintrc.json
+!.vscode-test.mjs
+!.vscodeignore
+!build-wasm.sh
+!LICENSE.md
+!README.md
+!tsconfig.json
+!src
