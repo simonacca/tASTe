@@ -6,6 +6,10 @@ import { ASTpathOfCursor } from "./ast"
 
 export type Grammar = any
 
+export type Command = (
+    languageID2Language: { [languageID: string]: Grammar },
+    parser?: Parser
+) => void
 
 const setParserLanguageFromDoc = (
     doc: vscode.TextDocument,
