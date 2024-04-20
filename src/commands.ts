@@ -1,14 +1,11 @@
 import * as vscode from "vscode"
 import Parser from "web-tree-sitter"
 import {
-  logSyntaxNode,
   makeSelectionOfSize,
   movePositionChar,
   syntaxNode2Selection,
 } from "./utils"
 import { ASTpathOfCursor } from "./ast"
-
-export type Grammar = any
 
 export type Command = (
   doc: vscode.TextDocument,
@@ -16,60 +13,90 @@ export type Command = (
   tree: Parser.Tree,
 ) => vscode.Selection | undefined
 
-let globalSelectionStackByDoc: Map<vscode.TextDocument, vscode.Selection[]> =
-  new Map()
+class GlobalSelectionStackByDoc {
+  private state = new Map<vscode.TextDocument, vscode.Selection[]>()
+
+  push = (doc: vscode.TextDocument, selection: vscode.Selection) => {
+    const prev = this.state.get(doc) || []
+    if (selection.isEmpty) {
+      this.state.set(doc, [])
+    } else {
+      this.state.set(doc, [...prev, selection])
+    }
+  }
+
+  pop = (doc: vscode.TextDocument) => {
+    const stack = this.state.get(doc)
+    if (!stack || stack.length === 0) {
+      return
+    }
+
+    const last = stack[stack.length - 1]
+    stack.pop()
+    return last
+  }
+}
+
+const globalSelectionStack = new GlobalSelectionStackByDoc()
+
+const moveSelectionToFirstNonWhitespace = (
+  doc: vscode.TextDocument,
+  selection: vscode.Selection,
+) => {
+  const line = doc.lineAt(selection.start)
+  if (line.firstNonWhitespaceCharacterIndex > selection.start.character) {
+    return new vscode.Selection(
+      new vscode.Position(
+        line.lineNumber,
+        line.firstNonWhitespaceCharacterIndex,
+      ),
+      new vscode.Position(
+        line.lineNumber,
+        line.firstNonWhitespaceCharacterIndex,
+      ),
+    )
+  } else {
+    return selection
+  }
+}
+
+const findSmallestNodeContainingSelection = (
+  selection: vscode.Selection,
+  tree: Parser.Tree,
+) => {
+  const cursorPath = ASTpathOfCursor(tree.rootNode, selection)
+  if (cursorPath.length === 0) {
+    return
+  }
+  return cursorPath[cursorPath.length - 1]
+}
+
+const findNodeMatchingSelection = (
+  selection: vscode.Selection,
+  tree: Parser.Tree,
+) => {
+  const cursorPath = ASTpathOfCursor(tree.rootNode, selection)
+  cursorPath.reverse()
+  return cursorPath.find((n) => !selection.isEqual(syntaxNode2Selection(n)))
+}
 
 export const ExpandSelection = (
   doc: vscode.TextDocument,
   selection: vscode.Selection,
   tree: Parser.Tree,
 ) => {
-  console.log(
-    "CURSOR",
-    selection.start.line,
-    selection.start.character,
-    selection.end.line,
-    selection.end.character,
-  )
-
-  // if cursor is before any non-whitespace character, move it to the first non-whitespace character
   if (selection.isEmpty) {
-    const line = doc.lineAt(selection.start)
-    if (line.firstNonWhitespaceCharacterIndex > selection.start.character) {
-      selection = new vscode.Selection(
-        new vscode.Position(
-          line.lineNumber,
-          line.firstNonWhitespaceCharacterIndex,
-        ),
-        new vscode.Position(
-          line.lineNumber,
-          line.firstNonWhitespaceCharacterIndex,
-        ),
-      )
-    }
+    selection = moveSelectionToFirstNonWhitespace(doc, selection)
   }
 
-  const cursorPath = ASTpathOfCursor(tree.rootNode, selection)
-  cursorPath.reverse()
-
-  logSyntaxNode("cursorPath", cursorPath)
-
-  const nodeToSelect = cursorPath.find(
-    (n) => !selection.isEqual(syntaxNode2Selection(n)),
-  )
-  if (!nodeToSelect) {
+  const node = findNodeMatchingSelection(selection, tree)
+  if (!node) {
     return
   }
-  logSyntaxNode("selecting node", [nodeToSelect])
 
-  const prev = globalSelectionStackByDoc.get(doc) || []
-  if (selection.isEmpty) {
-    globalSelectionStackByDoc.set(doc, [])
-  } else {
-    globalSelectionStackByDoc.set(doc, [...prev, selection])
-  }
+  globalSelectionStack.push(doc, selection)
 
-  return syntaxNode2Selection(nodeToSelect)
+  return syntaxNode2Selection(node)
 }
 
 export const ContractSelection = (
@@ -77,14 +104,7 @@ export const ContractSelection = (
   selection: vscode.Selection,
   tree: Parser.Tree,
 ) => {
-  const stack = globalSelectionStackByDoc.get(doc)
-  if (!stack || stack.length === 0) {
-    return
-  }
-
-  const last = stack[stack.length - 1]
-  stack.pop()
-  return last
+  return globalSelectionStack.pop(doc)
 }
 
 export const SelectTopLevel = (
@@ -100,14 +120,6 @@ export const SelectTopLevel = (
   return syntaxNode2Selection(cursorPath[1])
 }
 
-const smallestNodeContainingSelection = (
-  selection: vscode.Selection,
-  tree: Parser.Tree,
-) => {
-  const cursorPath = ASTpathOfCursor(tree.rootNode, selection)
-  return cursorPath[cursorPath.length - 1]
-}
-
 export const SelectNodeForward = (
   doc: vscode.TextDocument,
   selection: vscode.Selection,
@@ -118,12 +130,12 @@ export const SelectNodeForward = (
     return
   }
 
-  const node = smallestNodeContainingSelection(
+  const node = findSmallestNodeContainingSelection(
     makeSelectionOfSize(movePositionChar(selection.end, -1), 1),
     tree,
   )
 
-  if (!node || !node.nextNamedSibling) {
+  if (!node?.nextNamedSibling) {
     return
   }
 
@@ -138,12 +150,12 @@ export const UnSelectNodeForward = (
   selection: vscode.Selection,
   tree: Parser.Tree,
 ) => {
-  const node = smallestNodeContainingSelection(
+  const node = findSmallestNodeContainingSelection(
     makeSelectionOfSize(movePositionChar(selection.end, -1), 1),
     tree,
   )
 
-  if (!node || !node.previousNamedSibling) {
+  if (!node?.previousNamedSibling) {
     return
   }
 
@@ -158,11 +170,11 @@ export const SelectNodeBackward = (
   selection: vscode.Selection,
   tree: Parser.Tree,
 ) => {
-  const node = smallestNodeContainingSelection(
+  const node = findSmallestNodeContainingSelection(
     makeSelectionOfSize(selection.start, 1),
     tree,
   )
-  if (!node || !node.previousNamedSibling) {
+  if (!node?.previousNamedSibling) {
     return
   }
 

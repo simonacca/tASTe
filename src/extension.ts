@@ -4,9 +4,10 @@ import { languageID2Filename } from "./languages"
 import * as Cmd from "./commands"
 
 // this will be resolved on activation
+export type Grammar = any
 var parser: Parser | undefined = undefined
 // this will be populate on activation
-var languageID2Language: { [languageID: string]: Cmd.Grammar } = {}
+var languageID2Language: { [languageID: string]: Grammar } = {}
 
 const initParserPromise = Parser.init()
 const initParser = async () => {
@@ -32,7 +33,7 @@ const loadLanguage = async (basePath: string, languageID: string) => {
 
 const setParserLanguageFromDoc = (
   doc: vscode.TextDocument,
-  languageID2Language: { [languageID: string]: Cmd.Grammar },
+  languageID2Language: { [languageID: string]: Grammar },
   parser?: Parser,
 ) => {
   if (!parser || !vscode.window.activeTextEditor) {
