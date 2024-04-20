@@ -103,6 +103,7 @@
     "tree-sitter-lua": "^2.1.3",
     "tree-sitter-matlab": "github:mstanciu552/tree-sitter-matlab",
     "tree-sitter-nix": "^0.0.2",
+    "tree-sitter-objc": "github:jiyee/tree-sitter-objc",
     "tree-sitter-proto": "github:mitchellh/tree-sitter-proto",
     "tree-sitter-python": "^0.21.0",
     "tree-sitter-qmljs": "^0.1.2",

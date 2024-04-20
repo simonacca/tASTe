@@ -55,7 +55,7 @@ build_parser '@tree-sitter-grammars/tree-sitter-markdown/tree-sitter-markdown' m
 build_parser tree-sitter-matlab matlab
 # build_parser tree-sitter-nginx nginx # doesn't work as of 2024-04
 build_parser tree-sitter-nix nix
-# build_parser tree-sitter-objc objc # doesn't work as of 2024-04
+build_parser tree-sitter-objc objc
 # build_parser tree-sitter-ocaml/grammars/ocaml ocaml # doesn't work as of 2024-04
 # build_parser tree-sitter-perl perl # doesn't work as of 2024-04
 # build_parser tree-sitter-pascal pascal # doesn't work as of 2024-04
