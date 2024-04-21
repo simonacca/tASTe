@@ -74,6 +74,7 @@ build_parser tree-sitter-sql sql
 build_parser tree-sitter-swift swift
 build_parser tree-sitter-toml toml
 build_parser tree-sitter-typescript/typescript typescript
+build_parser tree-sitter-typescript/tsx typescriptreact
 # build_parser tree-sitter-xml xml # 2024-04 (can't find scanner.h)
 build_parser tree-sitter-zig zig
 # build_parser tree-sitter-vue vue # 2024-04 (no member AcessorSignature in namespace v8)

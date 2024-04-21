@@ -4,7 +4,6 @@ import TSParser from "web-tree-sitter"
 type Grammar = any
 
 const languageIDTranslation: { [id: string]: string | null } = {
-  typescriptreact: "typescript",
   javascriptreact: "javascript",
   shellscript: "bash",
   terraform: "hcl",
