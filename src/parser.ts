@@ -20,10 +20,7 @@ const languageID2Path = (basePath: string, languageID: LanguageId): string => {
   return `${basePath}/out/parsers/${languageID}.wasm`
 }
 
-export const loadLanguage = async (
-  basePath: string,
-  languageID: LanguageId,
-) => {
+export const loadLanguage = async (basePath: string, languageID: LanguageId) => {
   // already loaded
   if (parserRegistry[languageID]) {
     return

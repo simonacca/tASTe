@@ -147,7 +147,8 @@
     "web-tree-sitter": "^0.22.5"
   },
   "prettier": {
-    "semi": false
+    "semi": false,
+    "printWidth": 100
   },
   "eslintConfig": {
     "root": true,
@@ -160,6 +161,7 @@
       "@typescript-eslint"
     ],
     "rules": {
+      "max-len": "off",
       "@typescript-eslint/naming-convention": [
         "warn",
         {

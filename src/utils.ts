@@ -36,11 +36,9 @@ export const makeSelectionOfSize = (pos: vscode.Position, size: number) => {
   return new vscode.Selection(pos, movePositionChar(pos, size))
 }
 
-export const emptySelection = (pos: vscode.Position) =>
-  makeSelectionOfSize(pos, 0)
+export const emptySelection = (pos: vscode.Position) => makeSelectionOfSize(pos, 0)
 
-export const selectFirstChar = (s: vscode.Selection) =>
-  makeSelectionOfSize(s.start, 1)
+export const selectFirstChar = (s: vscode.Selection) => makeSelectionOfSize(s.start, 1)
 export const selectLastChar = (s: vscode.Selection) =>
   makeSelectionOfSize(movePositionChar(s.end, -1), 1)
 
@@ -51,14 +49,8 @@ export const moveSelectionToFirstNonWhitespace = (
   const line = doc.lineAt(selection.start)
   if (line.firstNonWhitespaceCharacterIndex > selection.start.character) {
     return new vscode.Selection(
-      new vscode.Position(
-        line.lineNumber,
-        line.firstNonWhitespaceCharacterIndex,
-      ),
-      new vscode.Position(
-        line.lineNumber,
-        line.firstNonWhitespaceCharacterIndex,
-      ),
+      new vscode.Position(line.lineNumber, line.firstNonWhitespaceCharacterIndex),
+      new vscode.Position(line.lineNumber, line.firstNonWhitespaceCharacterIndex),
     )
   } else {
     return selection

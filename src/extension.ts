@@ -58,8 +58,7 @@ export const activate = async (context: vscode.ExtensionContext) => {
     "taste.shrinkSelectionAtEnd": Cmd.ShrinkSelectionAtEnd,
     "taste.growSelectionAtBeginning": Cmd.GrowSelectionAtBeginning,
     "taste.shrinkSelectionAtBeginning": Cmd.ShrinkSelectionAtBeginning,
-    "taste.growOrShrinkSelectionFocusRight":
-      Cmd.GrowOrShrinkSelectionFocusRight,
+    "taste.growOrShrinkSelectionFocusRight": Cmd.GrowOrShrinkSelectionFocusRight,
     "taste.growOrShrinkSelectionFocusLeft": Cmd.GrowOrShrinkSelectionFocusLeft,
     "taste.moveCursorLeft": Cmd.MoveCursorLeft,
     "taste.moveCursorRight": Cmd.MoveCursorRight,
