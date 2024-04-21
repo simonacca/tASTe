@@ -49,17 +49,17 @@ build_parser tree-sitter-jq jq
 build_parser tree-sitter-json json
 build_parser tree-sitter-julia julia
 build_parser tree-sitter-kotlin kotlin
-# build_parser tree-sitter-latex latex # doesn't work as of 2024-04
+# build_parser tree-sitter-latex latex # 2024-04 (expects parser.h)
 build_parser tree-sitter-lua lua
 build_parser '@tree-sitter-grammars/tree-sitter-markdown/tree-sitter-markdown' markdown
 build_parser tree-sitter-matlab matlab
-# build_parser tree-sitter-nginx nginx # doesn't work as of 2024-04
+# build_parser tree-sitter-nginx nginx # 2024-04 (Cannot find module 'nan')
 build_parser tree-sitter-nix nix
 build_parser tree-sitter-objc objc
-# build_parser tree-sitter-ocaml/grammars/ocaml ocaml # doesn't work as of 2024-04
-# build_parser tree-sitter-perl perl # doesn't work as of 2024-04
-# build_parser tree-sitter-pascal pascal # doesn't work as of 2024-04
-# build_parser tree-sitter-php php # doesn't work as of 2024-04
+# build_parser tree-sitter-ocaml/grammars/ocaml ocaml # 2024-04 (can't find scanner.h)
+# build_parser tree-sitter-perl perl # 2024-04 (can't find grammar.json)
+# build_parser tree-sitter-pascal pascal # 2024-04 (can't find binding.o)
+# build_parser tree-sitter-php/php php # 2024-04 (can't find scanner.h)
 build_parser tree-sitter-proto proto
 build_parser tree-sitter-python python
 build_parser tree-sitter-qmljs qmljs
@@ -74,8 +74,8 @@ build_parser tree-sitter-sql sql
 build_parser tree-sitter-swift swift
 build_parser tree-sitter-toml toml
 build_parser tree-sitter-typescript/typescript typescript
-# build_parser tree-sitter-xml xml # doesn't work as of 2024-04
+# build_parser tree-sitter-xml xml # 2024-04 (can't find scanner.h)
 build_parser tree-sitter-zig zig
-# build_parser tree-sitter-vue vue # doesn't work as of 2024-04
+# build_parser tree-sitter-vue vue # 2024-04 (no member AcessorSignature in namespace v8)
 
 rm -f a.out.js a.out.wasm
