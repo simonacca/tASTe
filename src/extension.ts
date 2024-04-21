@@ -1,57 +1,10 @@
 import * as vscode from "vscode"
-import Parser from "web-tree-sitter"
-import { languageID2Filename } from "./languages"
+import * as ParserLib from "./parser"
 import * as Cmd from "./commands"
-
-// this will be resolved on activation
-export type Grammar = any
-var parser: Parser | undefined = undefined
-// this will be populate on activation
-var languageID2Language: { [languageID: string]: Grammar } = {}
-
-const initParserPromise = Parser.init()
-const initParser = async () => {
-  await initParserPromise
-  parser = new Parser()
-}
-
-const loadLanguage = async (basePath: string, languageID: string) => {
-  // already loaded
-  if (languageID2Language[languageID]) {
-    return
-  }
-
-  console.log(`Loading language:`, languageID)
-
-  const fileName = languageID2Filename(basePath, languageID)
-  try {
-    languageID2Language[languageID] = await Parser.Language.load(fileName)
-  } catch (error) {
-    console.warn(`Could not load language: ${languageID}`)
-  }
-}
-
-const setParserLanguageFromDoc = (
-  doc: vscode.TextDocument,
-  languageID2Language: { [languageID: string]: Grammar },
-  parser?: Parser,
-) => {
-  if (!parser || !vscode.window.activeTextEditor) {
-    return
-  }
-  const grammar = languageID2Language[doc.languageId]
-
-  if (!grammar) {
-    vscode.window.showErrorMessage(
-      `The language "${doc.languageId}" is not yet supported by TASTE. \nPlease consider contributing! https://github.com/simonacca/taste`,
-    )
-    return
-  }
-  parser.setLanguage(grammar)
-}
 
 const initCommands = (
   context: vscode.ExtensionContext,
+  parser: ParserLib.Parser,
   commands: { [key: string]: Cmd.Command },
 ) => {
   for (const cmd of Object.entries(commands)) {
@@ -63,7 +16,7 @@ const initCommands = (
         const doc = vscode.window.activeTextEditor.document
         const selection = vscode.window.activeTextEditor.selection
 
-        setParserLanguageFromDoc(doc, languageID2Language, parser)
+        parser.setParserLanguageFromDoc(doc)
 
         const ASTtree = parser.parse(doc.getText())
 
@@ -80,10 +33,10 @@ const initCommands = (
 }
 
 export const activate = async (context: vscode.ExtensionContext) => {
-  await initParser()
+  const parser = await ParserLib.initParser()
 
   if (vscode.window.activeTextEditor) {
-    await loadLanguage(
+    await ParserLib.loadLanguage(
       context.extensionPath,
       vscode.window.activeTextEditor.document.languageId,
     )
@@ -93,10 +46,10 @@ export const activate = async (context: vscode.ExtensionContext) => {
     if (!editor) {
       return
     }
-    loadLanguage(context.extensionPath, editor.document.languageId)
+    ParserLib.loadLanguage(context.extensionPath, editor.document.languageId)
   })
 
-  initCommands(context, {
+  initCommands(context, parser, {
     "taste.expandSelection": Cmd.ExpandSelection,
     "taste.contractSelection": Cmd.ContractSelection,
     "taste.selectTopLevel": Cmd.SelectTopLevel,
