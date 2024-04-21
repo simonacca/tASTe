@@ -1,10 +1,6 @@
 import * as vscode from "vscode"
 import Parser from "web-tree-sitter"
-import {
-  makeSelectionOfSize,
-  movePositionChar,
-  parserNode2Selection,
-} from "./utils"
+import * as U from "./utils"
 import * as AST from "./ast"
 
 export type Command = (
@@ -39,34 +35,13 @@ class GlobalSelectionStackByDoc {
 
 const globalSelectionStack = new GlobalSelectionStackByDoc()
 
-const moveSelectionToFirstNonWhitespace = (
-  doc: vscode.TextDocument,
-  selection: vscode.Selection,
-) => {
-  const line = doc.lineAt(selection.start)
-  if (line.firstNonWhitespaceCharacterIndex > selection.start.character) {
-    return new vscode.Selection(
-      new vscode.Position(
-        line.lineNumber,
-        line.firstNonWhitespaceCharacterIndex,
-      ),
-      new vscode.Position(
-        line.lineNumber,
-        line.firstNonWhitespaceCharacterIndex,
-      ),
-    )
-  } else {
-    return selection
-  }
-}
-
 export const ExpandSelection = (
   doc: vscode.TextDocument,
   selection: vscode.Selection,
   tree: Parser.Tree,
 ) => {
   if (selection.isEmpty) {
-    selection = moveSelectionToFirstNonWhitespace(doc, selection)
+    selection = U.moveSelectionToFirstNonWhitespace(doc, selection)
   }
 
   const path = AST.pathOfSmallestNodeContainingSelection(
@@ -74,7 +49,7 @@ export const ExpandSelection = (
     selection,
   )
   path.reverse()
-  const node = path.find((n) => !selection.isEqual(parserNode2Selection(n)))
+  const node = path.find((n) => !selection.isEqual(U.parserNode2Selection(n)))
 
   if (!node) {
     return
@@ -82,7 +57,7 @@ export const ExpandSelection = (
 
   globalSelectionStack.push(doc, selection)
 
-  return parserNode2Selection(node)
+  return U.parserNode2Selection(node)
 }
 
 export const ContractSelection = (
@@ -106,62 +81,82 @@ export const SelectTopLevel = (
   if (cursorPath.length < 2) {
     return
   }
-  return parserNode2Selection(cursorPath[1])
+  return U.parserNode2Selection(cursorPath[1])
 }
 
-const selectFirstChar = (s: vscode.Selection) => makeSelectionOfSize(s.start, 1)
-const selectLastChar = (s: vscode.Selection) =>
-  makeSelectionOfSize(movePositionChar(s.end, -1), 1)
-
-export const GrowShrinkAtSides = (
+const GrowShrinkAtSides = (
+  doc: vscode.TextDocument,
   selection: vscode.Selection,
   tree: Parser.Tree,
   side: "beginning" | "end",
   action: "grow" | "shrink",
-) => {
+): vscode.Selection | undefined => {
   const pathOfSideChar = AST.pathOfSmallestNodeContainingSelection(
     tree.rootNode,
     side === "beginning"
-      ? selectFirstChar(selection)
-      : selectLastChar(selection),
+      ? U.selectFirstChar(selection)
+      : U.selectLastChar(selection),
   )
 
   // biggest node in path contained by selection
   const node = pathOfSideChar.find((n) =>
-    selection.contains(parserNode2Selection(n)),
+    selection.contains(U.parserNode2Selection(n)),
   )
 
-  if (!node) {
-    return
-  }
+  if (side === "beginning" && action === "grow") {
+    if (selection.isEmpty) {
+      const p = AST.pathOfSmallestNodeContainingSelection(
+        tree.rootNode,
+        U.selectFirstChar(U.moveSelectionToFirstNonWhitespace(doc, selection)),
+      )
+      const n = p[p.length - 1]
+      if (!n?.previousNamedSibling) {
+        return
+      }
+      return U.invert(U.parserNode2Selection(n.previousNamedSibling))
+    }
 
-  if (side === "beginning" && action === "grow" && node.previousNamedSibling) {
-    return new vscode.Selection(
-      parserNode2Selection(node.previousNamedSibling).start,
-      selection.end,
-    )
+    if (node?.previousNamedSibling) {
+      return new vscode.Selection(
+        selection.end,
+        U.parserNode2Selection(node.previousNamedSibling).start,
+      )
+    }
   } else if (
     side === "beginning" &&
     action === "shrink" &&
-    node.nextNamedSibling
+    node?.nextNamedSibling
   ) {
+    if (selection.isEqual(U.parserNode2Selection(node))) {
+      return U.emptySelection(selection.end)
+    }
     return new vscode.Selection(
-      parserNode2Selection(node.nextNamedSibling).start,
       selection.end,
+      U.parserNode2Selection(node.nextNamedSibling).start,
     )
-  } else if (side === "end" && action === "grow" && node.nextNamedSibling) {
-    return new vscode.Selection(
-      selection.start,
-      parserNode2Selection(node.nextNamedSibling).end,
-    )
+  } else if (side === "end" && action === "grow") {
+    if (selection.isEmpty) {
+      return ExpandSelection(doc, selection, tree)
+    }
+
+    if (node?.nextNamedSibling) {
+      return new vscode.Selection(
+        selection.start,
+        U.parserNode2Selection(node.nextNamedSibling).end,
+      )
+    }
   } else if (
     side === "end" &&
     action === "shrink" &&
-    node.previousNamedSibling
+    node?.previousNamedSibling
   ) {
+    if (selection.isEqual(U.parserNode2Selection(node))) {
+      return U.emptySelection(selection.start)
+    }
+
     return new vscode.Selection(
       selection.start,
-      parserNode2Selection(node.previousNamedSibling).end,
+      U.parserNode2Selection(node.previousNamedSibling).end,
     )
   }
 }
@@ -171,10 +166,7 @@ export const GrowSelectionAtEnd = (
   selection: vscode.Selection,
   tree: Parser.Tree,
 ) => {
-  if (selection.isEmpty) {
-    return ExpandSelection(doc, selection, tree)
-  }
-  return GrowShrinkAtSides(selection, tree, "end", "grow")
+  return GrowShrinkAtSides(doc, selection, tree, "end", "grow")
 }
 
 export const ShrinkSelectionAtEnd = (
@@ -182,7 +174,7 @@ export const ShrinkSelectionAtEnd = (
   selection: vscode.Selection,
   tree: Parser.Tree,
 ) => {
-  return GrowShrinkAtSides(selection, tree, "end", "shrink")
+  return GrowShrinkAtSides(doc, selection, tree, "end", "shrink")
 }
 
 export const GrowSelectionAtBeginning = (
@@ -190,7 +182,7 @@ export const GrowSelectionAtBeginning = (
   selection: vscode.Selection,
   tree: Parser.Tree,
 ) => {
-  return GrowShrinkAtSides(selection, tree, "beginning", "grow")
+  return GrowShrinkAtSides(doc, selection, tree, "beginning", "grow")
 }
 
 export const ShrinkSelectionAtBeginning = (
@@ -198,7 +190,7 @@ export const ShrinkSelectionAtBeginning = (
   selection: vscode.Selection,
   tree: Parser.Tree,
 ) => {
-  return GrowShrinkAtSides(selection, tree, "beginning", "shrink")
+  return GrowShrinkAtSides(doc, selection, tree, "beginning", "shrink")
 }
 
 export const GrowOrShrinkSelectionFocusLeft = (
@@ -207,9 +199,9 @@ export const GrowOrShrinkSelectionFocusLeft = (
   tree: Parser.Tree,
 ) => {
   if (selection.isReversed) {
-    return GrowShrinkAtSides(selection, tree, "beginning", "grow")
+    return GrowShrinkAtSides(doc, selection, tree, "beginning", "grow")
   } else {
-    return GrowShrinkAtSides(selection, tree, "end", "shrink")
+    return GrowShrinkAtSides(doc, selection, tree, "end", "shrink")
   }
 }
 
@@ -218,10 +210,10 @@ export const GrowOrShrinkSelectionFocusRight = (
   selection: vscode.Selection,
   tree: Parser.Tree,
 ) => {
-  if (selection.isReversed) {
-    return GrowShrinkAtSides(selection, tree, "beginning", "shrink")
+  if (selection.isReversed && !selection.isEmpty) {
+    return GrowShrinkAtSides(doc, selection, tree, "beginning", "shrink")
   } else {
-    return GrowShrinkAtSides(selection, tree, "end", "grow")
+    return GrowShrinkAtSides(doc, selection, tree, "end", "grow")
   }
 }
 
@@ -243,7 +235,7 @@ export const MoveCursorRight = (
   if (!sibling) {
     return
   }
-  return makeSelectionOfSize(parserNode2Selection(sibling).start, 0)
+  return U.emptySelection(U.parserNode2Selection(sibling).start)
 }
 
 export const MoveCursorLeft = (
@@ -264,5 +256,5 @@ export const MoveCursorLeft = (
   if (!sibling) {
     return
   }
-  return makeSelectionOfSize(parserNode2Selection(sibling).start, 0)
+  return U.emptySelection(U.parserNode2Selection(sibling).start)
 }
