@@ -1,10 +1,11 @@
 {
   "name": "taste",
-  "displayName": "taste",
+  "private": true,
+  "displayName": "tASTe",
   "description": "The AST Editor",
   "publisher": "simonacca",
   "repository": {
-    "url": "https://github.com/simonacca/taste"
+    "url": "https://github.com/simonacca/tASTe"
   },
   "version": "1.0.4",
   "engines": {

@@ -47,7 +47,7 @@ export class Parser extends TSParser {
 
     if (!grammar) {
       vscode.window.showErrorMessage(
-        `The language "${doc.languageId}" is not yet supported by TASTE. \nPlease consider contributing! https://github.com/simonacca/taste`,
+        `The language "${doc.languageId}" is not yet supported by tASTe. \nPlease consider contributing! https://github.com/simonacca/tASTe`,
       )
       return
     }

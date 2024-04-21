@@ -1,4 +1,4 @@
-# TASTE: The AST Editor
+# tASTe: The AST Editor
 
 Taste is a collection of commands to edit text based on its structure (the AST).
 
