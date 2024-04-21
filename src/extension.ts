@@ -54,9 +54,15 @@ export const activate = async (context: vscode.ExtensionContext) => {
     "taste.expandSelection": Cmd.ExpandSelection,
     "taste.contractSelection": Cmd.ContractSelection,
     "taste.selectTopLevel": Cmd.SelectTopLevel,
-    "taste.selectNodeForward": Cmd.SelectNodeForward,
-    "taste.unselectNodeForward": Cmd.UnSelectNodeForward,
-    "taste.selectNodeBackward": Cmd.SelectNodeBackward,
+    "taste.growSelectionAtEnd": Cmd.GrowSelectionAtEnd,
+    "taste.shrinkSelectionAtEnd": Cmd.ShrinkSelectionAtEnd,
+    "taste.growSelectionAtBeginning": Cmd.GrowSelectionAtBeginning,
+    "taste.shrinkSelectionAtBeginning": Cmd.ShrinkSelectionAtBeginning,
+    "taste.growOrShrinkSelectionFocusRight":
+      Cmd.GrowOrShrinkSelectionFocusRight,
+    "taste.growOrShrinkSelectionFocusLeft": Cmd.GrowOrShrinkSelectionFocusLeft,
+    "taste.moveCursorLeft": Cmd.MoveCursorLeft,
+    "taste.moveCursorRight": Cmd.MoveCursorRight,
   })
 }
 

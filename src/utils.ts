@@ -17,16 +17,10 @@ export const logSyntaxNode = (t: string, ASTpath: SyntaxNode[]) => {
   )
 }
 
-export const syntaxNode2Selection = (innermostNode: SyntaxNode) => {
+export const parserNode2Selection = (node: SyntaxNode) => {
   return new vscode.Selection(
-    new vscode.Position(
-      innermostNode.startPosition.row,
-      innermostNode.startPosition.column,
-    ),
-    new vscode.Position(
-      innermostNode.endPosition.row,
-      innermostNode.endPosition.column,
-    ),
+    new vscode.Position(node.startPosition.row, node.startPosition.column),
+    new vscode.Position(node.endPosition.row, node.endPosition.column),
   )
 }
 

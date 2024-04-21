@@ -1,17 +1,19 @@
 import * as vscode from "vscode"
 import { SyntaxNode } from "web-tree-sitter"
 
-export const ASTpathOfCursor = (
+export type Path = SyntaxNode[]
+
+export const pathOfSmallestNodeContainingSelection = (
   node: SyntaxNode,
-  cursor: vscode.Selection,
-): SyntaxNode[] => {
+  selection: vscode.Selection,
+): Path => {
   const isInRange =
-    (node.startPosition.row < cursor.start.line ||
-      (node.startPosition.row === cursor.start.line &&
-        node.startPosition.column <= cursor.start.character)) &&
-    (node.endPosition.row > cursor.end.line ||
-      (node.endPosition.row === cursor.end.line &&
-        node.endPosition.column >= cursor.end.character))
+    (node.startPosition.row < selection.start.line ||
+      (node.startPosition.row === selection.start.line &&
+        node.startPosition.column <= selection.start.character)) &&
+    (node.endPosition.row > selection.end.line ||
+      (node.endPosition.row === selection.end.line &&
+        node.endPosition.column >= selection.end.character))
 
   if (!isInRange) {
     return []
@@ -24,7 +26,7 @@ export const ASTpathOfCursor = (
   }
 
   for (const child of node.children) {
-    const res = ASTpathOfCursor(child, cursor)
+    const res = pathOfSmallestNodeContainingSelection(child, selection)
     if (res.length > 0) {
       return [node, ...res]
     }

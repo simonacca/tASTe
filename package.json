@@ -31,16 +31,36 @@
         "title": "Taste: Select Top Level"
       },
       {
-        "command": "taste.selectNodeForward",
-        "title": "Taste: Select Node Forward"
+        "command": "taste.growSelectionAtEnd",
+        "title": "Taste: Grow Selection At End"
       },
       {
-        "command": "taste.unselectNodeForward",
-        "title": "Taste: Unselect Node Forward"
+        "command": "taste.shrinkSelectionAtEnd",
+        "title": "Taste: Shrink Selection At End"
       },
       {
-        "command": "taste.selectNodeBackward",
-        "title": "Taste: Select Node Backward"
+        "command": "taste.growSelectionAtBeginning",
+        "title": "Taste: Grow Selection At Beginning"
+      },
+      {
+        "command": "taste.shrinkSelectionAtBeginning",
+        "title": "Taste: Shrink Selection At Beginning"
+      },
+      {
+        "command": "taste.growOrShrinkSelectionFocusRight",
+        "title": "Taste: Grow or Shrink Selection Focus to the right"
+      },
+      {
+        "command": "taste.growOrShrinkSelectionFocusLeft",
+        "title": "Taste: Grow or Shrink Selection Focus to the left"
+      },
+      {
+        "command": "taste.moveCursorLeft",
+        "title": "Taste: Move Cursor Left (experimental)"
+      },
+      {
+        "command": "taste.moveCursorRight",
+        "title": "Taste: Move Cursor Right (experimental)"
       }
     ]
   },
