@@ -1,10 +1,11 @@
 import * as vscode from "vscode"
 import * as ParserLib from "./parser"
 import * as Cmd from "./commands"
+import TSParser from "web-tree-sitter"
 
 const initCommands = (
   context: vscode.ExtensionContext,
-  parser: ParserLib.Parser,
+  parser: TSParser,
   commands: { [key: string]: Cmd.Command },
 ) => {
   for (const cmd of Object.entries(commands)) {
@@ -16,7 +17,7 @@ const initCommands = (
         const doc = vscode.window.activeTextEditor.document
         const selection = vscode.window.activeTextEditor.selection
 
-        parser.setParserLanguageFromDoc(doc)
+        ParserLib.setParserLanguage(parser, doc.languageId)
 
         const ASTtree = parser.parse(doc.getText())
 

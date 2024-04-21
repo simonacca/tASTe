@@ -1,64 +1,58 @@
 import * as vscode from "vscode"
 import TSParser from "web-tree-sitter"
 
-type Grammar = any
+type LanguageParser = any
+type LanguageId = string
 
-const languageIDTranslation: { [id: string]: string | null } = {
+const languageIDTranslation: { [id: LanguageId]: LanguageId | null } = {
   javascriptreact: "javascript",
   shellscript: "bash",
   terraform: "hcl",
   jsonc: "json",
 }
 
-// languages are not loaded into a specific parser but rather at the
-// library level. This is why languageID2Language is not part of
-// the Parser class
-var languageID2Language: { [languageID: string]: Grammar } = {}
+// languages are not loaded into a specific parser but rather at the library level
+var parserRegistry: { [languageID: LanguageId]: LanguageParser } = {}
 
-const languageID2Filename = (basePath: string, languageID: string): string => {
+const languageID2Path = (basePath: string, languageID: LanguageId): string => {
   const translation = languageIDTranslation[languageID]
   languageID = translation || languageID
   return `${basePath}/out/parsers/${languageID}.wasm`
 }
 
-export const loadLanguage = async (basePath: string, languageID: string) => {
+export const loadLanguage = async (
+  basePath: string,
+  languageID: LanguageId,
+) => {
   // already loaded
-  if (languageID2Language[languageID]) {
+  if (parserRegistry[languageID]) {
     return
   }
 
-  console.log(`Loading language:`, languageID)
-
-  const fileName = languageID2Filename(basePath, languageID)
+  const parserPath = languageID2Path(basePath, languageID)
   try {
-    languageID2Language[languageID] = await TSParser.Language.load(fileName)
+    parserRegistry[languageID] = await TSParser.Language.load(parserPath)
   } catch (error) {
     console.warn(`Could not load language: ${languageID}`)
   }
 }
 
-export class Parser extends TSParser {
-  setParserLanguageFromDoc = (doc: vscode.TextDocument) => {
-    if (!vscode.window.activeTextEditor) {
-      return
-    }
-    const grammar = languageID2Language[doc.languageId]
+export const setParserLanguage = (parser: TSParser, languageId: LanguageId) => {
+  const grammar = parserRegistry[languageId]
 
-    if (!grammar) {
-      vscode.window.showErrorMessage(
-        `The language "${doc.languageId}" is not yet supported by tASTe. \nPlease consider contributing! https://github.com/simonacca/tASTe`,
-      )
-      return
-    }
-    this.setLanguage(grammar)
+  if (!grammar) {
+    vscode.window.showErrorMessage(
+      `The language "${languageId}" is not yet supported by tASTe. \nPlease consider contributing! https://github.com/simonacca/tASTe`,
+    )
+    return
   }
+  parser.setLanguage(grammar)
 }
 
-// tree sitter itself needs to be initialized before
-// any parser can be instantiated
+// the library itself needs to be initialized before any parser can be instantiated
 const treeSitterInitSingleton = TSParser.init()
 
 export const initParser = async () => {
   await treeSitterInitSingleton
-  return new Parser()
+  return new TSParser()
 }
