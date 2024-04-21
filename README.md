@@ -77,19 +77,27 @@ tASTe is a vscode extension to edit code based on its structure (the AST).
 
 ### Bringup development environment
 
-1. `npm install`
-2. `npm build-wasm`
-3. `npm run watch`
-4. In the "Run and Debug" menu of vscode, Start debugging the "Run Extension" target
+1. Make sure you have installed the following:
+
+- [typescript compiler](https://www.typescriptlang.org/download)
+- [emscripten compiler](https://github.com/emscripten-core/emscripten)
+- nodejs
+- docker
+- gnu parallel (optional)
+
+2. `npm install`
+3. `npm build-wasm`
+4. `npm run watch`
+5. In the "Run and Debug" menu of vscode, Start debugging the "Run Extension" target
 
 ### Publish
 
-0. Bump version number in `package.json`
-1. `npm run clean`
-2. `npm run build-wasm`
-3. `npm run vscode:prepublish`
-4. `npm run package`
-5. `npm run publish`
+1. Bump version number in `package.json`
+2. `npm run clean`
+3. `npm run build-wasm`
+4. `npm run vscode:prepublish`
+5. `npm run package`
+6. `npm run publish`
 
 ### Rebuild parsers
 
