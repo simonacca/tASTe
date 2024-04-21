@@ -80,6 +80,7 @@
     "tree-sitter-c": "^0.21.0",
     "tree-sitter-c-sharp": "^0.20.0",
     "tree-sitter-capnp": "^1.5.0",
+    "tree-sitter-clojure": "github:sogaiu/tree-sitter-clojure",
     "tree-sitter-cobol": "github:yutaro-sakamoto/tree-sitter-cobol",
     "tree-sitter-commonlisp": "^0.3.3",
     "tree-sitter-cpp": "^0.22.0",

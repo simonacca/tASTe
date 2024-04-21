@@ -27,6 +27,7 @@ build_parser tree-sitter-c-sharp c-sharp
 build_parser tree-sitter-commonlisp commonlisp
 build_parser tree-sitter-cpp cpp
 build_parser tree-sitter-capnp capnp
+build_parser tree-sitter-clojure clojure
 build_parser tree-sitter-cobol cobol
 build_parser tree-sitter-css css
 build_parser tree-sitter-cuda cuda
