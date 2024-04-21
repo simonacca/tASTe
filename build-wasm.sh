@@ -37,9 +37,9 @@ build_parser tree-sitter-elixir elixir
 build_parser tree-sitter-erlang erlang
 build_parser tree-sitter-fish fish
 build_parser tree-sitter-go go
-# build_parser tree-sitter-go-mod go-mod # doesn't work as of 2024-04
-# build_parser tree-sitter-graphql graphql # doesn't work as of 2024-04
-# build_parser tree-sitter-hack hack # doesn't work as of 2024-04
+build_parser tree-sitter-gomod go-mod
+build_parser tree-sitter-graphql graphql
+build_parser tree-sitter-hacklang hack
 build_parser tree-sitter-haskell haskell
 build_parser tree-sitter-hcl hcl
 build_parser tree-sitter-html html

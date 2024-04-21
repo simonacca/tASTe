@@ -41,6 +41,9 @@ Taste is a collection of commands to edit text based on its structure (the AST).
 - Erlang
 - Fish
 - Go
+- Go mod
+- Graphql
+- Hack
 - Haskell
 - HCL (Terraform)
 - HTML
