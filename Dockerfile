@@ -18,4 +18,4 @@ RUN npm install
 COPY build-wasm.sh /build/
 RUN BUILDERS_COUNT=10 npm run build-wasm
 
-COPY .eslintrc.json .vscode-test.mjs .vscodeignore LICENSE.md README.md tsconfig.json /build/
+COPY .vscode-test.mjs .vscodeignore LICENSE.md README.md tsconfig.json /build/
