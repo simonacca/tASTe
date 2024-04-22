@@ -13,6 +13,46 @@ const tests: TUtils.Test[] = [
         }<FE>
             `,
   },
+  {
+    cmd: Cmd.GrowOrShrinkSelectionFocusRight,
+    languageId: "typescript",
+    text: `
+    [
+        <IS><FS>{a: 1}<IE>,
+        {b: 2}<FE>,
+        {c: 3}
+      ]`,
+  },
+  {
+    cmd: Cmd.GrowOrShrinkSelectionFocusRight,
+    languageId: "typescript",
+    text: `
+    [
+        <IS><IE><FS>{a: 1}<FE>,
+        {b: 2},
+        {c: 3}
+      ]`,
+  },
+  {
+    cmd: Cmd.GrowOrShrinkSelectionFocusLeft,
+    languageId: "typescript",
+    text: `
+    [
+        <IS><FS>{a: 1}<FE>,
+        {b: 2}<IE>,
+        {c: 3}
+      ]`,
+  },
+  {
+    cmd: Cmd.GrowOrShrinkSelectionFocusLeft,
+    languageId: "typescript",
+    text: `
+    [
+        <IS><FS>{a: 1}<FE>,
+        {b: 2}<IE>,
+        {c: 3}
+      ]`,
+  },
 ]
 
 describe("workspace", () => {
@@ -30,7 +70,17 @@ describe("workspace", () => {
       const isEq = res?.isEqual(finalSel)
 
       if (!isEq) {
-        console.error("Res", res)
+        if (res) {
+          console.error(
+            "Want",
+            test.text,
+            "\n----------------\n",
+            "Have",
+            `${doc.getText().slice(0, doc.offsetAt(res.start))}<FS>${doc.getText().slice(doc.offsetAt(res.start), doc.offsetAt(res.end))}<FE>${doc.getText().slice(doc.offsetAt(res.start))}`,
+          )
+        } else {
+          console.error("No Res")
+        }
       }
       expect(isEq).toBeTruthy()
     }
