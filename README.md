@@ -11,18 +11,59 @@ tASTe is a vscode extension to edit code based on its structure (the AST).
 
 ![expand and contract selection](media/expand_contract_selection.gif)
 
-### Select and Unselect Node Forward
+### Grow and Shrink Selection
 
-- `taste.selectNodeForward`
-- `taste.unselectNodeForward`
+- `taste.growOrShrinkSelectionFocusRight`
+- `taste.growOrShrinkSelectionFocusLeft`
 
 ![expand and contract selection](media/select_node_forward.gif)
+
+### Move Cursor
+
+- `taste.moveCursorLeft`
+- `taste.moveCursorRight`
+
+![move cursor](media/move_cursor.gif)
 
 ### Select Top Level
 
 - `taste.selectTopLevel`
 
 ![select top level](media/select_top_level.gif)
+
+## Install instructions
+
+1. Install from [here](https://marketplace.visualstudio.com/items?itemName=simonacca.taste)
+2. Add the keyboard shortcuts you are interested in to your editor config from the Command Palette (⇧⌘P) with the "Preferences: Open Keyboard Shortcuts (JSON) command." ([docs](https://code.visualstudio.com/docs/getstarted/keybindings#_advanced-customization))
+
+Here's some suggested ones:
+
+```json
+{
+  "key": "cmd+e",
+  "command": "taste.expandSelection"
+},
+{
+  "key": "cmd+shift+e",
+  "command": "taste.contractSelection"
+},
+{
+  "key": "shift+cmd+left",
+  "command": "taste.growOrShrinkSelectionFocusLeft"
+},
+{
+  "key": "shift+cmd+right",
+  "command": "taste.growOrShrinkSelectionFocusRight"
+},
+{
+  "key": "cmd+right",
+  "command": "taste.moveCursorRight"
+},
+{
+  "key": "cmd+left",
+  "command": "taste.moveCursorLeft"
+}
+```
 
 ## Supported languages
 
@@ -72,6 +113,10 @@ tASTe is a vscode extension to edit code based on its structure (the AST).
 - Toml
 - Typescript
 - Zig
+
+## Credits
+
+Credit for this idea goes to the long lineage of lisp structured editors, with a special shoutout to Emac's [paredit](https://paredit.org/) and vscode's [Calva](https://calva.io/). A special thank you also to the developers of [Tree-sitter](https://tree-sitter.github.io/tree-sitter/) and its many parsers, without which this wouldn't be possible.
 
 ## Dev HOWTOs
 
