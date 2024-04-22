@@ -17,7 +17,11 @@ const initCommands = (
         const doc = vscode.window.activeTextEditor.document
         const selection = vscode.window.activeTextEditor.selection
 
-        ParserLib.setParserLanguage(parser, doc.languageId)
+        if (!ParserLib.setParserLanguage(parser, doc.languageId)) {
+          vscode.window.showErrorMessage(
+            `The language "${doc.languageId}" is not yet supported by tASTe. \nPlease consider contributing! https://github.com/simonacca/tASTe`,
+          )
+        }
 
         const ASTtree = parser.parse(doc.getText())
 

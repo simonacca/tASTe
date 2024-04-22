@@ -1,11 +1,11 @@
-import * as vscode from "vscode"
+import { Selection } from "vscode"
 import { SyntaxNode } from "web-tree-sitter"
 
 export type Path = SyntaxNode[]
 
 export const pathOfSmallestNodeContainingSelection = (
   node: SyntaxNode,
-  selection: vscode.Selection,
+  selection: Selection,
 ): Path => {
   const isInRange =
     (node.startPosition.row < selection.start.line ||

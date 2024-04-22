@@ -1,4 +1,3 @@
-import * as vscode from "vscode"
 import TSParser from "web-tree-sitter"
 
 type LanguageParser = any
@@ -34,16 +33,14 @@ export const loadLanguage = async (basePath: string, languageID: LanguageId) => 
   }
 }
 
-export const setParserLanguage = (parser: TSParser, languageId: LanguageId) => {
+export const setParserLanguage = (parser: TSParser, languageId: LanguageId): boolean => {
   const grammar = parserRegistry[languageId]
 
   if (!grammar) {
-    vscode.window.showErrorMessage(
-      `The language "${languageId}" is not yet supported by tASTe. \nPlease consider contributing! https://github.com/simonacca/tASTe`,
-    )
-    return
+    return false
   }
   parser.setLanguage(grammar)
+  return true
 }
 
 // the library itself needs to be initialized before any parser can be instantiated
