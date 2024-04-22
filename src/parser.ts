@@ -1,6 +1,5 @@
 import TSParser from "web-tree-sitter"
 
-type LanguageParser = any
 type LanguageId = string
 
 const languageIDTranslation: { [id: LanguageId]: LanguageId | null } = {
@@ -11,7 +10,7 @@ const languageIDTranslation: { [id: LanguageId]: LanguageId | null } = {
 }
 
 // languages are not loaded into a specific parser but rather at the library level
-var parserRegistry: { [languageID: LanguageId]: LanguageParser } = {}
+var parserRegistry: { [languageID: LanguageId]: TSParser.Language } = {}
 
 const languageID2Path = (basePath: string, languageID: LanguageId): string => {
   const translation = languageIDTranslation[languageID]
@@ -34,12 +33,12 @@ export const loadLanguage = async (basePath: string, languageID: LanguageId) => 
 }
 
 export const setParserLanguage = (parser: TSParser, languageId: LanguageId): boolean => {
-  const grammar = parserRegistry[languageId]
+  const languageParser = parserRegistry[languageId]
 
-  if (!grammar) {
+  if (!languageParser) {
     return false
   }
-  parser.setLanguage(grammar)
+  parser.setLanguage(languageParser)
   return true
 }
 
