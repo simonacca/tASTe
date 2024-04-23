@@ -61,6 +61,10 @@
       {
         "command": "taste.MoveCursorForward",
         "title": "Taste: Move Cursor forward (experimental)"
+      },
+      {
+        "command": "taste.Raise",
+        "title": "Taste: Substitute Parent with Node. AKA: Raise"
       }
     ]
   },

@@ -1,4 +1,4 @@
-import { TextDocument, Selection } from "vscode"
+import { TextDocument, Selection, TextEditor, window } from "vscode"
 import Parser, { SyntaxNode } from "web-tree-sitter"
 import * as U from "./utils"
 import * as AST from "./ast"
@@ -7,7 +7,7 @@ export type Command = (
   doc: TextDocument,
   selection: Selection,
   tree: Parser.Tree,
-) => Selection | undefined
+) => Selection | undefined | void
 
 class SelectionStackByDoc {
   private state = new Map<TextDocument, Selection[]>()
@@ -247,4 +247,17 @@ export const MoveCursorBackward = (doc: TextDocument, sel: Selection, tree: Pars
     return
   }
   return U.emptySelection(U.parserNode2Selection(sibling).start)
+}
+
+export const Raise = (doc: TextDocument, sel: Selection, tree: Parser.Tree) => {
+  const node = AST.Sel(tree.rootNode, sel)
+  const parent = node?.parent
+
+  if (!node || !parent) {
+    return
+  }
+
+  window.activeTextEditor?.edit((editBuilder) => {
+    editBuilder.replace(U.parserNode2Selection(parent), node.text)
+  })
 }
