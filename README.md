@@ -45,6 +45,19 @@ Hopefully resulting in less errors and more fun :)
 
 ![select top level](media/select_top_level.gif)
 
+### Raise
+
+- `taste.Raise`
+
+![raise](media/raise.gif)
+
+### Swap
+
+- `taste.SwapForward`
+- `taste.SwapBackward`
+
+![swap](media/swap.gif)
+
 ## Install instructions
 
 1. Install from [here](https://marketplace.visualstudio.com/items?itemName=simonacca.taste)
