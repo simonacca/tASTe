@@ -29,5 +29,5 @@ jobs:
         if: steps.cache-parser-build.outputs.cache-hit != 'true'
         run: npm run build-parsers
         env:
-          BUILDERS_COUNT: 6
+          BUILDERS_COUNT: 4
       - run: npm run check
