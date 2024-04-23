@@ -135,19 +135,11 @@ export const GrowSelectionAtStart = (doc: TextDocument, sel: Selection, tree: Pa
   return GrowShrinkAtSides(doc, sel, tree, "beginning", "grow")
 }
 
-export const ShrinkSelectionAtStart = (
-  doc: TextDocument,
-  sel: Selection,
-  tree: Parser.Tree,
-) => {
+export const ShrinkSelectionAtStart = (doc: TextDocument, sel: Selection, tree: Parser.Tree) => {
   return GrowShrinkAtSides(doc, sel, tree, "beginning", "shrink")
 }
 
-export const SelectBackward = (
-  doc: TextDocument,
-  sel: Selection,
-  tree: Parser.Tree,
-) => {
+export const SelectBackward = (doc: TextDocument, sel: Selection, tree: Parser.Tree) => {
   if (sel.isReversed) {
     return GrowShrinkAtSides(doc, sel, tree, "beginning", "grow")
   } else {
@@ -155,11 +147,7 @@ export const SelectBackward = (
   }
 }
 
-export const SelectForward = (
-  doc: TextDocument,
-  sel: Selection,
-  tree: Parser.Tree,
-) => {
+export const SelectForward = (doc: TextDocument, sel: Selection, tree: Parser.Tree) => {
   if (sel.isReversed && !sel.isEmpty) {
     return GrowShrinkAtSides(doc, sel, tree, "beginning", "shrink")
   } else {

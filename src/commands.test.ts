@@ -2,7 +2,6 @@ import * as Cmd from "./commands"
 import * as ParserLib from "./parser"
 import * as TUtils from "./testutils"
 
-
 // Each test case contains four markers describing the position of the
 // Initial selection (that is, the selection before the command is applied)
 // and of the Final Selection (that is, the selection after the command is applied)
@@ -10,7 +9,6 @@ import * as TUtils from "./testutils"
 // - <IE> : Initial selection, End
 // - <FS> : Final selection, Start
 // - <FE> : Final selection, end
-
 
 const cases: TUtils.Test[] = [
   {
@@ -75,7 +73,6 @@ describe("Commands", () => {
       throw new Error("Could not set parser language")
     }
     const res = c.cmd(doc, initialSel, parser.parse(doc.getText()))
-    
 
     // must
     if (res && !finalSel.isEqual(res)) {

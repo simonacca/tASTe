@@ -120,7 +120,7 @@ Here's some suggested ones:
 
 If you get the message "The language ... is not yet supported by tASTe" but the language of my file listed as supported in this readme,
 it could be that vscode cannot auto-detect the language in question.
-You can verify this by checking that the language is shown correctly  in the bottom-right corner of vscode.
+You can verify this by checking that the language is shown correctly in the bottom-right corner of vscode.
 
 In case it's not shown correctly, you might need to install an extension that enables support for your language.
 
@@ -165,7 +165,6 @@ Credit for this idea goes to the long lineage of lisp structured editors, with a
 This only applies if you are the extension publisher (simonacca).
 
 [Instructions](https://code.visualstudio.com/api/working-with-extensions/publishing-extension#get-a-personal-access-token), [PAT tab](https://dev.azure.com/simonacca/_usersSettings/tokens).
-
 
 ### Rebuild parsers
 
