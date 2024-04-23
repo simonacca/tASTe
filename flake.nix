@@ -16,6 +16,7 @@
           pkgs.parallel
           pkgs.nodejs
           pkgs.emscripten
+          pkgs.jq
           ];
       };
   });

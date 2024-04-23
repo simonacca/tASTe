@@ -77,7 +77,8 @@
     "check": "npm run lint && npm run test",
     "package": "npx vsce package",
     "vscode:prepublish": "npm run check && npm run build",
-    "publish": "npx vsce publish"
+    "publish": "npx vsce publish",
+    "tag-n-push": "git tag v$(jq -r '.version' package.json) && git push --tags"
   },
   "devDependencies": {
     "@types/jest": "^29.5.12",

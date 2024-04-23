@@ -153,12 +153,10 @@ Credit for this idea goes to the long lineage of lisp structured editors, with a
 2. Bump version number in `package.json`
 3. `npm install` to bump it in `package-lock.json`
 4. `git commit -m 'Bump'`
-5. `git tag vx.y.z`
-6. `git push && git push --tags`
-7. `npm run clean`
-8. `npm run build-parsers`
-9. `npm run package`
-10. `npm run publish`
+5. `npm run tag-n-push`
+6. `npm run clean`
+7. `npm run build-parsers`
+8. `npm run publish`
 
 #### Get Personal access token
 
