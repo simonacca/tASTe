@@ -44,8 +44,6 @@ export const makeSelectionOfSize = (pos: Position, size: number) => {
 
 export const emptySelection = (pos: Position) => makeSelectionOfSize(pos, 0)
 
-// export const selectFirstChar = (s: Selection) => makeSelectionOfSize(s.start, 1)
-// export const selectLastChar = (s: Selection) => makeSelectionOfSize(movePositionChar(s.end, -1), 1)
 export const selectCharAfter = (p: Position) => makeSelectionOfSize(p, 1)
 export const selectCharBefore = (p: Position) => makeSelectionOfSize(movePositionChar(p, -1), 1)
 
