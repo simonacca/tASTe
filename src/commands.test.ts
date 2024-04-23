@@ -2,6 +2,16 @@ import * as Cmd from "./commands"
 import * as ParserLib from "./parser"
 import * as TUtils from "./testutils"
 
+
+// Each test case contains four markers describing the position of the
+// Initial selection (that is, the selection before the command is applied)
+// and of the Final Selection (that is, the selection after the command is applied)
+// - <IS> : Initial selection, Start
+// - <IE> : Initial selection, End
+// - <FS> : Final selection, Start
+// - <FE> : Final selection, end
+
+
 const cases: TUtils.Test[] = [
   {
     cmd: Cmd.SelectTopLevel,
