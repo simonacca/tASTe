@@ -107,14 +107,12 @@ const GrowShrink = (
     if (!node) {
       return
     }
-    if (direction === "left") {
-      if (!node.previousNamedSibling) {
-        return
-      }
-      node = node.previousNamedSibling
+
+    if (direction === "right" && node) {
+      return U.parserNode2Selection(node)
+    } else if (direction === "left" && node.previousNamedSibling) {
+      return new Selection(sel.end, U.parserNode2Selection(node.previousNamedSibling).start)
     }
-    const newSel = U.parserNode2Selection(node)
-    return direction === "right" ? newSel : U.reverse(newSel)
   }
 
   const sideCharSel = (() => {
