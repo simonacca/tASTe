@@ -81,6 +81,16 @@ const cases: TUtils.Test[] = [
       {},
   ]`,
   },
+  {
+    cmd: Cmd.SelectForward,
+    languageId: "typescript",
+    text: `
+    [
+      {},<IS><IE><FS>
+      {}<FE>,
+      {},
+  ]`,
+  },
 ]
 
 describe("Commands", () => {
