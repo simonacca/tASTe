@@ -3,7 +3,7 @@
 !package-lock.json
 !.vscode-test.mjs
 !.vscodeignore
-!build-wasm.sh
+!build-parsers.sh
 !LICENSE.md
 !README.md
 !tsconfig.json

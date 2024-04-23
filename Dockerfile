@@ -2,7 +2,7 @@ FROM node:lts-bookworm-slim AS build
 
 WORKDIR /build
 
-# these packages are needed by the "npm install" and "npm run build-wasm" steps related to the grammar packages
+# these packages are needed by the "npm install" and "npm run build-parsers" steps related to the grammar packages
 RUN apt-get update && apt-get install -y \
     emscripten \
     make \
@@ -15,7 +15,7 @@ RUN apt-get update && apt-get install -y \
 COPY package.json package-lock.json /build/
 RUN npm install
 
-COPY build-wasm.sh /build/
-RUN BUILDERS_COUNT=10 npm run build-wasm
+COPY build-parsers.sh /build/
+RUN BUILDERS_COUNT=10 npm run build-parsers
 
 COPY .vscode-test.mjs .vscodeignore LICENSE.md README.md tsconfig.json /build/

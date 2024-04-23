@@ -131,7 +131,7 @@ Credit for this idea goes to the long lineage of lisp structured editors, with a
 - gnu parallel (optional)
 
 2. `npm install`
-3. `npm build-wasm`
+3. `npm build-parsers`
 4. `npm run watch`
 5. In the "Run and Debug" menu of vscode, Start debugging the "Run Extension" target
 
@@ -139,14 +139,14 @@ Credit for this idea goes to the long lineage of lisp structured editors, with a
 
 1. Bump version number in `package.json`
 2. `npm run clean`
-3. `npm run build-wasm`
+3. `npm run build-parsers`
 4. `npm run vscode:prepublish`
 5. `npm run package`
 6. `npm run publish`
 
 ### Rebuild parsers
 
-1. `npm build-wasm`
+1. `npm build-parsers`
 
 ### Configure a new language
 
@@ -157,4 +157,4 @@ Credit for this idea goes to the long lineage of lisp structured editors, with a
 
 ### A language is installed and built but not recognized
 
-Add an entry in `src/languages.ts` -> `languageIDTranslation` mapping the vscode `languageID` to the wasm name (see `build-wasm.sh` -> `build_parser <node_module_name> <wasm_name>`).
+Add an entry in `src/languages.ts` -> `languageIDTranslation` mapping the vscode `languageID` to the wasm name (see `build-parsers.sh` -> `build_parser <node_module_name> <wasm_name>`).

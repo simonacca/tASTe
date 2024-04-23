@@ -69,7 +69,7 @@
     "compile": "tsc -p ./",
     "package": "npx vsce package",
     "publish": "npx vsce publish",
-    "build-wasm": "./build-wasm.sh",
+    "build-parsers": "./build-parsers.sh",
     "watch": "tsc -watch -p ./",
     "lint": "npx prettier --check . && npx eslint src --ext ts",
     "check": "npm run lint && npm run test",
