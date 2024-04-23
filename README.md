@@ -149,12 +149,23 @@ Credit for this idea goes to the long lineage of lisp structured editors, with a
 
 ### Publish
 
-1. Bump version number in `package.json`
-2. `npm run clean`
-3. `npm run build-parsers`
-4. `npm run vscode:prepublish`
-5. `npm run package`
-6. `npm run publish`
+1. `npm run check`
+2. Bump version number in `package.json`
+3. `npm install` to bump it in `package-lock.json`
+4. `git commit -m 'Bump'`
+5. `git tag vx.y.z`
+6. `git push && git push --tags`
+7. `npm run clean`
+8. `npm run build-parsers`
+9. `npm run package`
+10. `npm run publish`
+
+#### Get Personal access token
+
+This only applies if you are the extension publisher (simonacca).
+
+[Instructions](https://code.visualstudio.com/api/working-with-extensions/publishing-extension#get-a-personal-access-token), [PAT tab](https://dev.azure.com/simonacca/_usersSettings/tokens).
+
 
 ### Rebuild parsers
 
