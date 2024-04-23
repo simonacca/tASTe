@@ -7,8 +7,8 @@ import * as TUtils from "./testutils"
 // and of the Final Selection (that is, the selection after the command is applied)
 // - <IS> : Initial selection, Start
 // - <IE> : Initial selection, End
-// - <FS> : Final selection, Start
-// - <FE> : Final selection, end
+// - <FS> : Final selection,   Start
+// - <FE> : Final selection,   End
 
 const cases: TUtils.Test[] = [
   {
@@ -70,6 +70,16 @@ const cases: TUtils.Test[] = [
         {b: 2}<IE>,
         {c: 3}
       ]`,
+  },
+  {
+    cmd: Cmd.SelectBackward,
+    languageId: "typescript",
+    text: `
+    [
+      <FE>{},
+      <IS><IE><FS>{},
+      {},
+  ]`,
   },
 ]
 
