@@ -46,6 +46,16 @@ const cases: TUtils.Test[] = [
     languageId: "typescript",
     text: `
     [
+      <FS><FE><IS>{a: 1}<IE>,
+        {b: 2},
+        {c: 3}
+      ]`,
+  },
+  {
+    cmd: Cmd.SelectBackward,
+    languageId: "typescript",
+    text: `
+    [
         <IS><FS>{a: 1}<FE>,
         {b: 2}<IE>,
         {c: 3}

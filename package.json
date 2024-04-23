@@ -40,11 +40,11 @@
       },
       {
         "command": "taste.GrowSelectionAtStart",
-        "title": "Taste: Grow Selection at Beginning"
+        "title": "Taste: Grow Selection at Start"
       },
       {
         "command": "taste.ShrinkSelectionAtStart",
-        "title": "Taste: Shrink Selection at Beginning"
+        "title": "Taste: Shrink Selection at Start"
       },
       {
         "command": "taste.SelectForward",

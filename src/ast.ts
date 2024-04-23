@@ -3,10 +3,7 @@ import { SyntaxNode } from "web-tree-sitter"
 
 export type Path = SyntaxNode[]
 
-export const pathOfSmallestNodeContainingSelection = (
-  node: SyntaxNode,
-  selection: Selection,
-): Path => {
+export const path2Sel = (node: SyntaxNode, selection: Selection): Path => {
   const isInRange =
     (node.startPosition.row < selection.start.line ||
       (node.startPosition.row === selection.start.line &&
@@ -26,7 +23,7 @@ export const pathOfSmallestNodeContainingSelection = (
   }
 
   for (const child of node.children) {
-    const res = pathOfSmallestNodeContainingSelection(child, selection)
+    const res = path2Sel(child, selection)
     if (res.length > 0) {
       return [node, ...res]
     }
