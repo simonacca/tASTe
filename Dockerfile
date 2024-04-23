@@ -18,4 +18,4 @@ RUN npm install
 COPY build-parsers.sh /build/
 RUN BUILDERS_COUNT=10 npm run build-parsers
 
-COPY .vscode-test.mjs .vscodeignore LICENSE.md README.md tsconfig.json /build/
+COPY .vscodeignore LICENSE.md README.md tsconfig.json /build/

@@ -80,4 +80,11 @@ build_parser tree-sitter-typescript/tsx typescriptreact
 build_parser tree-sitter-zig zig
 # build_parser tree-sitter-vue vue # 2024-04 (no member AcessorSignature in namespace v8)
 
+if [ -n "${BUILDERS_COUNT:-}" ]; then 
+    parallel --wait --id builder
+fi
+
+
+echo "Done building parsers"
 rm -f a.out.js a.out.wasm
+
