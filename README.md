@@ -114,6 +114,19 @@ Here's some suggested ones:
 - Typescript
 - Zig
 
+## Troubleshooting
+
+### Unrecognized language
+
+If you get the message "The language ... is not yet supported by tASTe" but the language of my file listed as supported in this readme,
+it could be that vscode cannot auto-detect the language in question.
+You can verify this by checking that the language is shown correctly  in the bottom-right corner of vscode.
+
+In case it's not shown correctly, you might need to install an extension that enables support for your language.
+
+If the language is already recognized correctly and you still get the "language not supported" error, the problem is probably that the languageId assigned
+by vscode to your language does not coincide with the one used by tree-sitter. Please open an issue!
+
 ## Credits
 
 Credit for this idea goes to the long lineage of lisp structured editors, with a special shoutout to Emac's [paredit](https://paredit.org/) and vscode's [Calva](https://calva.io/). A special thank you also to the developers of [Tree-sitter](https://tree-sitter.github.io/tree-sitter/) and its many parsers, without which this wouldn't be possible.
