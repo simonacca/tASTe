@@ -1,0 +1,33 @@
+name: Check
+on:
+  pull_request:
+    branches:
+      - main
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Install apts
+        run: sudo apt update && sudo apt-get install -y emscripten
+      - uses: actions/checkout@v4
+      - name: Cache install
+        id: cache-install
+        uses: actions/cache@v4
+        with:
+          path: node_modules
+          key: ${{ hashFiles('**/package-lock.json') }}
+      - name: Install
+        if: steps.cache-install.outputs.cache-hit != 'true'
+        run: npm install
+      - name: Cache parser build
+        id: cache-parser-build
+        uses: actions/cache@v4
+        with:
+          path: out/parsers
+          key: ${{ hashFiles('**/package-lock.json', 'build-parsers.sh') }}
+      - name: "Build parsers"
+        if: steps.cache-parser-build.outputs.cache-hit != 'true'
+        run: npm run build-parsers
+        env:
+          BUILDERS_COUNT: 4
+      - run: npm run check

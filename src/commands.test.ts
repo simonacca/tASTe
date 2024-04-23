@@ -78,7 +78,7 @@ describe("Commands", () => {
     const parser = await ParserLib.initParser()
     const { doc, initialSel, finalSel } = TUtils.text2VScodeObjs(c.languageId, c.text)
 
-    await ParserLib.loadLanguage(".", doc.languageId)
+    await ParserLib.loadLanguage(process.cwd(), doc.languageId)
     if (!ParserLib.setParserLanguage(parser, doc.languageId)) {
       throw new Error("Could not set parser language")
     }
