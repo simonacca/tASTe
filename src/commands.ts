@@ -34,13 +34,13 @@ class SelectionStackByDoc {
 const globalSelectionStack = new SelectionStackByDoc()
 
 export const ExpandSelection = (doc: TextDocument, sel: Selection, tree: Parser.Tree) => {
+  let node: SyntaxNode | undefined | null = undefined
   if (sel.isEmpty) {
     sel = U.moveSelectionToFirstNonWhitespace(doc, sel)
+    node = AST.Sel(tree.rootNode, sel)
+  } else {
+    node = AST.Sel(tree.rootNode, sel)?.parent
   }
-
-  const path = AST.path2Sel(tree.rootNode, sel)
-  path.reverse()
-  const node = path.find((n) => !sel.isEqual(U.parserNode2Selection(n)))
 
   if (!node) {
     return
@@ -56,12 +56,16 @@ export const ContractSelection = (doc: TextDocument, sel: Selection, tree: Parse
 }
 
 export const SelectTopLevel = (doc: TextDocument, sel: Selection, tree: Parser.Tree) => {
-  const cursorPath = AST.path2Sel(tree.rootNode, sel)
-
-  if (cursorPath.length < 2) {
+  let node = AST.Sel(tree.rootNode, sel)
+  if (!node) {
     return
   }
-  return U.parserNode2Selection(cursorPath[1])
+
+  while (node.parent?.parent) {
+    node = node?.parent
+  }
+
+  return U.parserNode2Selection(node)
 }
 
 const growFromLeft = (sel: Selection, node: SyntaxNode) => {
@@ -99,11 +103,10 @@ const GrowShrink = (
   direction: "left" | "right",
 ): Selection | undefined => {
   if (sel.isEmpty) {
-    const path = AST.path2Sel(
+    const node = AST.Sel(
       tree.rootNode,
       U.selectCharAfter(U.moveSelectionToFirstNonWhitespace(doc, sel).start),
     )
-    let node = U.last(path)
     if (!node) {
       return
     }
@@ -219,13 +222,13 @@ export const SelectBackward = (doc: TextDocument, sel: Selection, tree: Parser.T
 }
 
 export const MoveCursorForward = (doc: TextDocument, sel: Selection, tree: Parser.Tree) => {
-  const path = AST.path2Sel(tree.rootNode, sel)
+  const node = AST.Sel(tree.rootNode, sel)
 
-  if (path.length < 1) {
+  if (!node) {
     return
   }
 
-  const sibling = path[path.length - 1].nextNamedSibling
+  const sibling = node.nextNamedSibling
   if (!sibling) {
     return
   }
@@ -233,9 +236,8 @@ export const MoveCursorForward = (doc: TextDocument, sel: Selection, tree: Parse
 }
 
 export const MoveCursorBackward = (doc: TextDocument, sel: Selection, tree: Parser.Tree) => {
-  const path = AST.path2Sel(tree.rootNode, sel)
+  const node = AST.Sel(tree.rootNode, sel)
 
-  const node = U.last(path)
   if (!node) {
     return
   }

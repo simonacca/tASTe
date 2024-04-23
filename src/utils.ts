@@ -7,6 +7,19 @@ export function last<T>(a: T[]): T | undefined {
   }
 }
 
+/**
+ * First element of array for which fn produces a value, as well as the produced value
+ */
+export function find<T, R>(array: T[], fn: (i: T) => R | undefined): [T, R] | [] {
+  for (const item of array) {
+    const res = fn(item)
+    if (res) {
+      return [item, res]
+    }
+  }
+  return []
+}
+
 export const logSyntaxNode = (t: string, ASTpath: SyntaxNode[]) => {
   console.log(
     t,

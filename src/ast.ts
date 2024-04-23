@@ -2,35 +2,19 @@ import { Selection } from "vscode"
 import { SyntaxNode, Tree } from "web-tree-sitter"
 import * as U from "./utils"
 
-export type Path = SyntaxNode[]
-
-export const path2Sel = (node: SyntaxNode, selection: Selection): Path => {
-  const isInRange =
-    (node.startPosition.row < selection.start.line ||
-      (node.startPosition.row === selection.start.line &&
-        node.startPosition.column <= selection.start.character)) &&
-    (node.endPosition.row > selection.end.line ||
-      (node.endPosition.row === selection.end.line &&
-        node.endPosition.column >= selection.end.character))
-
-  if (!isInRange) {
-    return []
+export const Sel = (container: SyntaxNode, selection: Selection): SyntaxNode | undefined => {
+  if (!U.parserNode2Selection(container).contains(selection)) {
+    return
   }
 
-  // we do not want anonymous nodes like parentheses
-  // see: https://tree-sitter.github.io/tree-sitter/using-parsers#named-vs-anonymous-nodes
-  if (!node.isNamed) {
-    return []
+  const [_, res] = U.find(container.children, (c) => Sel(c, selection))
+  if (res) {
+    return res
   }
 
-  for (const child of node.children) {
-    const res = path2Sel(child, selection)
-    if (res.length > 0) {
-      return [node, ...res]
-    }
+  if (container.isNamed) {
+    return container
   }
-
-  return [node]
 }
 
 // biggestNodeContaining smallSel which is fully contained in bigSel
@@ -39,8 +23,7 @@ export const biggestNodeContaining = (
   bigSel: Selection,
   smallSel: Selection,
 ): SyntaxNode | undefined => {
-  const path = path2Sel(tree.rootNode, smallSel)
-  let node = U.last(path)
+  let node = Sel(tree.rootNode, smallSel)
   if (!node) {
     return
   }
