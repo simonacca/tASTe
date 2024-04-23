@@ -1,6 +1,20 @@
 # tASTe: The AST Editor
 
-tASTe is a vscode extension to edit code based on its structure (the AST).
+Editing code often involves dealing with low-level textual representations, which can be tedious and error-prone.
+
+**tASTe is a vscode extension to edit code based on its structure**, allowing you to interact more directly with the elements that make up your language.
+
+For example, when your cursor is inside a for loop, you can invoke a command to select the whole loop at once.
+
+Or, if you have a list of elements, tASTe gives you a command to jump from one element to the next, or
+expand the current selection from one element to te next.
+This works equally well with strings in a list as it does with other syntactic elements of many languages;
+you can for instance jump between code blocks (to jump from one function to the next for example), or select
+markdown paragraphs one after the other.
+
+The theme of this plugin is to do away with some of the tediousness of editing code by raising the level of abstraction,
+so as to end up a little closer to manipulating the _concepts_ inherent to your programming language instead of _characters_.
+Hopefully resulting in less errors and more fun :)
 
 ## Commands
 
