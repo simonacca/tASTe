@@ -1,5 +1,6 @@
 import { Selection } from "vscode"
-import { SyntaxNode } from "web-tree-sitter"
+import { SyntaxNode, Tree } from "web-tree-sitter"
+import * as U from "./utils"
 
 export type Path = SyntaxNode[]
 
@@ -30,4 +31,21 @@ export const path2Sel = (node: SyntaxNode, selection: Selection): Path => {
   }
 
   return [node]
+}
+
+// biggestNodeContaining smallSel which is fully contained in bigSel
+export const biggestNodeContaining = (
+  tree: Tree,
+  bigSel: Selection,
+  smallSel: Selection,
+): SyntaxNode | undefined => {
+  const path = path2Sel(tree.rootNode, smallSel)
+  let node = U.last(path)
+  if (!node) {
+    return
+  }
+  while (node && node.parent && bigSel.contains(U.parserNode2Selection(node.parent))) {
+    node = node.parent
+  }
+  return node
 }

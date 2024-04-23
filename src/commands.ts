@@ -115,7 +115,7 @@ const GrowShrink = (
     }
   }
 
-  const sideCharSel = (() => {
+  const edgeChar = ((): Selection => {
     switch (side) {
       case "start": {
         return U.selectCharAfter(sel.start)
@@ -142,37 +142,47 @@ const GrowShrink = (
     }
   })()
 
-  const path = AST.path2Sel(tree.rootNode, sideCharSel)
-  const node = U.last(path)
-  if (!node) {
+  if (!edgeChar) {
+    return
+  }
+
+  // here we cannot just use `sel`, it doesn't work in case sel comprises
+  // of more than 1 element out of a sequence. for example: [<IS><FS>f(1),f(2)<IE>,f(3)<FE>,f(4)]
+  // we cannot use edgeChar either because, as in the example above, it might select
+  // something that is not directly an element of the sequence of interest.
+  // instead, we want to find the biggest syntax node that includes the last character of the selection
+  // and that is fully enclosed by the selection
+
+  let edgeNode = AST.biggestNodeContaining(tree, sel, edgeChar)
+  if (!edgeNode) {
     return
   }
 
   const newSel = (() => {
     if (side === "start" && direction === "left") {
-      return growFromLeft(sel, node)
+      return growFromLeft(sel, edgeNode)
     } else if (side === "start" && direction === "right") {
-      return shrinkFromLeft(sel, node)
+      return shrinkFromLeft(sel, edgeNode)
     } else if (side === "end" && direction === "left") {
-      return shrinkFromRight(sel, node)
+      return shrinkFromRight(sel, edgeNode)
     } else if (side === "end" && direction === "right") {
-      return growFromRight(sel, node)
+      return growFromRight(sel, edgeNode)
     } else if (side === "active" && !sel.isReversed && direction === "right") {
-      return growFromRight(sel, node)
+      return growFromRight(sel, edgeNode)
     } else if (side === "active" && sel.isReversed && direction === "left") {
-      return growFromLeft(sel, node)
+      return growFromLeft(sel, edgeNode)
     } else if (side === "active" && sel.isReversed && direction === "right") {
-      return shrinkFromLeft(sel, node)
+      return shrinkFromLeft(sel, edgeNode)
     } else if (side === "active" && !sel.isReversed && direction === "left") {
-      return shrinkFromRight(sel, node)
+      return shrinkFromRight(sel, edgeNode)
     } else if (side === "anchor" && !sel.isReversed && direction === "right") {
-      return shrinkFromLeft(sel, node)
+      return shrinkFromLeft(sel, edgeNode)
     } else if (side === "anchor" && sel.isReversed && direction === "left") {
-      return shrinkFromRight(sel, node)
+      return shrinkFromRight(sel, edgeNode)
     } else if (side === "anchor" && sel.isReversed && direction === "right") {
-      return growFromRight(sel, node)
+      return growFromRight(sel, edgeNode)
     } else if (side === "anchor" && !sel.isReversed && direction === "left") {
-      return growFromLeft(sel, node)
+      return growFromLeft(sel, edgeNode)
     }
 
     throw new Error("case not handled")

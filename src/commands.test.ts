@@ -81,6 +81,19 @@ const cases: TUtils.Test[] = [
       {},
   ]`,
   },
+  {
+    cmd: Cmd.SelectForward,
+    languageId: "go",
+    text: `function main() {
+      foo(
+        <FS><IS>bar(
+          1,
+          2,
+        )<IE>,
+        3<FE>,
+      )
+    }`,
+  },
 ]
 
 describe("Commands", () => {
