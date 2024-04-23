@@ -65,6 +65,14 @@
       {
         "command": "taste.Raise",
         "title": "Taste: Substitute Parent with Node. AKA: Raise"
+      },
+      {
+        "command": "taste.SwapBackward",
+        "title": "Taste: Swap Node with previous Node"
+      },
+      {
+        "command": "taste.SwapForward",
+        "title": "Taste: Swap Node with next Node"
       }
     ]
   },

@@ -261,3 +261,35 @@ export const Raise = (doc: TextDocument, sel: Selection, tree: Parser.Tree) => {
     editBuilder.replace(U.parserNode2Selection(parent), node.text)
   })
 }
+
+export const SwapForward = (doc: TextDocument, sel: Selection, tree: Parser.Tree) => {
+  const node = AST.Sel(tree.rootNode, sel)
+  const sibling = node?.nextNamedSibling
+
+  if (!node || !sibling) {
+    return
+  }
+
+  const siblingText = sibling.text
+
+  window.activeTextEditor?.edit((editBuilder) => {
+    editBuilder.replace(U.parserNode2Selection(sibling), node.text)
+    editBuilder.replace(U.parserNode2Selection(node), siblingText)
+  })
+}
+
+export const SwapBackward = (doc: TextDocument, sel: Selection, tree: Parser.Tree) => {
+  const node = AST.Sel(tree.rootNode, sel)
+  const sibling = node?.previousNamedSibling
+
+  if (!node || !sibling) {
+    return
+  }
+
+  const nodeText = node.text
+
+  window.activeTextEditor?.edit((editBuilder) => {
+    editBuilder.replace(U.parserNode2Selection(node), sibling.text)
+    editBuilder.replace(U.parserNode2Selection(sibling), nodeText)
+  })
+}
