@@ -131,11 +131,11 @@ export const ShrinkSelectionAtEnd = (
   return GrowShrinkAtSides(doc, selection, tree, "end", "shrink")
 }
 
-export const GrowSelectionAtBeginning = (doc: TextDocument, sel: Selection, tree: Parser.Tree) => {
+export const GrowSelectionAtStart = (doc: TextDocument, sel: Selection, tree: Parser.Tree) => {
   return GrowShrinkAtSides(doc, sel, tree, "beginning", "grow")
 }
 
-export const ShrinkSelectionAtBeginning = (
+export const ShrinkSelectionAtStart = (
   doc: TextDocument,
   sel: Selection,
   tree: Parser.Tree,
@@ -143,7 +143,7 @@ export const ShrinkSelectionAtBeginning = (
   return GrowShrinkAtSides(doc, sel, tree, "beginning", "shrink")
 }
 
-export const GrowOrShrinkSelectionFocusLeft = (
+export const SelectBackward = (
   doc: TextDocument,
   sel: Selection,
   tree: Parser.Tree,
@@ -155,7 +155,7 @@ export const GrowOrShrinkSelectionFocusLeft = (
   }
 }
 
-export const GrowOrShrinkSelectionFocusRight = (
+export const SelectForward = (
   doc: TextDocument,
   sel: Selection,
   tree: Parser.Tree,
@@ -167,7 +167,7 @@ export const GrowOrShrinkSelectionFocusRight = (
   }
 }
 
-export const MoveCursorRight = (doc: TextDocument, sel: Selection, tree: Parser.Tree) => {
+export const MoveCursorForward = (doc: TextDocument, sel: Selection, tree: Parser.Tree) => {
   const path = AST.pathOfSmallestNodeContainingSelection(tree.rootNode, sel)
 
   if (path.length < 1) {
@@ -181,7 +181,7 @@ export const MoveCursorRight = (doc: TextDocument, sel: Selection, tree: Parser.
   return U.emptySelection(U.parserNode2Selection(sibling).start)
 }
 
-export const MoveCursorLeft = (doc: TextDocument, sel: Selection, tree: Parser.Tree) => {
+export const MoveCursorBackward = (doc: TextDocument, sel: Selection, tree: Parser.Tree) => {
   const path = AST.pathOfSmallestNodeContainingSelection(tree.rootNode, sel)
 
   if (path.length < 1) {

@@ -55,17 +55,17 @@ export const activate = async (context: vscode.ExtensionContext) => {
   })
 
   initCommands(context, parser, {
-    "taste.expandSelection": Cmd.ExpandSelection,
-    "taste.contractSelection": Cmd.ContractSelection,
-    "taste.selectTopLevel": Cmd.SelectTopLevel,
-    "taste.growSelectionAtEnd": Cmd.GrowSelectionAtEnd,
-    "taste.shrinkSelectionAtEnd": Cmd.ShrinkSelectionAtEnd,
-    "taste.growSelectionAtBeginning": Cmd.GrowSelectionAtBeginning,
-    "taste.shrinkSelectionAtBeginning": Cmd.ShrinkSelectionAtBeginning,
-    "taste.growOrShrinkSelectionFocusRight": Cmd.GrowOrShrinkSelectionFocusRight,
-    "taste.growOrShrinkSelectionFocusLeft": Cmd.GrowOrShrinkSelectionFocusLeft,
-    "taste.moveCursorLeft": Cmd.MoveCursorLeft,
-    "taste.moveCursorRight": Cmd.MoveCursorRight,
+    "taste.ExpandSelection": Cmd.ExpandSelection,
+    "taste.ContractSelection": Cmd.ContractSelection,
+    "taste.SelectTopLevel": Cmd.SelectTopLevel,
+    "taste.GrowSelectionAtEnd": Cmd.GrowSelectionAtEnd,
+    "taste.ShrinkSelectionAtEnd": Cmd.ShrinkSelectionAtEnd,
+    "taste.GrowSelectionAtStart": Cmd.GrowSelectionAtStart,
+    "taste.ShrinkSelectionAtStart": Cmd.ShrinkSelectionAtStart,
+    "taste.SelectForward": Cmd.SelectForward,
+    "taste.SelectBackward": Cmd.SelectBackward,
+    "taste.MoveCursorBackward": Cmd.MoveCursorBackward,
+    "taste.MoveCursorForward": Cmd.MoveCursorForward,
   })
 }
 

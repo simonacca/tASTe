@@ -24,7 +24,7 @@ const cases: TUtils.Test[] = [
             `,
   },
   {
-    cmd: Cmd.GrowOrShrinkSelectionFocusRight,
+    cmd: Cmd.SelectForward,
     languageId: "typescript",
     text: `
     [
@@ -34,7 +34,7 @@ const cases: TUtils.Test[] = [
       ]`,
   },
   {
-    cmd: Cmd.GrowOrShrinkSelectionFocusRight,
+    cmd: Cmd.SelectForward,
     languageId: "typescript",
     text: `
     [
@@ -44,7 +44,7 @@ const cases: TUtils.Test[] = [
       ]`,
   },
   {
-    cmd: Cmd.GrowOrShrinkSelectionFocusLeft,
+    cmd: Cmd.SelectBackward,
     languageId: "typescript",
     text: `
     [
@@ -54,7 +54,7 @@ const cases: TUtils.Test[] = [
       ]`,
   },
   {
-    cmd: Cmd.GrowOrShrinkSelectionFocusLeft,
+    cmd: Cmd.SelectBackward,
     languageId: "typescript",
     text: `
     [
@@ -76,6 +76,7 @@ describe("Commands", () => {
     }
     const res = c.cmd(doc, initialSel, parser.parse(doc.getText()))
     
+
     // must
     if (res && !finalSel.isEqual(res)) {
       console.log(

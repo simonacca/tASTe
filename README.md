@@ -6,22 +6,22 @@ tASTe is a vscode extension to edit code based on its structure (the AST).
 
 ### Expand and Contract Selection
 
-- `taste.expandSelection`
-- `taste.contractSelection`
+- `taste.ExpandSelection`
+- `taste.ContractSelection`
 
 ![expand and contract selection](media/expand_contract_selection.gif)
 
 ### Grow and Shrink Selection
 
-- `taste.growOrShrinkSelectionFocusRight`
-- `taste.growOrShrinkSelectionFocusLeft`
+- `taste.SelectForward`
+- `taste.SelectBackward`
 
 ![expand and contract selection](media/select_node_forward.gif)
 
 ### Move Cursor
 
-- `taste.moveCursorLeft`
-- `taste.moveCursorRight`
+- `taste.MoveCursorBackward`
+- `taste.MoveCursorForward`
 
 ![move cursor](media/move_cursor.gif)
 
@@ -41,27 +41,27 @@ Here's some suggested ones:
 ```json
 {
   "key": "cmd+e",
-  "command": "taste.expandSelection"
+  "command": "taste.ExpandSelection"
 },
 {
   "key": "cmd+shift+e",
-  "command": "taste.contractSelection"
+  "command": "taste.ContractSelection"
 },
 {
   "key": "shift+cmd+left",
-  "command": "taste.growOrShrinkSelectionFocusLeft"
+  "command": "taste.SelectBackward"
 },
 {
   "key": "shift+cmd+right",
-  "command": "taste.growOrShrinkSelectionFocusRight"
+  "command": "taste.SelectForward"
 },
 {
   "key": "cmd+right",
-  "command": "taste.moveCursorRight"
+  "command": "taste.MoveCursorForward"
 },
 {
   "key": "cmd+left",
-  "command": "taste.moveCursorLeft"
+  "command": "taste.MoveCursorBackward"
 }
 ```
 

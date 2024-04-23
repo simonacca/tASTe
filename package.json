@@ -19,48 +19,48 @@
   "contributes": {
     "commands": [
       {
-        "command": "taste.expandSelection",
+        "command": "taste.ExpandSelection",
         "title": "Taste: Expand Selection"
       },
       {
-        "command": "taste.contractSelection",
+        "command": "taste.ContractSelection",
         "title": "Taste: Contract Selection"
       },
       {
-        "command": "taste.selectTopLevel",
+        "command": "taste.SelectTopLevel",
         "title": "Taste: Select Top Level"
       },
       {
-        "command": "taste.growSelectionAtEnd",
-        "title": "Taste: Grow Selection At End"
+        "command": "taste.GrowSelectionAtEnd",
+        "title": "Taste: Grow Selection at End"
       },
       {
-        "command": "taste.shrinkSelectionAtEnd",
-        "title": "Taste: Shrink Selection At End"
+        "command": "taste.ShrinkSelectionAtEnd",
+        "title": "Taste: Shrink Selection at End"
       },
       {
-        "command": "taste.growSelectionAtBeginning",
-        "title": "Taste: Grow Selection At Beginning"
+        "command": "taste.GrowSelectionAtStart",
+        "title": "Taste: Grow Selection at Beginning"
       },
       {
-        "command": "taste.shrinkSelectionAtBeginning",
-        "title": "Taste: Shrink Selection At Beginning"
+        "command": "taste.ShrinkSelectionAtStart",
+        "title": "Taste: Shrink Selection at Beginning"
       },
       {
-        "command": "taste.growOrShrinkSelectionFocusRight",
-        "title": "Taste: Grow or Shrink Selection Focus to the right"
+        "command": "taste.SelectForward",
+        "title": "Taste: Move selection forward (usually grows it, shrinks it if inverted)"
       },
       {
-        "command": "taste.growOrShrinkSelectionFocusLeft",
-        "title": "Taste: Grow or Shrink Selection Focus to the left"
+        "command": "taste.SelectBackward",
+        "title": "Taste: Move selection backward (usually shrinks it, grows it if inverted)"
       },
       {
-        "command": "taste.moveCursorLeft",
-        "title": "Taste: Move Cursor Left (experimental)"
+        "command": "taste.MoveCursorBackward",
+        "title": "Taste: Move Cursor backward (experimental)"
       },
       {
-        "command": "taste.moveCursorRight",
-        "title": "Taste: Move Cursor Right (experimental)"
+        "command": "taste.MoveCursorForward",
+        "title": "Taste: Move Cursor forward (experimental)"
       }
     ]
   },
