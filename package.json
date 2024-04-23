@@ -65,19 +65,19 @@
     ]
   },
   "scripts": {
-    "vscode:prepublish": "npm run compile",
-    "compile": "tsc -p ./",
-    "package": "npx vsce package",
-    "publish": "npx vsce publish",
     "build-parsers": "./build-parsers.sh",
-    "watch": "tsc -watch -p ./",
-    "lint": "npx prettier --check . && npx eslint src --ext ts",
-    "check": "npm run lint && npm run test",
+    "build": "tsc -p ./",
+    "build-watch": "tsc -p ./ -watch",
     "docker-build-img": "docker build --platform linux/amd64 --network=host -t simonacca/taste .",
-    "test-integration": "vscode-test",
-    "test": "npx jest",
     "clean": "rm -rf out",
-    "format": "npx prettier --write ."
+    "lint": "npx prettier --check . && npx eslint src --ext ts",
+    "format": "npx prettier --write .",
+    "test": "npx jest",
+    "test-watch": "npx jest --watch",
+    "check": "npm run lint && npm run test",
+    "package": "npx vsce package",
+    "vscode:prepublish": "npm run check && npm run build",
+    "publish": "npx vsce publish"
   },
   "devDependencies": {
     "@types/jest": "^29.5.12",

@@ -144,7 +144,7 @@ Credit for this idea goes to the long lineage of lisp structured editors, with a
 
 2. `npm install`
 3. `npm build-parsers`
-4. `npm run watch`
+4. `npm run build-watch`
 5. In the "Run and Debug" menu of vscode, Start debugging the "Run Extension" target
 
 ### Publish
