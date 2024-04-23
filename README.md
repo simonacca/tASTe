@@ -137,10 +137,9 @@ Credit for this idea goes to the long lineage of lisp structured editors, with a
 
 1. Make sure you have installed the following:
 
-- [typescript compiler](https://www.typescriptlang.org/download)
 - [emscripten compiler](https://github.com/emscripten-core/emscripten)
 - nodejs
-- docker
+- docker (optional)
 - gnu parallel (optional)
 
 2. `npm install`
