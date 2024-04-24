@@ -112,14 +112,19 @@ describe("Commands", () => {
     }
     const res = c.cmd(doc, initialSel, parser.parse(doc.getText()))
 
-    // must
     if (res && !finalSel.isEqual(res)) {
       console.log(
         "Want",
         c.text,
         "\n----------------\n",
         "Have",
-        `${doc.getText().slice(0, doc.offsetAt(res.start))}<FS>${doc.getText().slice(doc.offsetAt(res.start), doc.offsetAt(res.end))}<FE>${doc.getText().slice(doc.offsetAt(res.start))}`,
+        [
+          doc.getText().slice(0, doc.offsetAt(res.start)),
+          "<FS>",
+          doc.getText().slice(doc.offsetAt(res.start), doc.offsetAt(res.end)),
+          "<FE>",
+          doc.getText().slice(doc.offsetAt(res.start)),
+        ].join(""),
       )
     }
 
