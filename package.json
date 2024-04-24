@@ -93,6 +93,7 @@
     "tag-n-push": "git tag v$(jq -r '.version' package.json) && git push --tags"
   },
   "devDependencies": {
+    "@tree-sitter-grammars/tree-sitter-yaml": "github:tree-sitter-grammars/tree-sitter-yaml",
     "@tree-sitter-grammars/tree-sitter-markdown": "github:tree-sitter-grammars/tree-sitter-markdown",
     "@types/jest": "^29.5.12",
     "@types/node": "18.x",
