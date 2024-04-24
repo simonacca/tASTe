@@ -2,85 +2,111 @@
 
 set -euo pipefail
 
-DEST_DIR="out/parsers"
+declare -A parsers
 
-# rm -rf "$DEST_DIR"
-mkdir -p "$DEST_DIR"
+parsers[bash]="tree-sitter-bash" 
+parsers[c]="tree-sitter-c" 
+parsers[c-sharp]="tree-sitter-c-sharp" 
+parsers[commonlisp]="tree-sitter-commonlisp" 
+parsers[cpp]="tree-sitter-cpp" 
+parsers[capnp]="tree-sitter-capnp" 
+parsers[clojure]="tree-sitter-clojure" 
+parsers[cobol]="tree-sitter-cobol" 
+parsers[css]="tree-sitter-css" 
+parsers[cuda]="tree-sitter-cuda" 
+parsers[dart]="tree-sitter-dart" 
+parsers[dockerfile]="tree-sitter-dockerfile" 
+parsers[dot]="tree-sitter-dot" 
+parsers[elixir]="tree-sitter-elixir" 
+parsers[erlang]="tree-sitter-erlang" 
+parsers[fish]="tree-sitter-fish" 
+parsers[go]="tree-sitter-go" 
+parsers[go-mod]="tree-sitter-gomod" 
+parsers[graphql]="tree-sitter-graphql" 
+parsers[hack]="tree-sitter-hacklang" 
+parsers[haskell]="tree-sitter-haskell" 
+parsers[hcl]="tree-sitter-hcl" 
+parsers[html]="tree-sitter-html" 
+parsers[java]="tree-sitter-java" 
+parsers[javascript]="tree-sitter-javascript" 
+parsers[jq]="tree-sitter-jq" 
+parsers[json]="tree-sitter-json" 
+parsers[julia]="tree-sitter-julia" 
+parsers[kotlin]="tree-sitter-kotlin" 
+# parsers[latex]="tree-sitter-latex" # 2024-04 (expects parser.h)
+parsers[lua]="tree-sitter-lua" 
+parsers[markdown]="'@tree-sitter-grammars/tree-sitter-markdown/tree-sitter-markdown'" 
+parsers[makefile]="tree-sitter-make" 
+parsers[matlab]="tree-sitter-matlab" 
+# parsers[nginx]="tree-sitter-nginx" # 2024-04 (Cannot find module 'nan')
+parsers[nix]="tree-sitter-nix" 
+parsers[objc]="tree-sitter-objc" 
+# parsers[ocaml]="tree-sitter-ocaml/grammars/ocaml" # 2024-04 (can't find scanner.h)
+# parsers[perl]="tree-sitter-perl" # 2024-04 (can't find grammar.json)
+# parsers[pascal]="tree-sitter-pascal" # 2024-04 (can't find binding.o)
+# parsers[php]="tree-sitter-php/php" # 2024-04 (can't find scanner.h)
+parsers[proto]="tree-sitter-proto" 
+parsers[python]="tree-sitter-python" 
+parsers[qmljs]="tree-sitter-qmljs" 
+parsers[r]="tree-sitter-r" 
+parsers[racket]="tree-sitter-racket" 
+parsers[rust]="tree-sitter-rust" 
+parsers[ruby]="tree-sitter-ruby" 
+parsers[scala]="tree-sitter-scala" 
+parsers[scheme]="tree-sitter-scheme" 
+parsers[scss]="tree-sitter-scss" 
+parsers[sql]="tree-sitter-sql" 
+parsers[swift]="tree-sitter-swift" 
+parsers[toml]="tree-sitter-toml" 
+parsers[typescript]="tree-sitter-typescript/typescript" 
+parsers[typescriptreact]="tree-sitter-typescript/tsx" 
+# parsers[xml]="tree-sitter-xml" # 2024-04 (can't find scanner.h)
+parsers[yaml]="@tree-sitter-grammars/tree-sitter-yaml" 
+parsers[zig]="tree-sitter-zig" 
+# parsers[vue]="tree-sitter-vue" # 2024-04 (no member AcessorSignature in namespace v8)
 
-function build_parser(){
-    echo "Building $2"
-    if [ -n "${BUILDERS_COUNT:-}" ];
-    then 
-        parallel --semaphore -j "$BUILDERS_COUNT" --id builder npx tree-sitter build --wasm "node_modules/$1" --output "$DEST_DIR/$2.wasm"
-    else 
-       npx tree-sitter build --wasm "node_modules/$1" --output "$DEST_DIR/$2.wasm"
-    fi
-}
+# -----------------------------------------------------------------------------
 
 # the dockerfile parser is built with docker and requires linux/amd64
 export DOCKER_DEFAULT_PLATFORM=linux/amd64
+DEST_DIR="out/parsers"
 
+# -----------------------------------------------------------------------------
 
-build_parser tree-sitter-bash bash
-build_parser tree-sitter-c c
-build_parser tree-sitter-c-sharp c-sharp
-build_parser tree-sitter-commonlisp commonlisp
-build_parser tree-sitter-cpp cpp
-build_parser tree-sitter-capnp capnp
-build_parser tree-sitter-clojure clojure
-build_parser tree-sitter-cobol cobol
-build_parser tree-sitter-css css
-build_parser tree-sitter-cuda cuda
-build_parser tree-sitter-dart dart
-build_parser tree-sitter-dockerfile dockerfile
-build_parser tree-sitter-dot dot
-build_parser tree-sitter-elixir elixir
-build_parser tree-sitter-erlang erlang
-build_parser tree-sitter-fish fish
-build_parser tree-sitter-go go
-build_parser tree-sitter-gomod go-mod
-build_parser tree-sitter-graphql graphql
-build_parser tree-sitter-hacklang hack
-build_parser tree-sitter-haskell haskell
-build_parser tree-sitter-hcl hcl
-build_parser tree-sitter-html html
-build_parser tree-sitter-java java
-build_parser tree-sitter-javascript javascript
-build_parser tree-sitter-jq jq
-build_parser tree-sitter-json json
-build_parser tree-sitter-julia julia
-build_parser tree-sitter-kotlin kotlin
-# build_parser tree-sitter-latex latex # 2024-04 (expects parser.h)
-build_parser tree-sitter-lua lua
-build_parser '@tree-sitter-grammars/tree-sitter-markdown/tree-sitter-markdown' markdown
-build_parser tree-sitter-make makefile
-build_parser tree-sitter-matlab matlab
-# build_parser tree-sitter-nginx nginx # 2024-04 (Cannot find module 'nan')
-build_parser tree-sitter-nix nix
-build_parser tree-sitter-objc objc
-# build_parser tree-sitter-ocaml/grammars/ocaml ocaml # 2024-04 (can't find scanner.h)
-# build_parser tree-sitter-perl perl # 2024-04 (can't find grammar.json)
-# build_parser tree-sitter-pascal pascal # 2024-04 (can't find binding.o)
-# build_parser tree-sitter-php/php php # 2024-04 (can't find scanner.h)
-build_parser tree-sitter-proto proto
-build_parser tree-sitter-python python
-build_parser tree-sitter-qmljs qmljs
-build_parser tree-sitter-r r
-build_parser tree-sitter-racket racket
-build_parser tree-sitter-rust rust
-build_parser tree-sitter-ruby ruby
-build_parser tree-sitter-scala scala
-build_parser tree-sitter-scheme scheme
-build_parser tree-sitter-scss scss
-build_parser tree-sitter-sql sql
-build_parser tree-sitter-swift swift
-build_parser tree-sitter-toml toml
-build_parser tree-sitter-typescript/typescript typescript
-build_parser tree-sitter-typescript/tsx typescriptreact
-# build_parser tree-sitter-xml xml # 2024-04 (can't find scanner.h)
-build_parser @tree-sitter-grammars/tree-sitter-yaml yaml
-build_parser tree-sitter-zig zig
-# build_parser tree-sitter-vue vue # 2024-04 (no member AcessorSignature in namespace v8)
+mkdir -p "$DEST_DIR"
+
+function build_parser(){
+    languageID="$1"
+    grammarPath="${parsers[$languageID]}"
+    echo "Building $languageID"
+    if [ -n "${BUILDERS_COUNT:-}" ];
+    then 
+        parallel --semaphore \
+        -j "$BUILDERS_COUNT" \
+        --id builder \
+        npx tree-sitter build \
+            --wasm "node_modules/$grammarPath" \
+            --output "$DEST_DIR/$languageID.wasm"
+    else 
+        npx tree-sitter build \
+            --wasm "node_modules/$grammarPath" \
+            --output "$DEST_DIR/$languageID.wasm"
+    fi
+}
+
+function build_all(){
+    for languageID in "${!parsers[@]}"
+    do
+        build_parser "$languageID"
+    done
+}
+
+if [ -n "${1:-}" ];
+    then
+        build_parser "$1"
+    else
+        build_all
+    fi
 
 
 echo "Done building parsers"

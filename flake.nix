@@ -17,6 +17,7 @@
           pkgs.nodejs
           pkgs.emscripten
           pkgs.jq
+          pkgs.shellcheck
           ];
       };
   });

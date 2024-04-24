@@ -82,7 +82,7 @@
     "build-watch": "tsc -p ./ -watch",
     "docker-build-img": "docker build --platform linux/amd64 --network=host -t simonacca/taste .",
     "clean": "rm -rf out",
-    "lint": "npx prettier --check . && npx eslint src --ext ts",
+    "lint": "npx prettier --check . && npx eslint src --ext ts && shellcheck build-parsers.sh",
     "format": "npx prettier --write .",
     "test": "npx jest",
     "test-watch": "npx jest --watch",
