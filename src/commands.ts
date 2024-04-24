@@ -223,6 +223,7 @@ export const SelectBackward = (doc: TextDocument, sel: Selection, tree: Parser.T
 }
 
 export const MoveCursorForward = (doc: TextDocument, sel: Selection, tree: Parser.Tree) => {
+  sel = U.moveSelectionToFirstNonWhitespace(doc, sel)
   const node = AST.Sel(tree.rootNode, sel)
 
   if (!node) {
