@@ -93,8 +93,8 @@
     "tag-n-push": "git tag v$(jq -r '.version' package.json) && git push --tags"
   },
   "devDependencies": {
-    "@tree-sitter-grammars/tree-sitter-yaml": "github:tree-sitter-grammars/tree-sitter-yaml",
     "@tree-sitter-grammars/tree-sitter-markdown": "github:tree-sitter-grammars/tree-sitter-markdown",
+    "@tree-sitter-grammars/tree-sitter-yaml": "github:tree-sitter-grammars/tree-sitter-yaml",
     "@types/jest": "^29.5.12",
     "@types/node": "18.x",
     "@types/vscode": "^1.80.0",
@@ -116,6 +116,7 @@
     "tree-sitter-commonlisp": "^0.3.3",
     "tree-sitter-cpp": "^0.22.0",
     "tree-sitter-css": "^0.20.0",
+    "tree-sitter-csv": "github:tree-sitter-grammars/tree-sitter-csv",
     "tree-sitter-cuda": "^0.20.4",
     "tree-sitter-dart": "^1.0.0",
     "tree-sitter-dockerfile": "github:camdencheek/tree-sitter-dockerfile",
