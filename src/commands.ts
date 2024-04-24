@@ -12,13 +12,14 @@ export type Command = (
 class SelectionStackByDoc {
   private state = new Map<TextDocument, Selection[]>()
 
+  clear = () => (this.state = new Map())
+
   push = (doc: TextDocument, selection: Selection) => {
-    const prev = this.state.get(doc) || []
     if (selection.isEmpty) {
-      this.state.set(doc, [])
-    } else {
-      this.state.set(doc, [...prev, selection])
+      this.clear()
     }
+    const prev = this.state.get(doc) || []
+    this.state.set(doc, [...prev, selection])
   }
 
   pop = (doc: TextDocument) => {
