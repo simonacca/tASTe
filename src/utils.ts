@@ -20,22 +20,6 @@ export function find<T, R>(array: T[], fn: (i: T) => R | undefined): [T, R] | []
   return []
 }
 
-export const logSyntaxNode = (t: string, ASTpath: SyntaxNode[]) => {
-  console.log(
-    t,
-    "\n",
-    ASTpath.map((n) =>
-      [
-        n.startPosition.row,
-        n.startPosition.column,
-        n.endPosition.row,
-        n.endPosition.column,
-        n.type,
-      ].join("\t"),
-    ).join("\n "),
-  )
-}
-
 export const parserNode2Selection = (node: SyntaxNode) => {
   return new Selection(
     new Position(node.startPosition.row, node.startPosition.column),

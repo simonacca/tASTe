@@ -2,6 +2,7 @@ import * as vscode from "vscode"
 import * as ParserLib from "./parser"
 import * as Cmd from "./commands"
 import TSParser from "web-tree-sitter"
+import { detectLanguage } from "./languageDetection"
 
 const initCommands = (
   context: vscode.ExtensionContext,
@@ -17,9 +18,10 @@ const initCommands = (
         const doc = vscode.window.activeTextEditor.document
         const selection = vscode.window.activeTextEditor.selection
 
-        if (!ParserLib.setParserLanguage(parser, doc.languageId)) {
+        const language = detectLanguage(doc)
+        if (!language || !ParserLib.setParserLanguage(parser, language)) {
           vscode.window.showErrorMessage(
-            `The language "${doc.languageId}" is not yet supported by tASTe. \nPlease consider contributing! https://github.com/simonacca/tASTe`,
+            `The language "${language}" is not yet supported by tASTe. \nPlease consider contributing! https://github.com/simonacca/tASTe`,
           )
         }
 
@@ -41,17 +43,24 @@ export const activate = async (context: vscode.ExtensionContext) => {
   const parser = await ParserLib.initParser()
 
   if (vscode.window.activeTextEditor) {
-    await ParserLib.loadLanguage(
-      context.extensionPath,
-      vscode.window.activeTextEditor.document.languageId,
-    )
+    const language = detectLanguage(vscode.window.activeTextEditor.document)
+    if (!language) {
+      console.warn(`Could not load parser for ${language}`)
+      return
+    }
+    await ParserLib.loadLanguage(context.extensionPath, language)
   }
 
   vscode.window.onDidChangeActiveTextEditor((editor) => {
     if (!editor) {
       return
     }
-    ParserLib.loadLanguage(context.extensionPath, editor.document.languageId)
+    const language = detectLanguage(editor.document)
+    if (!language) {
+      console.warn(`Could not load parser for ${language}`)
+      return
+    }
+    ParserLib.loadLanguage(context.extensionPath, language)
   })
 
   initCommands(context, parser, {
