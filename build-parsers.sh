@@ -53,6 +53,7 @@ build_parser tree-sitter-kotlin kotlin
 # build_parser tree-sitter-latex latex # 2024-04 (expects parser.h)
 build_parser tree-sitter-lua lua
 build_parser '@tree-sitter-grammars/tree-sitter-markdown/tree-sitter-markdown' markdown
+build_parser tree-sitter-make makefile
 build_parser tree-sitter-matlab matlab
 # build_parser tree-sitter-nginx nginx # 2024-04 (Cannot find module 'nan')
 build_parser tree-sitter-nix nix
