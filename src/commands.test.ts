@@ -95,6 +95,23 @@ const cases: TUtils.Test[] = [
       )
     }`,
   },
+  {
+    cmd: Cmd.ExpandSelection,
+    languageId: "go",
+    text: `
+    a
+    if err != nil <FS>{
+      <IS>panic("Failed to perform setup")<IE>
+    }<FE>`,
+  },
+  {
+    cmd: Cmd.ExpandSelection,
+    languageId: "go",
+    text: `
+    a
+    <FS>c := <IS>mainConfig{}<IE><FE>
+    `,
+  },
 ]
 
 describe("Commands", () => {

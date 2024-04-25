@@ -40,7 +40,21 @@ export const ExpandSelection = (doc: TextDocument, sel: Selection, tree: Parser.
     sel = U.moveSelectionToFirstNonWhitespace(doc, sel)
     node = AST.Sel(tree.rootNode, sel)
   } else {
-    node = AST.Sel(tree.rootNode, sel)?.parent
+    node = AST.Sel(tree.rootNode, sel)
+    let parent = node?.parent
+
+    // sometimes the syntax tree has a parent node whose range concides with its child's range.
+    // in these cases we want to try the ancestors further up until we find one
+    // whose range does not coincide with the child.
+    // if we don't manage in 10 attempts, we bail
+    for (let i = 0; i < 10; i++) {
+      if (!node || !parent || !U.areSyntaxNodesSameSelection(node, parent)) {
+        break
+      }
+      parent = parent?.parent
+    }
+
+    node = parent
   }
 
   if (!node) {

@@ -20,6 +20,10 @@ export function find<T, R>(array: T[], fn: (i: T) => R | undefined): [T, R] | []
   return []
 }
 
+export const areSyntaxNodesSameSelection = (a: SyntaxNode, b: SyntaxNode): boolean => {
+  return a.startIndex === b.startIndex && a.endIndex === b.endIndex
+}
+
 export const parserNode2Selection = (node: SyntaxNode) => {
   return new Selection(
     new Position(node.startPosition.row, node.startPosition.column),
