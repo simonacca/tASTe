@@ -34,17 +34,12 @@ parsers[jq]="tree-sitter-jq"
 parsers[json]="tree-sitter-json" 
 parsers[julia]="tree-sitter-julia" 
 parsers[kotlin]="tree-sitter-kotlin" 
-# parsers[latex]="tree-sitter-latex" # 2024-04 (expects parser.h)
 parsers[lua]="tree-sitter-lua" 
 parsers[markdown]="'@tree-sitter-grammars/tree-sitter-markdown/tree-sitter-markdown'" 
 parsers[makefile]="tree-sitter-make" 
 parsers[matlab]="tree-sitter-matlab" 
-# parsers[nginx]="tree-sitter-nginx" # 2024-04 (Cannot find module 'nan')
 parsers[nix]="tree-sitter-nix" 
 parsers[objc]="tree-sitter-objc" 
-# parsers[ocaml]="tree-sitter-ocaml/grammars/ocaml" # 2024-04 (can't find scanner.h)
-# parsers[perl]="tree-sitter-perl" # 2024-04 (can't find grammar.json)
-# parsers[pascal]="tree-sitter-pascal" # 2024-04 (can't find binding.o)
 parsers[php]="tree-sitter-php/php"
 parsers[proto]="tree-sitter-proto" 
 parsers[python]="tree-sitter-python" 
@@ -62,10 +57,8 @@ parsers[toml]="tree-sitter-toml"
 parsers[tsv]="tree-sitter-csv/tsv"
 parsers[typescript]="tree-sitter-typescript/typescript" 
 parsers[typescriptreact]="tree-sitter-typescript/tsx" 
-# parsers[xml]="tree-sitter-xml" # 2024-04 (can't find scanner.h)
 parsers[yaml]="@tree-sitter-grammars/tree-sitter-yaml" 
 parsers[zig]="tree-sitter-zig" 
-# parsers[vue]="tree-sitter-vue" # 2024-04 (no member AcessorSignature in namespace v8)
 
 # -----------------------------------------------------------------------------
 
