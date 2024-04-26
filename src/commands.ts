@@ -263,9 +263,12 @@ export const Raise = (doc: TextDocument, sel: Selection, tree: Parser.Tree) => {
     return
   }
 
+  const parentSel = U.SyntaxNode2Selection(parent)
   window.activeTextEditor?.edit((editBuilder) => {
-    editBuilder.replace(U.SyntaxNode2Selection(parent), node.text)
+    editBuilder.replace(parentSel, node.text)
   })
+
+  return U.emptySelection(parentSel.start)
 }
 
 export const SwapForward = (doc: TextDocument, sel: Selection, tree: Parser.Tree) => {
