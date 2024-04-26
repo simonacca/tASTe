@@ -67,20 +67,24 @@ const cases: TUtils.Test[] = [
     languageId: "typescript",
     text: `
     [
-        👉🏻🫸🏻{a: 1}🫷🏻,
-        {b: 2}👈🏻,
-        {c: 3}
-      ]`,
-  },
-  {
-    cmd: Cmd.SelectBackward,
-    languageId: "typescript",
-    text: `
-    [
       🫷🏻{},
       👉🏻👈🏻🫸🏻{},
       {},
   ]`,
+  },
+  {
+    cmd: Cmd.SelectBackward,
+    languageId: "python",
+    text: `
+    def abc():
+    🫸🏻👉🏻for x in range(3):
+          print(x)🫷🏻
+  
+      if 1 == 2:
+          print("wow")👈🏻
+  
+      while False:
+          print("huh")`,
   },
   {
     cmd: Cmd.SelectForward,
