@@ -32,3 +32,22 @@ export const biggestNodeContaining = (
   }
   return node
 }
+
+/**
+ * Finds a node's parent.
+ * Sometimes the syntax tree has a parent node whose range concides with its child's range.
+ * in these cases we want to try the ancestors further up until we find one
+ * whose range does not coincide with the child.
+ * if we don't manage in 10 attempts, we bail
+ */
+export const enclosingParent = (node: SyntaxNode | undefined): SyntaxNode | null | undefined => {
+  let parent = node?.parent
+  for (let i = 0; i < 10; i++) {
+    if (!node || !parent || !U.areSyntaxNodesSameSelection(node, parent)) {
+      break
+    }
+    parent = parent?.parent
+  }
+
+  return parent
+}

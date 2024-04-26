@@ -40,21 +40,7 @@ export const ExpandSelection = (doc: TextDocument, sel: Selection, tree: Parser.
     sel = U.moveSelectionToFirstNonWhitespace(doc, sel)
     node = AST.Sel(tree.rootNode, sel)
   } else {
-    node = AST.Sel(tree.rootNode, sel)
-    let parent = node?.parent
-
-    // sometimes the syntax tree has a parent node whose range concides with its child's range.
-    // in these cases we want to try the ancestors further up until we find one
-    // whose range does not coincide with the child.
-    // if we don't manage in 10 attempts, we bail
-    for (let i = 0; i < 10; i++) {
-      if (!node || !parent || !U.areSyntaxNodesSameSelection(node, parent)) {
-        break
-      }
-      parent = parent?.parent
-    }
-
-    node = parent
+    node = AST.enclosingParent(AST.Sel(tree.rootNode, sel))
   }
 
   if (!node) {
@@ -76,8 +62,12 @@ export const SelectTopLevel = (doc: TextDocument, sel: Selection, tree: Parser.T
     return
   }
 
-  while (node.parent?.parent) {
-    node = node?.parent
+  // if we can't get to the top in 50 iteration, we bail
+  for (let i = 0; i < 50; i++) {
+    if (!node.parent?.parent) {
+      break
+    }
+    node = node.parent
   }
 
   return U.parserNode2Selection(node)
@@ -267,7 +257,7 @@ export const MoveCursorBackward = (doc: TextDocument, sel: Selection, tree: Pars
 
 export const Raise = (doc: TextDocument, sel: Selection, tree: Parser.Tree) => {
   const node = AST.Sel(tree.rootNode, sel)
-  const parent = node?.parent
+  const parent = AST.enclosingParent(node)
 
   if (!node || !parent) {
     return
