@@ -178,11 +178,12 @@ Credit for this idea goes to the long lineage of lisp structured editors, with a
 
 1. `npm run check`
 2. Bump version number in `package.json`
-3. `git commit -m 'Bump'`
-4. `npm run tag-n-push`
-5. `npm run clean`
-6. `npm run build-parsers`
-7. `npm run publish`
+3. Write changelog
+4. `git commit -m 'Bump'`
+5. `npm run tag-n-push`
+6. `npm run clean`
+7. `npm run build-parsers`
+8. `npm run publish`
 
 #### Get Personal access token
 
