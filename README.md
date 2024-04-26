@@ -96,14 +96,16 @@ Here's some suggested ones:
 
 - Bash
 - C
-- C++
 - C Sharp
 - Common Lisp
+- C++
 - Cap'n Proto
 - Cobol
+- CSV
 - CSS
 - Cuda
 - Dart
+- Dockerfile
 - DOT
 - Elixir
 - Erlang
@@ -123,8 +125,11 @@ Here's some suggested ones:
 - Kotlin
 - Lua
 - Markdown
+- Makefile
 - Matlab
 - Nix
+- Objective C
+- PHP
 - Protobuf
 - Python
 - QML
@@ -133,12 +138,15 @@ Here's some suggested ones:
 - Rust
 - Ruby
 - Scala
+- Scheme
 - SCSS
 - Scheme
 - SQL
 - Swift
 - Toml
+- TSV
 - Typescript
+- YAML
 - Zig
 
 ## Troubleshooting
