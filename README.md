@@ -100,10 +100,8 @@ Here's some suggested ones:
 - Common Lisp
 - C++
 - Cap'n Proto
-- Cobol
 - CSV
 - CSS
-- Cuda
 - Dart
 - Dockerfile
 - DOT
@@ -111,7 +109,6 @@ Here's some suggested ones:
 - Erlang
 - Fish
 - Go
-- Go mod
 - Graphql
 - Hack
 - Haskell
@@ -119,7 +116,6 @@ Here's some suggested ones:
 - HTML
 - Java
 - Javascript
-- JQ
 - JSON
 - Julia
 - Kotlin
@@ -130,7 +126,6 @@ Here's some suggested ones:
 - Nix
 - Objective C
 - PHP
-- Protobuf
 - Python
 - QML
 - R
