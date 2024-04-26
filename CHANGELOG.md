@@ -2,7 +2,11 @@
 
 All notable changes to the "taste" extension will be documented in this file.
 
-## [Unreleased]
+## 1.0.17
+
+- Remove languages that don't work
+- Fix some incorrectly labeled languages
+- Improve selection handling on cmd.Raise
 
 ## 1.0.16
 
