@@ -57,6 +57,7 @@ parsers[toml]="tree-sitter-toml"
 parsers[tsv]="tree-sitter-csv/tsv"
 parsers[typescript]="tree-sitter-typescript/typescript" 
 parsers[typescriptreact]="tree-sitter-typescript/tsx" 
+parsers[xml]="@tree-sitter-grammars/tree-sitter-xml/xml"
 parsers[yaml]="@tree-sitter-grammars/tree-sitter-yaml" 
 parsers[zig]="tree-sitter-zig" 
 

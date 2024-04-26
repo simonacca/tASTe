@@ -7,6 +7,7 @@ All notable changes to the "taste" extension will be documented in this file.
 ## 1.0.16
 
 - Make all commands that reach for parent node more robust
+- Add XML language support
 
 ## 1.0.15
 

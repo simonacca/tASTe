@@ -146,6 +146,7 @@ Here's some suggested ones:
 - Toml
 - TSV
 - Typescript
+- XML
 - YAML
 - Zig
 
