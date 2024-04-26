@@ -4,6 +4,10 @@ All notable changes to the "taste" extension will be documented in this file.
 
 ## [Unreleased]
 
+## 1.0.16
+
+- Make all commands that reach for parent node more robust
+
 ## 1.0.15
 
 - Make expansion command more robust
@@ -19,7 +23,7 @@ All notable changes to the "taste" extension will be documented in this file.
 ## 1.0.13
 
 - Improve move cursor forward command
-- Allow for contraction of selection all the way to an empty selection 
+- Allow for contraction of selection all the way to an empty selection
 
 ## 1.0.12
 
@@ -48,7 +52,6 @@ All notable changes to the "taste" extension will be documented in this file.
 - Implement cursor move commands
 - Add clojure language support
 
-
 ## 1.0.6
 
 - Fix typescriptreact language
@@ -60,8 +63,6 @@ All notable changes to the "taste" extension will be documented in this file.
 - Add go-mod language support
 - Improve error message when a language is not supported
 
-
-
 ## 1.0.4
 
 - Add matlab language support
@@ -71,7 +72,6 @@ All notable changes to the "taste" extension will be documented in this file.
 - Add protobuf language support
 - Add scheme language support
 - Add zig language support
-
 
 ## 1.0.3
 
@@ -84,5 +84,3 @@ All notable changes to the "taste" extension will be documented in this file.
 ## 1.0.0
 
 - Initial release
-
-
