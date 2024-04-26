@@ -1,0 +1,14 @@
+{
+  "Initial": {
+    "scope": "typescript",
+    "prefix": "",
+    "body": ["👉🏻$TM_SELECTED_TEXT👈🏻"],
+    "description": "Initial selection",
+  },
+  "Final": {
+    "scope": "typescript",
+    "prefix": "",
+    "body": ["🫸🏻$TM_SELECTED_TEXT🫷🏻"],
+    "description": "Final Selection",
+  },
+}
