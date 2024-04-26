@@ -2,11 +2,11 @@ import * as vscode from "vscode"
 import * as vsj from "jest-mock-vscode"
 import * as Cmd from "./commands"
 
-const re = /<IS>|<IE>|<FS>|<FE>/g
+const re = /👉🏻|👈🏻|🫸🏻|🫷🏻/g
 export const extractSymbols = (text: string) => {
   const positions = Array.from(text.matchAll(re))
   if (positions.length !== 4) {
-    throw new Error("Must have exactly 4 <> symbols")
+    throw new Error("Must have exactly 4 hand emojis")
   }
 
   const symbols: { [symbol: string]: number } = {}
@@ -16,20 +16,20 @@ export const extractSymbols = (text: string) => {
   symbols[positions[2][0]] = positions[2].index - 4 - 4
   symbols[positions[3][0]] = positions[3].index - 4 - 4 - 4
 
-  if (!symbols["<IS>"]) {
-    throw new Error("Missing symbol <IS>")
+  if (!symbols["👉🏻"]) {
+    throw new Error("Missing symbol 👉🏻")
   }
 
-  if (!symbols["<IE>"]) {
-    throw new Error("Missing symbol <IE>")
+  if (!symbols["👈🏻"]) {
+    throw new Error("Missing symbol 👈🏻")
   }
 
-  if (!symbols["<FS>"]) {
-    throw new Error("Missing symbol <FS>")
+  if (!symbols["🫸🏻"]) {
+    throw new Error("Missing symbol 🫸🏻")
   }
 
-  if (!symbols["<FE>"]) {
-    throw new Error("Missing symbol <FE>")
+  if (!symbols["🫷🏻"]) {
+    throw new Error("Missing symbol 🫷🏻")
   }
 
   return symbols
@@ -49,13 +49,13 @@ export const text2VScodeObjs = (
   const symbols = extractSymbols(text)
 
   const initialSel = new vscode.Selection(
-    doc.positionAt(symbols["<IS>"]),
-    doc.positionAt(symbols["<IE>"]),
+    doc.positionAt(symbols["👉🏻"]),
+    doc.positionAt(symbols["👈🏻"]),
   )
 
   const finalSel = new vscode.Selection(
-    doc.positionAt(symbols["<FS>"]),
-    doc.positionAt(symbols["<FE>"]),
+    doc.positionAt(symbols["🫸🏻"]),
+    doc.positionAt(symbols["🫷🏻"]),
   )
 
   return { doc, initialSel, finalSel }

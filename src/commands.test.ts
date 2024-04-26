@@ -6,10 +6,10 @@ import { detectLanguage } from "./languageDetection"
 // Each test case contains four markers describing the position of the
 // Initial selection (that is, the selection before the command is applied)
 // and of the Final Selection (that is, the selection after the command is applied)
-// - <IS> : Initial selection, Start
-// - <IE> : Initial selection, End
-// - <FS> : Final selection,   Start
-// - <FE> : Final selection,   End
+// - 👉🏻 : Initial selection, Start
+// - 👈🏻 : Initial selection, End
+// - 🫸🏻 : Final selection,   Start
+// - 🫷🏻 : Final selection,   End
 
 const cases: TUtils.Test[] = [
   {
@@ -17,9 +17,9 @@ const cases: TUtils.Test[] = [
     languageId: "typescript",
     text: `
         a = 123
-        <FS>const<IS><IE> a = () => {
+        🫸🏻const👉🏻👈🏻 a = () => {
             
-        }<FE>
+        }🫷🏻
             `,
   },
   {
@@ -27,8 +27,8 @@ const cases: TUtils.Test[] = [
     languageId: "typescript",
     text: `
     [
-        <IS><FS>{a: 1}<IE>,
-        {b: 2}<FE>,
+        👉🏻🫸🏻{a: 1}👈🏻,
+        {b: 2}🫷🏻,
         {c: 3}
       ]`,
   },
@@ -37,7 +37,7 @@ const cases: TUtils.Test[] = [
     languageId: "typescript",
     text: `
     [
-        <IS><IE><FS>{a: 1}<FE>,
+        👉🏻👈🏻🫸🏻{a: 1}🫷🏻,
         {b: 2},
         {c: 3}
       ]`,
@@ -47,7 +47,7 @@ const cases: TUtils.Test[] = [
     languageId: "typescript",
     text: `
     [
-      <FS><FE><IS>{a: 1}<IE>,
+      🫸🏻🫷🏻👉🏻{a: 1}👈🏻,
         {b: 2},
         {c: 3}
       ]`,
@@ -57,8 +57,8 @@ const cases: TUtils.Test[] = [
     languageId: "typescript",
     text: `
     [
-        <IS><FS>{a: 1}<FE>,
-        {b: 2}<IE>,
+        👉🏻🫸🏻{a: 1}🫷🏻,
+        {b: 2}👈🏻,
         {c: 3}
       ]`,
   },
@@ -67,8 +67,8 @@ const cases: TUtils.Test[] = [
     languageId: "typescript",
     text: `
     [
-        <IS><FS>{a: 1}<FE>,
-        {b: 2}<IE>,
+        👉🏻🫸🏻{a: 1}🫷🏻,
+        {b: 2}👈🏻,
         {c: 3}
       ]`,
   },
@@ -77,8 +77,8 @@ const cases: TUtils.Test[] = [
     languageId: "typescript",
     text: `
     [
-      <FE>{},
-      <IS><IE><FS>{},
+      🫷🏻{},
+      👉🏻👈🏻🫸🏻{},
       {},
   ]`,
   },
@@ -87,11 +87,11 @@ const cases: TUtils.Test[] = [
     languageId: "go",
     text: `function main() {
       foo(
-        <FS><IS>bar(
+        🫸🏻👉🏻bar(
           1,
           2,
-        )<IE>,
-        3<FE>,
+        )👈🏻,
+        3🫷🏻,
       )
     }`,
   },
@@ -100,16 +100,16 @@ const cases: TUtils.Test[] = [
     languageId: "go",
     text: `
     a
-    if err != nil <FS>{
-      <IS>panic("Failed to perform setup")<IE>
-    }<FE>`,
+    if err != nil 🫸🏻{
+      👉🏻panic("Failed to perform setup")👈🏻
+    }🫷🏻`,
   },
   {
     cmd: Cmd.ExpandSelection,
     languageId: "go",
     text: `
     a
-    <FS>c := <IS>mainConfig{}<IE><FE>
+    🫸🏻c := 👉🏻mainConfig{}👈🏻🫷🏻
     `,
   },
 ]
@@ -137,9 +137,9 @@ describe("Commands", () => {
         "Have",
         [
           doc.getText().slice(0, doc.offsetAt(res.start)),
-          "<FS>",
+          "🫸🏻",
           doc.getText().slice(doc.offsetAt(res.start), doc.offsetAt(res.end)),
-          "<FE>",
+          "🫷🏻",
           doc.getText().slice(doc.offsetAt(res.start)),
         ].join(""),
       )
