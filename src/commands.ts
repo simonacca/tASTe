@@ -49,7 +49,7 @@ export const ExpandSelection = (doc: TextDocument, sel: Selection, tree: Parser.
 
   globalSelectionStack.push(doc, sel)
 
-  return U.parserNode2Selection(node)
+  return U.SyntaxNode2Selection(node)
 }
 
 export const ContractSelection = (doc: TextDocument, sel: Selection, tree: Parser.Tree) => {
@@ -70,33 +70,33 @@ export const SelectTopLevel = (doc: TextDocument, sel: Selection, tree: Parser.T
     node = node.parent
   }
 
-  return U.parserNode2Selection(node)
+  return U.SyntaxNode2Selection(node)
 }
 
 const growFromLeft = (sel: Selection, node: SyntaxNode) => {
   if (!node.previousNamedSibling) {
     return
   }
-  return new Selection(U.parserNode2Selection(node.previousNamedSibling).start, sel.end)
+  return new Selection(U.SyntaxNode2Selection(node.previousNamedSibling).start, sel.end)
 }
 const growFromRight = (sel: Selection, node: SyntaxNode) => {
   if (!node.nextNamedSibling) {
     return
   }
-  return new Selection(sel.start, U.parserNode2Selection(node.nextNamedSibling).end)
+  return new Selection(sel.start, U.SyntaxNode2Selection(node.nextNamedSibling).end)
 }
 const shrinkFromLeft = (sel: Selection, node: SyntaxNode) => {
-  if (sel.end.isEqual(U.parserNode2Selection(node).end) || !node.nextNamedSibling) {
+  if (sel.end.isEqual(U.SyntaxNode2Selection(node).end) || !node.nextNamedSibling) {
     return U.emptySelection(sel.end)
   } else {
-    return new Selection(U.parserNode2Selection(node.nextNamedSibling).start, sel.end)
+    return new Selection(U.SyntaxNode2Selection(node.nextNamedSibling).start, sel.end)
   }
 }
 const shrinkFromRight = (sel: Selection, node: SyntaxNode) => {
-  if (sel.start.isEqual(U.parserNode2Selection(node).start) || !node.previousNamedSibling) {
+  if (sel.start.isEqual(U.SyntaxNode2Selection(node).start) || !node.previousNamedSibling) {
     return U.emptySelection(sel.start)
   } else {
-    return new Selection(sel.start, U.parserNode2Selection(node.previousNamedSibling).end)
+    return new Selection(sel.start, U.SyntaxNode2Selection(node.previousNamedSibling).end)
   }
 }
 
@@ -117,9 +117,9 @@ const GrowShrink = (
     }
 
     if (direction === "right" && node) {
-      return U.parserNode2Selection(node)
+      return U.SyntaxNode2Selection(node)
     } else if (direction === "left" && node.previousNamedSibling) {
-      return new Selection(sel.end, U.parserNode2Selection(node.previousNamedSibling).start)
+      return new Selection(sel.end, U.SyntaxNode2Selection(node.previousNamedSibling).start)
     }
   }
 
@@ -238,7 +238,7 @@ export const MoveCursorForward = (doc: TextDocument, sel: Selection, tree: Parse
   if (!sibling) {
     return
   }
-  return U.emptySelection(U.parserNode2Selection(sibling).start)
+  return U.emptySelection(U.SyntaxNode2Selection(sibling).start)
 }
 
 export const MoveCursorBackward = (doc: TextDocument, sel: Selection, tree: Parser.Tree) => {
@@ -252,7 +252,7 @@ export const MoveCursorBackward = (doc: TextDocument, sel: Selection, tree: Pars
   if (!sibling) {
     return
   }
-  return U.emptySelection(U.parserNode2Selection(sibling).start)
+  return U.emptySelection(U.SyntaxNode2Selection(sibling).start)
 }
 
 export const Raise = (doc: TextDocument, sel: Selection, tree: Parser.Tree) => {
@@ -264,7 +264,7 @@ export const Raise = (doc: TextDocument, sel: Selection, tree: Parser.Tree) => {
   }
 
   window.activeTextEditor?.edit((editBuilder) => {
-    editBuilder.replace(U.parserNode2Selection(parent), node.text)
+    editBuilder.replace(U.SyntaxNode2Selection(parent), node.text)
   })
 }
 
@@ -279,8 +279,8 @@ export const SwapForward = (doc: TextDocument, sel: Selection, tree: Parser.Tree
   const siblingText = sibling.text
 
   window.activeTextEditor?.edit((editBuilder) => {
-    editBuilder.replace(U.parserNode2Selection(sibling), node.text)
-    editBuilder.replace(U.parserNode2Selection(node), siblingText)
+    editBuilder.replace(U.SyntaxNode2Selection(sibling), node.text)
+    editBuilder.replace(U.SyntaxNode2Selection(node), siblingText)
   })
 }
 
@@ -295,7 +295,7 @@ export const SwapBackward = (doc: TextDocument, sel: Selection, tree: Parser.Tre
   const nodeText = node.text
 
   window.activeTextEditor?.edit((editBuilder) => {
-    editBuilder.replace(U.parserNode2Selection(node), sibling.text)
-    editBuilder.replace(U.parserNode2Selection(sibling), nodeText)
+    editBuilder.replace(U.SyntaxNode2Selection(node), sibling.text)
+    editBuilder.replace(U.SyntaxNode2Selection(sibling), nodeText)
   })
 }

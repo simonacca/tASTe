@@ -2,8 +2,11 @@ import { Selection } from "vscode"
 import { SyntaxNode, Tree } from "web-tree-sitter"
 import * as U from "./utils"
 
+/**
+ * Finds the smallest SyntaxNode that fully encloses `selection`
+ */
 export const Sel = (container: SyntaxNode, selection: Selection): SyntaxNode | undefined => {
-  if (!U.parserNode2Selection(container).contains(selection)) {
+  if (!U.SyntaxNode2Selection(container).contains(selection)) {
     return
   }
 
@@ -17,7 +20,9 @@ export const Sel = (container: SyntaxNode, selection: Selection): SyntaxNode | u
   }
 }
 
-// biggestNodeContaining smallSel which is fully contained in bigSel
+/**
+ * Finds the biggest SyntaxNode containing smallSel which is fully contained in bigSel
+ */
 export const biggestNodeContaining = (
   tree: Tree,
   bigSel: Selection,
@@ -27,7 +32,7 @@ export const biggestNodeContaining = (
   if (!node) {
     return
   }
-  while (node && node.parent && bigSel.contains(U.parserNode2Selection(node.parent))) {
+  while (node && node.parent && bigSel.contains(U.SyntaxNode2Selection(node.parent))) {
     node = node.parent
   }
   return node
