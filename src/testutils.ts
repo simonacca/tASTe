@@ -78,8 +78,8 @@ export interface Test {
  * - 🫸🏻 : Final selection,   Start
  * - 🫷🏻 : Final selection,   End
  */
-export const executeTestCases = (cases: Test[]) => {
-  test.concurrent.each(cases)("%#", async (c) => {
+export const executeTestCases = (cases: Test[], case2Name?: string) => {
+  test.concurrent.each(cases)(case2Name || "%#", async (c) => {
     const parser = await ParserLib.initParser()
     const { doc, initialSel, finalSel } = text2VScodeObjs(c.languageId, c.text)
 
