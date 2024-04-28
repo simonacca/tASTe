@@ -33,6 +33,18 @@ const cases: TUtils.Test[] = [
       ]`,
   },
   {
+    // ensure moveSelectionToFirstNonWhitespace works across newlines
+    cmd: Cmd.SelectForward,
+    languageId: "typescript",
+    text: `
+    [
+        {a: 1},  👉🏻👈🏻  
+
+        🫸🏻{b: 2}🫷🏻,
+        {c: 3}
+      ]`,
+  },
+  {
     cmd: Cmd.SelectBackward,
     languageId: "typescript",
     text: `

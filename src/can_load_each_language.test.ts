@@ -309,7 +309,7 @@ a
     text: `
     class Hacktoberfest {
       public static void main(String[] args) {
-          🫸🏻Sys👉🏻tem👈🏻.out🫷🏻.println("Hello, World!");
+          🫸🏻Sys👉🏻tem👈🏻🫷🏻.out.println("Hello, World!");
       }
   }
     `,

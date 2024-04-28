@@ -1,5 +1,5 @@
 import { SyntaxNode } from "web-tree-sitter"
-import { Selection, Position, TextDocument } from "vscode"
+import { Selection, Position, TextDocument, Range } from "vscode"
 
 /**
  * Last element of an array
@@ -69,9 +69,14 @@ export const emptySelection = (pos: Position) => makeSelectionOfSize(pos, 0)
 export const selectCharAfter = (p: Position) => makeSelectionOfSize(p, 1)
 export const selectCharBefore = (p: Position) => makeSelectionOfSize(movePositionChar(p, -1), 1)
 
+// line.firstNonWhitespaceCharacterIndex is unreliable
+const firstNonWhitespaceIdx = (s: string) => s.search(/\S|$/)
+const isWhitespaceString = (s: string) => !s.replace(/\s/g, "").length
+
 /**
  * When selection is collapsed and occurs before any non-whitespace char
- * in its line, moves it to an empty selection just before the first non-whitespace char
+ *  moves it to an empty selection just before the first non-whitespace char.
+ * Skips lines until it finds a non-whitespace char if necessary.
  */
 export const moveSelectionToFirstNonWhitespace = (
   doc: TextDocument,
@@ -81,10 +86,31 @@ export const moveSelectionToFirstNonWhitespace = (
     return selection
   }
 
-  const line = doc.lineAt(selection.start)
-  if (line.firstNonWhitespaceCharacterIndex > selection.start.character) {
-    return emptySelection(new Position(line.lineNumber, line.firstNonWhitespaceCharacterIndex))
-  } else {
-    return selection
+  let startPos = selection.start
+  while (true) {
+    if (!doc.validatePosition(startPos)) {
+      return selection
+    }
+
+    const line = doc.lineAt(startPos)
+    // line.firstNonWhitespaceCharacterIndex is unreliable
+    const firstNonWhitespace = firstNonWhitespaceIdx(line.text)
+    const nextLineStart = new Position(startPos.line + 1, 0)
+
+    if (firstNonWhitespace === line.text.length) {
+      startPos = nextLineStart
+      continue
+    }
+
+    if (firstNonWhitespace > startPos.character) {
+      return emptySelection(new Position(line.lineNumber, firstNonWhitespace))
+    }
+
+    if (isWhitespaceString(doc.getText(new Range(startPos, line.range.end)))) {
+      startPos = nextLineStart
+      continue
+    } else {
+      return selection
+    }
   }
 }
