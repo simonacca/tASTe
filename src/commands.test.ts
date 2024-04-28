@@ -106,6 +106,21 @@ const cases: TUtils.Test[] = [
     🫸🏻c := 👉🏻mainConfig{}👈🏻🫷🏻
     `,
   },
+  {
+    cmd: Cmd.ExpandSelection,
+    languageId: "typescript",
+    text: `
+[
+  1,
+  🫸🏻[
+    👉🏻2,
+    3👈🏻,
+    4,
+  ]🫷🏻
+]
+
+    `,
+  },
 ]
 
 describe("Commands", () => TUtils.executeTestCases(cases))
