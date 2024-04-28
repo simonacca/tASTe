@@ -23,6 +23,7 @@ const initCommands = (
           vscode.window.showErrorMessage(
             `The language "${language}" is not yet supported by tASTe. \nPlease consider contributing! https://github.com/simonacca/tASTe`,
           )
+          return
         }
 
         const ASTtree = parser.parse(doc.getText())
