@@ -35,21 +35,34 @@ class SelectionStackByDoc {
 const globalSelectionStack = new SelectionStackByDoc()
 
 export const ExpandSelection = (doc: TextDocument, sel: Selection, tree: Parser.Tree) => {
-  let node: SyntaxNode | undefined | null = undefined
+  let parent: SyntaxNode | undefined | null = undefined
   if (sel.isEmpty) {
     sel = U.moveSelectionToFirstNonWhitespace(doc, sel)
-    node = AST.Sel(tree.rootNode, sel)
+    parent = AST.Sel(tree.rootNode, sel)
   } else {
-    node = AST.enclosingParent(AST.Sel(tree.rootNode, sel))
+    const node = AST.Sel(tree.rootNode, sel)
+    if (!node) {
+      return
+    }
+
+    if (U.SyntaxNode2Selection(node).isEqual(sel)) {
+      // in this case sel covers exactly one syntax node, so we jump to its parent
+      parent = AST.enclosingParent(node)
+    } else {
+      // in this case, sel covers more than one syntax node (for example two sibling nodes)
+      // so we jump to node, which is already the smallest syntax node that encloses all of
+      // sel
+      parent = node
+    }
   }
 
-  if (!node) {
+  if (!parent) {
     return
   }
 
   globalSelectionStack.push(doc, sel)
 
-  return U.SyntaxNode2Selection(node)
+  return U.SyntaxNode2Selection(parent)
 }
 
 export const ContractSelection = (doc: TextDocument, sel: Selection, tree: Parser.Tree) => {
