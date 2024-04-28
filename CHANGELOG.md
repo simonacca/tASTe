@@ -7,6 +7,9 @@ All notable changes to the "taste" extension will be documented in this file.
 - Remove languages that don't work
 - Fix some incorrectly labeled languages
 - Improve selection handling on cmd.Raise
+- Fix issue where command would execute with undefined language
+- Make ExpandSelection work when more than one node is selected
+- Make search of first non whitespace character multiline-aware
 
 ## 1.0.16
 
