@@ -121,7 +121,6 @@ Here's some suggested ones:
 - Kotlin
 - Lua
 - Markdown
-- Makefile
 - Matlab
 - Nix
 - Objective C
