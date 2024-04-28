@@ -200,10 +200,11 @@ This only applies if you are the extension publisher (simonacca).
 
 ### Configure a new language
 
-1. Install the parser `npm i tree-sitter-mylanguage`
-2. Add a line to the `build_wasm.sh` script to generate the grammar
-3. List the language in `languageID2ParserName`
-4. Add an entry to `excludeNodeTypes` corresponding to the language
+1. Check [open and closed issues](https://github.com/simonacca/tASTe/issues?q=label%3Alanguage-support) first tagged with `language-support`, that's where unsuccessful attempts at adding languages are documented.
+2. Install the parser `npm i tree-sitter-mylanguage`
+3. Add a line to the `build_wasm.sh` script to generate the grammar
+4. List the language in `languageID2ParserName`
+5. Add an entry to `excludeNodeTypes` corresponding to the language
 
 ### A language is installed and built but not recognized
 
