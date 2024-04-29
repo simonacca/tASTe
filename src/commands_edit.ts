@@ -89,6 +89,17 @@ export const SlurpForward = async (
     return
   }
 
+  const deleteSel = new Selection(
+    U.SyntaxNode2Selection(nextSibling).start,
+
+    // we do this to account for separators
+    // for example in [[1👉🏻👈🏻,2], 3, 4] we want to delete
+    // this whole chunk: [[1,2], 🫸🏻3, 🫷🏻4], not just this: [[1,2], 🫸🏻3🫷🏻, 4]
+    nextSibling.nextNamedSibling
+      ? U.SyntaxNode2Selection(nextSibling.nextNamedSibling).start
+      : U.SyntaxNode2Selection(nextSibling).end,
+  )
+
   const separatorSel = new Selection(
     U.SyntaxNode2Selection(secondToLastNamedChild).end,
     U.SyntaxNode2Selection(lastNamedChild).start,
@@ -98,7 +109,7 @@ export const SlurpForward = async (
   const insertionPoint = U.SyntaxNode2Selection(lastNamedChild).end
 
   await editor.edit((editBuilder) => {
-    editBuilder.replace(U.SyntaxNode2Selection(nextSibling), "")
+    editBuilder.delete(deleteSel)
     editBuilder.insert(insertionPoint, separator + nextSibling.text)
   })
 }
