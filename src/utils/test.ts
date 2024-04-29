@@ -5,6 +5,8 @@ import * as vsj from "jest-mock-vscode"
 import { Command } from "../commands/common"
 import * as ParserLib from "./tree_sitter"
 import { detectLanguage } from "./language_detection"
+import { replaceStr } from "./utils"
+import { selectionify } from "./vscode"
 
 /**
  * Each test case contains four markers describing the position of
@@ -38,17 +40,12 @@ const text2VScodeObjs = (
   languageID: string,
   text: string,
 ): {
-  editor: vscode.TextEditor
   doc: vscode.TextDocument
   initialSel?: vscode.Selection
   finalSel?: vscode.Selection
 } => {
-  const filteredText = text.replace(selectionSymbolsRe, "")
-  const doc = vsj.createTextDocument(
-    vscode.Uri.parse("untitled:Untitled-1"),
-    filteredText,
-    languageID,
-  )
+  const cleanText = text.replace(selectionSymbolsRe, "")
+  const doc = vsj.createTextDocument(vscode.Uri.parse("untitled:Untitled-1"), cleanText, languageID)
   const editor = vsj.createMockTextEditor(jest, doc)
 
   const symbols = extractSelSymbols(text)
@@ -63,7 +60,7 @@ const text2VScodeObjs = (
     finalSel = new vscode.Selection(doc.positionAt(symbols[FSS]), doc.positionAt(symbols[FSE]))
   }
 
-  return { editor, doc, initialSel, finalSel }
+  return { doc, initialSel, finalSel }
 }
 
 const loadParser = async (doc: vscode.TextDocument) => {
@@ -87,7 +84,7 @@ export interface SelectionChangeTest {
 }
 
 export const executeSelectionChangeTest = async (testCase: SelectionChangeTest) => {
-  const { editor, doc, initialSel, finalSel } = text2VScodeObjs(testCase.languageId, testCase.text)
+  const { doc, initialSel, finalSel } = text2VScodeObjs(testCase.languageId, testCase.text)
 
   if (!initialSel) {
     throw new Error("Could not find Initial Selection")
@@ -126,11 +123,53 @@ export interface EditTest {
   cmd: Command
 }
 
+// jest-mock-vscode doesn't implement edits so we do it ourselves
+class EditorEdit implements vscode.TextEditorEdit {
+  doc: vscode.TextDocument
+  text: string
+  lastEditPos: number
+  constructor(doc: vscode.TextDocument) {
+    this.doc = doc
+    this.text = doc.getText()
+    this.lastEditPos = this.text.length
+  }
+
+  // we only allow monotonic edit so that this.text stays in sync with selections over this.doc
+  checkPos(newStartPos: number, newEndPos: number) {
+    if (newStartPos > newEndPos) {
+      throw new Error("newEndPos is lower than newStartPos")
+    }
+    if (newEndPos > this.lastEditPos) {
+      throw new Error("Only edits to monotonically decreasing positions are allowed")
+    }
+    this.lastEditPos = newStartPos
+  }
+
+  replace(location: vscode.Position | vscode.Range | vscode.Selection, value: string): void {
+    const sel = selectionify(location)
+
+    const startPos = this.doc.offsetAt(sel.start)
+    const endPos = this.doc.offsetAt(sel.end)
+    this.checkPos(startPos, endPos)
+
+    this.text = replaceStr(this.text, startPos, endPos, value)
+  }
+
+  insert(location: vscode.Position, value: string): void {
+    this.replace(location, value)
+  }
+
+  delete(location: vscode.Range | vscode.Selection): void {
+    this.replace(location, "")
+  }
+
+  setEndOfLine(endOfLine: vscode.EndOfLine): void {
+    throw new Error("Not implemented")
+  }
+}
+
 export const executeEditTest = async (testCase: EditTest) => {
-  const { editor, doc, initialSel, finalSel } = text2VScodeObjs(
-    testCase.languageId,
-    testCase.initialText,
-  )
+  const { doc, initialSel, finalSel } = text2VScodeObjs(testCase.languageId, testCase.initialText)
 
   if (!initialSel) {
     throw new Error("Could not find Initial Selection")
@@ -141,7 +180,11 @@ export const executeEditTest = async (testCase: EditTest) => {
   }
 
   const parser = await loadParser(doc)
-  await testCase.cmd(doc, initialSel, parser.parse(doc.getText()))
+  const ret = testCase.cmd(doc, initialSel, parser.parse(doc.getText()))
+  const editor = new EditorEdit(doc)
+  if (ret?.edit) {
+    ret.edit(editor)
+  }
 
-  expect(editor.document.getText()).toEqual(testCase.finalText)
+  expect(editor.text).toEqual(testCase.finalText)
 }
