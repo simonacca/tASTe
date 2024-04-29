@@ -19,3 +19,6 @@ export function find<T, R>(array: T[], fn: (i: T) => R | undefined): [T, R] | []
   }
   return []
 }
+
+export const replaceStr = (base: string, from: number, to: number, toInsert: string): string =>
+  base.slice(0, from) + toInsert + base.slice(to)
