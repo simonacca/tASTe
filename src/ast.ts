@@ -56,3 +56,15 @@ export const enclosingParent = (node: SyntaxNode | undefined): SyntaxNode | null
 
   return parent
 }
+
+export const firstAncestorWithNamedChild = (node: SyntaxNode): SyntaxNode | undefined => {
+  while (true) {
+    if (node.firstNamedChild) {
+      return node
+    }
+    if (!node.parent) {
+      return
+    }
+    node = node.parent
+  }
+}

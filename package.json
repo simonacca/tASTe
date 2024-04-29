@@ -73,6 +73,14 @@
       {
         "command": "taste.SwapForward",
         "title": "Taste: Swap Node with next Node"
+      },
+      {
+        "command": "taste.BarfForward",
+        "title": "Taste: Barf Forward.  Last element of the current sequence becomes the next sibling of the current sequence"
+      },
+      {
+        "command": "taste.SlurpForward",
+        "title": "Taste: Slurp Forward. Next sibling of the current sequence becomes last child of the current sequence"
       }
     ]
   },

@@ -58,6 +58,13 @@ Hopefully resulting in less errors and more fun :)
 
 ![swap](media/swap.gif)
 
+### Slurp / Barf
+
+- `taste.SlurpForward`
+- `taste.BarfForward`
+
+![slurp-barf](media/slurp_barf.gif)
+
 ## Install instructions
 
 1. Install from [here](https://marketplace.visualstudio.com/items?itemName=simonacca.taste)

@@ -79,6 +79,8 @@ export const activate = async (context: vscode.ExtensionContext) => {
     "taste.Raise": Cmd.Raise,
     "taste.SwapForward": Cmd.SwapForward,
     "taste.SwapBackward": Cmd.SwapBackward,
+    "taste.BarfForward": Cmd.BarfForward,
+    "taste.SlurpForward": Cmd.SlurpForward,
   })
 }
 
