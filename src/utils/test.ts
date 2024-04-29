@@ -118,3 +118,30 @@ export const executeSelectionChangeTest = async (testCase: SelectionChangeTest) 
 
   expect(newSel).toEqual(finalSel)
 }
+
+export interface EditTest {
+  initialText: string
+  finalText: string
+  languageId: string
+  cmd: Command
+}
+
+export const executeEditTest = async (testCase: EditTest) => {
+  const { editor, doc, initialSel, finalSel } = text2VScodeObjs(
+    testCase.languageId,
+    testCase.initialText,
+  )
+
+  if (!initialSel) {
+    throw new Error("Could not find Initial Selection")
+  }
+
+  if (finalSel) {
+    throw new Error("Should not have Final Selection")
+  }
+
+  const parser = await loadParser(doc)
+  await testCase.cmd(editor, doc, initialSel, parser.parse(doc.getText()))
+
+  expect(editor.document.getText()).toEqual(testCase.finalText)
+}
