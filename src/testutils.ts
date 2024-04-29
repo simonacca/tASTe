@@ -62,7 +62,7 @@ const text2VScodeObjs = (
   return { doc, initialSel, finalSel }
 }
 
-export interface Test {
+export interface SelectionChangeTest {
   text: string
   languageId: string
   cmd: Cmd.Command
@@ -82,7 +82,7 @@ const loadParser = async (doc: vscode.TextDocument) => {
   return parser
 }
 
-export const executeSelectionChangeTest = async (testCase: Test) => {
+export const executeSelectionChangeTest = async (testCase: SelectionChangeTest) => {
   const { doc, initialSel, finalSel } = text2VScodeObjs(testCase.languageId, testCase.text)
 
   if (!initialSel) {
@@ -94,23 +94,23 @@ export const executeSelectionChangeTest = async (testCase: Test) => {
   }
 
   const parser = await loadParser(doc)
-  const res = testCase.cmd(doc, initialSel, parser.parse(doc.getText()))
+  const newSel = testCase.cmd(doc, initialSel, parser.parse(doc.getText()))
 
-  if (res && !finalSel.isEqual(res)) {
+  if (newSel && !finalSel.isEqual(newSel)) {
     console.log(
       "Want",
       testCase.text,
       "\n----------------\n",
       "Have",
       [
-        doc.getText().slice(0, doc.offsetAt(res.start)),
+        doc.getText().slice(0, doc.offsetAt(newSel.start)),
         FSS,
-        doc.getText().slice(doc.offsetAt(res.start), doc.offsetAt(res.end)),
+        doc.getText().slice(doc.offsetAt(newSel.start), doc.offsetAt(newSel.end)),
         FSE,
-        doc.getText().slice(doc.offsetAt(res.start)),
+        doc.getText().slice(doc.offsetAt(newSel.start)),
       ].join(""),
     )
   }
 
-  expect(res).toEqual(finalSel)
+  expect(newSel).toEqual(finalSel)
 }

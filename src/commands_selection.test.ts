@@ -1,7 +1,7 @@
 import * as Cmd from "./commands"
 import * as TUtils from "./testutils"
 
-const cases: TUtils.Test[] = [
+const cases: TUtils.SelectionChangeTest[] = [
   {
     cmd: Cmd.SelectTopLevel,
     languageId: "typescript",

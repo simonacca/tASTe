@@ -7,7 +7,7 @@ import * as TUtils from "./testutils"
 // They are not meant to validate the precise details of each parser's
 // behavior. See other tests for that.
 
-const cases: TUtils.Test[] = [
+const cases: TUtils.SelectionChangeTest[] = [
   {
     cmd: Cmd.SelectTopLevel,
     languageId: "bash",
