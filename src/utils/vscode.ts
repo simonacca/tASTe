@@ -79,7 +79,7 @@ export const moveSelectionToFirstNonWhitespace = (
  * Convert a Position, a range or a Selection into a Selection
  */
 export const selectionify = (location: Position | Range | Selection): Selection => {
-  if ((location as any).line) {
+  if ((location as any).line !== undefined) {
     return new Selection(location as any, location as any)
   } else {
     return new Selection((location as any).start, (location as any).end)

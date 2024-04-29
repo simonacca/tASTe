@@ -125,6 +125,7 @@ export const BarfForward = (doc: TextDocument, sel: Selection, tree: Parser.Tree
   const insertionPoint = tsUtils.SyntaxNode2Selection(nextSibling).start
 
   const edit = (editBuilder: TextEditorEdit) => {
+    editBuilder.insert(insertionPoint, lastNamedChild.text + separator)
     editBuilder.replace(
       new Selection(
         tsUtils.SyntaxNode2Selection(lastNamedChild).start,
@@ -132,7 +133,6 @@ export const BarfForward = (doc: TextDocument, sel: Selection, tree: Parser.Tree
       ),
       "",
     )
-    editBuilder.insert(insertionPoint, lastNamedChild.text + separator)
   }
 
   return { edit }
