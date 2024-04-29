@@ -1,13 +1,15 @@
 import * as vscode from "vscode"
 import * as ParserLib from "./parser"
-import * as Cmd from "./commands"
+import * as SelCmds from "./commands_selection"
+import * as EditCmds from "./commands_edit"
 import TSParser from "web-tree-sitter"
 import { detectLanguage } from "./languageDetection"
+import { Command } from "./commands"
 
 const initCommands = (
   context: vscode.ExtensionContext,
   parser: TSParser,
-  commands: { [key: string]: Cmd.Command },
+  commands: { [key: string]: Command },
 ) => {
   for (const cmd of Object.entries(commands)) {
     context.subscriptions.push(
@@ -65,22 +67,22 @@ export const activate = async (context: vscode.ExtensionContext) => {
   })
 
   initCommands(context, parser, {
-    "taste.ExpandSelection": Cmd.ExpandSelection,
-    "taste.ContractSelection": Cmd.ContractSelection,
-    "taste.SelectTopLevel": Cmd.SelectTopLevel,
-    "taste.GrowSelectionAtEnd": Cmd.GrowSelectionAtEnd,
-    "taste.ShrinkSelectionAtEnd": Cmd.ShrinkSelectionAtEnd,
-    "taste.GrowSelectionAtStart": Cmd.GrowSelectionAtStart,
-    "taste.ShrinkSelectionAtStart": Cmd.ShrinkSelectionAtStart,
-    "taste.SelectForward": Cmd.SelectForward,
-    "taste.SelectBackward": Cmd.SelectBackward,
-    "taste.MoveCursorBackward": Cmd.MoveCursorBackward,
-    "taste.MoveCursorForward": Cmd.MoveCursorForward,
-    "taste.Raise": Cmd.Raise,
-    "taste.SwapForward": Cmd.SwapForward,
-    "taste.SwapBackward": Cmd.SwapBackward,
-    "taste.BarfForward": Cmd.BarfForward,
-    "taste.SlurpForward": Cmd.SlurpForward,
+    "taste.ExpandSelection": SelCmds.ExpandSelection,
+    "taste.ContractSelection": SelCmds.ContractSelection,
+    "taste.SelectTopLevel": SelCmds.SelectTopLevel,
+    "taste.GrowSelectionAtEnd": SelCmds.GrowSelectionAtEnd,
+    "taste.ShrinkSelectionAtEnd": SelCmds.ShrinkSelectionAtEnd,
+    "taste.GrowSelectionAtStart": SelCmds.GrowSelectionAtStart,
+    "taste.ShrinkSelectionAtStart": SelCmds.ShrinkSelectionAtStart,
+    "taste.SelectForward": SelCmds.SelectForward,
+    "taste.SelectBackward": SelCmds.SelectBackward,
+    "taste.MoveCursorBackward": SelCmds.MoveCursorBackward,
+    "taste.MoveCursorForward": SelCmds.MoveCursorForward,
+    "taste.Raise": EditCmds.Raise,
+    "taste.SwapForward": EditCmds.SwapForward,
+    "taste.SwapBackward": EditCmds.SwapBackward,
+    "taste.BarfForward": EditCmds.BarfForward,
+    "taste.SlurpForward": EditCmds.SlurpForward,
   })
 }
 

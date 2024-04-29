@@ -1,6 +1,6 @@
 import * as vscode from "vscode"
 import * as vsj from "jest-mock-vscode"
-import * as Cmd from "./commands"
+import { Command } from "./commands"
 import * as ParserLib from "./parser"
 import { detectLanguage } from "./languageDetection"
 
@@ -65,7 +65,7 @@ const text2VScodeObjs = (
 export interface SelectionChangeTest {
   text: string
   languageId: string
-  cmd: Cmd.Command
+  cmd: Command
 }
 
 const loadParser = async (doc: vscode.TextDocument) => {

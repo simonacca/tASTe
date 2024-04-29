@@ -1,9 +1,9 @@
-import * as Cmd from "./commands"
+import * as Cmds from "./commands_selection"
 import * as TUtils from "./testutils"
 
 const cases: TUtils.SelectionChangeTest[] = [
   {
-    cmd: Cmd.SelectTopLevel,
+    cmd: Cmds.SelectTopLevel,
     languageId: "typescript",
     text: `
         a = 123
@@ -13,7 +13,7 @@ const cases: TUtils.SelectionChangeTest[] = [
             `,
   },
   {
-    cmd: Cmd.SelectForward,
+    cmd: Cmds.SelectForward,
     languageId: "typescript",
     text: `
     [
@@ -23,7 +23,7 @@ const cases: TUtils.SelectionChangeTest[] = [
       ]`,
   },
   {
-    cmd: Cmd.SelectForward,
+    cmd: Cmds.SelectForward,
     languageId: "typescript",
     text: `
     [
@@ -34,7 +34,7 @@ const cases: TUtils.SelectionChangeTest[] = [
   },
   {
     // ensure moveSelectionToFirstNonWhitespace works across newlines
-    cmd: Cmd.SelectForward,
+    cmd: Cmds.SelectForward,
     languageId: "typescript",
     text: `
     [
@@ -45,7 +45,7 @@ const cases: TUtils.SelectionChangeTest[] = [
       ]`,
   },
   {
-    cmd: Cmd.SelectBackward,
+    cmd: Cmds.SelectBackward,
     languageId: "typescript",
     text: `
     [
@@ -55,7 +55,7 @@ const cases: TUtils.SelectionChangeTest[] = [
       ]`,
   },
   {
-    cmd: Cmd.SelectBackward,
+    cmd: Cmds.SelectBackward,
     languageId: "typescript",
     text: `
     [
@@ -65,7 +65,7 @@ const cases: TUtils.SelectionChangeTest[] = [
       ]`,
   },
   {
-    cmd: Cmd.SelectBackward,
+    cmd: Cmds.SelectBackward,
     languageId: "typescript",
     text: `
     [
@@ -75,7 +75,7 @@ const cases: TUtils.SelectionChangeTest[] = [
   ]`,
   },
   {
-    cmd: Cmd.SelectBackward,
+    cmd: Cmds.SelectBackward,
     languageId: "python",
     text: `
     def abc():
@@ -89,7 +89,7 @@ const cases: TUtils.SelectionChangeTest[] = [
           print("huh")`,
   },
   {
-    cmd: Cmd.SelectForward,
+    cmd: Cmds.SelectForward,
     languageId: "go",
     text: `function main() {
       foo(
@@ -102,7 +102,7 @@ const cases: TUtils.SelectionChangeTest[] = [
     }`,
   },
   {
-    cmd: Cmd.ExpandSelection,
+    cmd: Cmds.ExpandSelection,
     languageId: "go",
     text: `
     a
@@ -111,7 +111,7 @@ const cases: TUtils.SelectionChangeTest[] = [
     }🫷🏻`,
   },
   {
-    cmd: Cmd.ExpandSelection,
+    cmd: Cmds.ExpandSelection,
     languageId: "go",
     text: `
     a
@@ -119,7 +119,7 @@ const cases: TUtils.SelectionChangeTest[] = [
     `,
   },
   {
-    cmd: Cmd.ExpandSelection,
+    cmd: Cmds.ExpandSelection,
     languageId: "typescript",
     text: `
 [

@@ -1,4 +1,4 @@
-import * as Cmd from "./commands"
+import * as Cmds from "./commands_selection"
 import * as TUtils from "./testutils"
 
 // These tests are solely meant to validate
@@ -9,7 +9,7 @@ import * as TUtils from "./testutils"
 
 const cases: TUtils.SelectionChangeTest[] = [
   {
-    cmd: Cmd.SelectTopLevel,
+    cmd: Cmds.SelectTopLevel,
     languageId: "bash",
     text: `
     🫸🏻echo "Hell👉🏻👈🏻o World"🫷🏻
@@ -20,7 +20,7 @@ const cases: TUtils.SelectionChangeTest[] = [
     `,
   },
   {
-    cmd: Cmd.SelectTopLevel,
+    cmd: Cmds.SelectTopLevel,
     languageId: "c",
     text: `
     //Hello World in C
@@ -33,7 +33,7 @@ const cases: TUtils.SelectionChangeTest[] = [
     `,
   },
   {
-    cmd: Cmd.SelectTopLevel,
+    cmd: Cmds.SelectTopLevel,
     languageId: "csharp",
     text: `
     using System;
@@ -52,7 +52,7 @@ const cases: TUtils.SelectionChangeTest[] = [
      `,
   },
   {
-    cmd: Cmd.SelectTopLevel,
+    cmd: Cmds.SelectTopLevel,
     languageId: "lisp",
     text: `
     🫸🏻(print "Hello 👉🏻👈🏻World")🫷🏻
@@ -61,7 +61,7 @@ const cases: TUtils.SelectionChangeTest[] = [
     `,
   },
   {
-    cmd: Cmd.SelectTopLevel,
+    cmd: Cmds.SelectTopLevel,
     languageId: "cpp",
     text: `
     #include <iostream>
@@ -74,7 +74,7 @@ const cases: TUtils.SelectionChangeTest[] = [
     `,
   },
   {
-    cmd: Cmd.SelectTopLevel,
+    cmd: Cmds.SelectTopLevel,
     languageId: "capnp",
     text: `
     🫸🏻struct Person {
@@ -90,7 +90,7 @@ const cases: TUtils.SelectionChangeTest[] = [
     `,
   },
   {
-    cmd: Cmd.SelectTopLevel,
+    cmd: Cmds.SelectTopLevel,
     languageId: "clojure",
     text: `
     (ns clojure.examples.hello
@@ -101,7 +101,7 @@ const cases: TUtils.SelectionChangeTest[] = [
     `,
   },
   {
-    cmd: Cmd.SelectTopLevel,
+    cmd: Cmds.SelectTopLevel,
     languageId: "csv",
     text: `
     a,b,c
@@ -110,7 +110,7 @@ const cases: TUtils.SelectionChangeTest[] = [
     `,
   },
   {
-    cmd: Cmd.SelectTopLevel,
+    cmd: Cmds.SelectTopLevel,
     languageId: "css",
     text: `
     /* Printing Hello World in CSS */
@@ -125,7 +125,7 @@ const cases: TUtils.SelectionChangeTest[] = [
     `,
   },
   {
-    cmd: Cmd.ExpandSelection,
+    cmd: Cmds.ExpandSelection,
     languageId: "dart",
     text: `
     var name = 'Voyager I';
@@ -139,7 +139,7 @@ const cases: TUtils.SelectionChangeTest[] = [
     `,
   },
   {
-    cmd: Cmd.SelectTopLevel,
+    cmd: Cmds.SelectTopLevel,
     languageId: "dockerfile",
     text: `
     FROM node:lts-bookworm-slim AS build
@@ -161,7 +161,7 @@ const cases: TUtils.SelectionChangeTest[] = [
     `,
   },
   {
-    cmd: Cmd.SelectTopLevel,
+    cmd: Cmds.SelectTopLevel,
     languageId: "dot",
     text: `
     digraph 🫸🏻{
@@ -173,7 +173,7 @@ a
     `,
   },
   {
-    cmd: Cmd.SelectTopLevel,
+    cmd: Cmds.SelectTopLevel,
     languageId: "elixir",
     text: `
     🫸🏻defprotocol Double do
@@ -192,7 +192,7 @@ a
     `,
   },
   {
-    cmd: Cmd.SelectTopLevel,
+    cmd: Cmds.SelectTopLevel,
     languageId: "erlang",
     text: `
     
@@ -207,7 +207,7 @@ a
 `,
   },
   {
-    cmd: Cmd.SelectTopLevel,
+    cmd: Cmds.SelectTopLevel,
     languageId: "fish",
     text: `
     #!/usr/bin/env fish
@@ -217,7 +217,7 @@ a
     `,
   },
   {
-    cmd: Cmd.SelectTopLevel,
+    cmd: Cmds.SelectTopLevel,
     languageId: "go",
     text: `
     🫸🏻func foo(x int){
@@ -232,7 +232,7 @@ a
     `,
   },
   {
-    cmd: Cmd.SelectTopLevel,
+    cmd: Cmds.SelectTopLevel,
     languageId: "graphql",
     text: `
     🫸🏻{
@@ -249,7 +249,7 @@ a
     `,
   },
   {
-    cmd: Cmd.ExpandSelection,
+    cmd: Cmds.ExpandSelection,
     languageId: "hack",
     text: `
     
@@ -261,7 +261,7 @@ a
     `,
   },
   {
-    cmd: Cmd.SelectTopLevel,
+    cmd: Cmds.SelectTopLevel,
     languageId: "haskell",
     text: `
     module Main where
@@ -272,7 +272,7 @@ a
     `,
   },
   {
-    cmd: Cmd.ExpandSelection,
+    cmd: Cmds.ExpandSelection,
     languageId: "hcl",
     text: `
     locals {
@@ -284,7 +284,7 @@ a
     `,
   },
   {
-    cmd: Cmd.SelectTopLevel,
+    cmd: Cmds.SelectTopLevel,
     languageId: "html",
     text: `
     <!DOCTYPE html>
@@ -304,7 +304,7 @@ a
     `,
   },
   {
-    cmd: Cmd.ExpandSelection,
+    cmd: Cmds.ExpandSelection,
     languageId: "java",
     text: `
     class Hacktoberfest {
@@ -315,7 +315,7 @@ a
     `,
   },
   {
-    cmd: Cmd.SelectTopLevel,
+    cmd: Cmds.SelectTopLevel,
     languageId: "javascript",
     text: `
     console.log("hi")
@@ -334,21 +334,21 @@ a
     `,
   },
   {
-    cmd: Cmd.ExpandSelection,
+    cmd: Cmds.ExpandSelection,
     languageId: "json",
     text: `
     [1,2,{🫸🏻"a":👉🏻[4,5,6]👈🏻🫷🏻}]
     `,
   },
   {
-    cmd: Cmd.ExpandSelection,
+    cmd: Cmds.ExpandSelection,
     languageId: "julia",
     text: `
     println(🫸🏻"Hello👉🏻👈🏻, World!"🫷🏻)
     `,
   },
   {
-    cmd: Cmd.ExpandSelection,
+    cmd: Cmds.ExpandSelection,
     languageId: "kotlin",
     text: `
     fun main(args: Array<🫸🏻St👉🏻👈🏻ring🫷🏻>){
@@ -358,12 +358,12 @@ a
     `,
   },
   {
-    cmd: Cmd.ExpandSelection,
+    cmd: Cmds.ExpandSelection,
     languageId: "lua",
     text: `print(🫸🏻fa👉🏻👈🏻ct🫷🏻(a))`,
   },
   {
-    cmd: Cmd.ExpandSelection,
+    cmd: Cmds.ExpandSelection,
     languageId: "markdown",
     text: `
 - qwe
@@ -372,7 +372,7 @@ a
     `,
   },
   {
-    cmd: Cmd.ExpandSelection,
+    cmd: Cmds.ExpandSelection,
     languageId: "matlab",
     text: `
     disp(🫸🏻'Hello Wo👉🏻👈🏻rld'🫷🏻);
@@ -380,7 +380,7 @@ a
     `,
   },
   {
-    cmd: Cmd.ExpandSelection,
+    cmd: Cmds.ExpandSelection,
     languageId: "nix",
     text: `
     pkgs.writeText "hello-world.nix" ''🫸🏻
@@ -389,7 +389,7 @@ a
     `,
   },
   {
-    cmd: Cmd.ExpandSelection,
+    cmd: Cmds.ExpandSelection,
     languageId: "objective-c",
     text: `
     @interface Box:NSObject {
@@ -403,14 +403,14 @@ a
     `,
   },
   {
-    cmd: Cmd.ExpandSelection,
+    cmd: Cmds.ExpandSelection,
     languageId: "php",
     text: `
     <?php 🫸🏻echo 👉🏻'Hello, World!'👈🏻;🫷🏻 ?>
     `,
   },
   {
-    cmd: Cmd.ExpandSelection,
+    cmd: Cmds.ExpandSelection,
     languageId: "python",
     text: `
     custom_message = "Hello World!"
@@ -419,7 +419,7 @@ a
     `,
   },
   {
-    cmd: Cmd.ExpandSelection,
+    cmd: Cmds.ExpandSelection,
     languageId: "qml",
     text: `
     import QtQuick 2.7
@@ -430,14 +430,14 @@ a
     `,
   },
   {
-    cmd: Cmd.ExpandSelection,
+    cmd: Cmds.ExpandSelection,
     languageId: "r",
     text: `
     cat(🫸🏻'Hello Worl👉🏻👈🏻d'🫷🏻)
     `,
   },
   {
-    cmd: Cmd.ExpandSelection,
+    cmd: Cmds.ExpandSelection,
     languageId: "racket",
     text: `
     #lang br
@@ -446,7 +446,7 @@ a
     `,
   },
   {
-    cmd: Cmd.ExpandSelection,
+    cmd: Cmds.ExpandSelection,
     languageId: "rust",
     text: `
     fn add2(x: i32, 🫸🏻y: 👉🏻i32👈🏻🫷🏻) -> i32 {
@@ -456,14 +456,14 @@ a
     `,
   },
   {
-    cmd: Cmd.ExpandSelection,
+    cmd: Cmds.ExpandSelection,
     languageId: "ruby",
     text: `
     puts '🫸🏻He👉🏻👈🏻llo World🫷🏻'
     `,
   },
   {
-    cmd: Cmd.ExpandSelection,
+    cmd: Cmds.ExpandSelection,
     languageId: "scala",
     text: `
     object HelloWorld extends App {
@@ -472,7 +472,7 @@ a
     `,
   },
   {
-    cmd: Cmd.ExpandSelection,
+    cmd: Cmds.ExpandSelection,
     languageId: "scheme",
     text: `
     (show '(across the universe) file1)
@@ -481,7 +481,7 @@ a
     `,
   },
   {
-    cmd: Cmd.ExpandSelection,
+    cmd: Cmds.ExpandSelection,
     languageId: "scss",
     text: `
     $font-stack: Helvetica, sans-serif;
@@ -494,7 +494,7 @@ a
     `,
   },
   {
-    cmd: Cmd.ExpandSelection,
+    cmd: Cmds.ExpandSelection,
     languageId: "sql",
     text: `
     CREATE TABLE HelloWorld (
@@ -509,7 +509,7 @@ a
     `,
   },
   {
-    cmd: Cmd.ExpandSelection,
+    cmd: Cmds.ExpandSelection,
     languageId: "swift",
     text: `
     println(🫸🏻'Hello W👉🏻👈🏻orld'🫷🏻);
@@ -517,7 +517,7 @@ a
     `,
   },
   {
-    cmd: Cmd.ExpandSelection,
+    cmd: Cmds.ExpandSelection,
     languageId: "toml",
     text: `
     [servers]
@@ -532,7 +532,7 @@ a
     `,
   },
   {
-    cmd: Cmd.ExpandSelection,
+    cmd: Cmds.ExpandSelection,
     languageId: "typescript",
     text: `
     let message: 🫸🏻stri👉🏻👈🏻ng🫷🏻 = "Hello World!";
@@ -541,7 +541,7 @@ a
     `,
   },
   {
-    cmd: Cmd.ExpandSelection,
+    cmd: Cmds.ExpandSelection,
     languageId: "typescriptreact",
     text: `
     const MyComponent = () => {
@@ -556,7 +556,7 @@ a
     `,
   },
   {
-    cmd: Cmd.ExpandSelection,
+    cmd: Cmds.ExpandSelection,
     languageId: "xml",
     text: `
     <root>
@@ -565,7 +565,7 @@ a
     `,
   },
   {
-    cmd: Cmd.ExpandSelection,
+    cmd: Cmds.ExpandSelection,
     languageId: "yaml",
     text: `
     markup-languages:
@@ -582,7 +582,7 @@ a
     `,
   },
   {
-    cmd: Cmd.ExpandSelection,
+    cmd: Cmds.ExpandSelection,
     languageId: "zig",
     text: `
     const std = @import("std");
