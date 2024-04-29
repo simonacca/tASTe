@@ -1,5 +1,5 @@
-import * as Cmds from "./commands_selection"
-import * as TUtils from "./testutils"
+import * as Cmds from "./selection"
+import * as TUtils from "../utils/test"
 
 const cases: TUtils.SelectionChangeTest[] = [
   {

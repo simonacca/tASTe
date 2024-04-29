@@ -2,9 +2,9 @@ import { expect, jest } from "@jest/globals"
 
 import * as vscode from "vscode"
 import * as vsj from "jest-mock-vscode"
-import { Command } from "./commands"
-import * as ParserLib from "./parser"
-import { detectLanguage } from "./languageDetection"
+import { Command } from "../commands/common"
+import * as ParserLib from "./tree_sitter"
+import { detectLanguage } from "./language_detection"
 
 /**
  * Each test case contains four markers describing the position of

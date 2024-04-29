@@ -1,5 +1,5 @@
-import * as Cmds from "./commands_selection"
-import * as TUtils from "./testutils"
+import * as Cmds from "./selection"
+import * as TUtils from "../utils/test"
 
 // These tests are solely meant to validate
 // that we can call into each language's parser correctly,

@@ -1,8 +1,8 @@
 import { TextDocument, Selection, TextEditor } from "vscode"
 import Parser, { SyntaxNode } from "web-tree-sitter"
-import * as U from "./utils"
-import * as AST from "./ast"
-import { CommandRet, globalSelectionStack } from "./commands"
+import * as vsUtils from "../utils/vscode"
+import * as tsUtils from "../utils/tree_sitter"
+import { CommandRet, globalSelectionStack } from "./common"
 
 export const ExpandSelection = async (
   _: TextEditor,
@@ -12,17 +12,17 @@ export const ExpandSelection = async (
 ): CommandRet => {
   let parent: SyntaxNode | undefined | null = undefined
   if (sel.isEmpty) {
-    sel = U.moveSelectionToFirstNonWhitespace(doc, sel)
-    parent = AST.Sel(tree.rootNode, sel)
+    sel = vsUtils.moveSelectionToFirstNonWhitespace(doc, sel)
+    parent = tsUtils.SmallestNodeEnclosingSel(tree.rootNode, sel)
   } else {
-    const node = AST.Sel(tree.rootNode, sel)
+    const node = tsUtils.SmallestNodeEnclosingSel(tree.rootNode, sel)
     if (!node) {
       return
     }
 
-    if (U.SyntaxNode2Selection(node).isEqual(sel)) {
+    if (tsUtils.SyntaxNode2Selection(node).isEqual(sel)) {
       // in this case sel covers exactly one syntax node, so we jump to its parent
-      parent = AST.enclosingParent(node)
+      parent = tsUtils.enclosingParent(node)
     } else {
       // in this case, sel covers more than one syntax node (for example two sibling nodes)
       // so we jump to node, which is already the smallest syntax node that encloses all of
@@ -37,7 +37,7 @@ export const ExpandSelection = async (
 
   globalSelectionStack.push(doc, sel)
 
-  return U.SyntaxNode2Selection(parent)
+  return tsUtils.SyntaxNode2Selection(parent)
 }
 
 export const ContractSelection = async (
@@ -55,7 +55,7 @@ export const SelectTopLevel = async (
   sel: Selection,
   tree: Parser.Tree,
 ): CommandRet => {
-  let node = AST.Sel(tree.rootNode, sel)
+  let node = tsUtils.SmallestNodeEnclosingSel(tree.rootNode, sel)
   if (!node) {
     return
   }
@@ -68,33 +68,33 @@ export const SelectTopLevel = async (
     node = node.parent
   }
 
-  return U.SyntaxNode2Selection(node)
+  return tsUtils.SyntaxNode2Selection(node)
 }
 
 const growFromLeft = (sel: Selection, node: SyntaxNode) => {
   if (!node.previousNamedSibling) {
     return
   }
-  return new Selection(U.SyntaxNode2Selection(node.previousNamedSibling).start, sel.end)
+  return new Selection(tsUtils.SyntaxNode2Selection(node.previousNamedSibling).start, sel.end)
 }
 const growFromRight = (sel: Selection, node: SyntaxNode) => {
   if (!node.nextNamedSibling) {
     return
   }
-  return new Selection(sel.start, U.SyntaxNode2Selection(node.nextNamedSibling).end)
+  return new Selection(sel.start, tsUtils.SyntaxNode2Selection(node.nextNamedSibling).end)
 }
 const shrinkFromLeft = (sel: Selection, node: SyntaxNode) => {
-  if (sel.end.isEqual(U.SyntaxNode2Selection(node).end) || !node.nextNamedSibling) {
-    return U.emptySelection(sel.end)
+  if (sel.end.isEqual(tsUtils.SyntaxNode2Selection(node).end) || !node.nextNamedSibling) {
+    return vsUtils.emptySelection(sel.end)
   } else {
-    return new Selection(U.SyntaxNode2Selection(node.nextNamedSibling).start, sel.end)
+    return new Selection(tsUtils.SyntaxNode2Selection(node.nextNamedSibling).start, sel.end)
   }
 }
 const shrinkFromRight = (sel: Selection, node: SyntaxNode) => {
-  if (sel.start.isEqual(U.SyntaxNode2Selection(node).start) || !node.previousNamedSibling) {
-    return U.emptySelection(sel.start)
+  if (sel.start.isEqual(tsUtils.SyntaxNode2Selection(node).start) || !node.previousNamedSibling) {
+    return vsUtils.emptySelection(sel.start)
   } else {
-    return new Selection(sel.start, U.SyntaxNode2Selection(node.previousNamedSibling).end)
+    return new Selection(sel.start, tsUtils.SyntaxNode2Selection(node.previousNamedSibling).end)
   }
 }
 
@@ -106,42 +106,42 @@ const GrowShrink = (
   direction: "left" | "right",
 ): Selection | undefined => {
   if (sel.isEmpty) {
-    const node = AST.Sel(
+    const node = tsUtils.SmallestNodeEnclosingSel(
       tree.rootNode,
-      U.selectCharAfter(U.moveSelectionToFirstNonWhitespace(doc, sel).start),
+      vsUtils.selectCharAfter(vsUtils.moveSelectionToFirstNonWhitespace(doc, sel).start),
     )
     if (!node) {
       return
     }
 
     if (direction === "right" && node) {
-      return U.SyntaxNode2Selection(node)
+      return tsUtils.SyntaxNode2Selection(node)
     } else if (direction === "left" && node.previousNamedSibling) {
-      return new Selection(sel.end, U.SyntaxNode2Selection(node.previousNamedSibling).start)
+      return new Selection(sel.end, tsUtils.SyntaxNode2Selection(node.previousNamedSibling).start)
     }
   }
 
   const edgeChar = ((): Selection => {
     switch (side) {
       case "start": {
-        return U.selectCharAfter(sel.start)
+        return vsUtils.selectCharAfter(sel.start)
       }
       case "end": {
-        return U.selectCharBefore(sel.end)
+        return vsUtils.selectCharBefore(sel.end)
       }
       case "anchor": {
         if (sel.isReversed) {
-          return U.selectCharBefore(sel.anchor)
+          return vsUtils.selectCharBefore(sel.anchor)
         } else {
-          return U.selectCharAfter(sel.anchor)
+          return vsUtils.selectCharAfter(sel.anchor)
         }
       }
       case "active":
         {
           if (sel.isReversed) {
-            return U.selectCharAfter(sel.active)
+            return vsUtils.selectCharAfter(sel.active)
           } else {
-            return U.selectCharBefore(sel.active)
+            return vsUtils.selectCharBefore(sel.active)
           }
         }
         throw new Error("Case not handled")
@@ -159,7 +159,7 @@ const GrowShrink = (
   // instead, we want to find the biggest syntax node that includes the last character of the selection
   // and that is fully enclosed by the selection
 
-  let edgeNode = AST.biggestNodeContaining(tree, sel, edgeChar)
+  let edgeNode = tsUtils.biggestNodeContaining(tree, sel, edgeChar)
   if (!edgeNode) {
     return
   }
@@ -197,7 +197,7 @@ const GrowShrink = (
   if (!newSel) {
     return
   }
-  return sel.isReversed ? U.reverse(newSel) : newSel
+  return sel.isReversed ? vsUtils.reverse(newSel) : newSel
 }
 
 export const GrowSelectionAtEnd = async (
@@ -260,8 +260,8 @@ export const MoveCursorForward = async (
   sel: Selection,
   tree: Parser.Tree,
 ): CommandRet => {
-  sel = U.moveSelectionToFirstNonWhitespace(doc, sel)
-  const node = AST.Sel(tree.rootNode, sel)
+  sel = vsUtils.moveSelectionToFirstNonWhitespace(doc, sel)
+  const node = tsUtils.SmallestNodeEnclosingSel(tree.rootNode, sel)
 
   if (!node) {
     return
@@ -271,7 +271,7 @@ export const MoveCursorForward = async (
   if (!sibling) {
     return
   }
-  return U.emptySelection(U.SyntaxNode2Selection(sibling).start)
+  return vsUtils.emptySelection(tsUtils.SyntaxNode2Selection(sibling).start)
 }
 
 export const MoveCursorBackward = async (
@@ -280,7 +280,7 @@ export const MoveCursorBackward = async (
   sel: Selection,
   tree: Parser.Tree,
 ): CommandRet => {
-  const node = AST.Sel(tree.rootNode, sel)
+  const node = tsUtils.SmallestNodeEnclosingSel(tree.rootNode, sel)
 
   if (!node) {
     return
@@ -290,5 +290,5 @@ export const MoveCursorBackward = async (
   if (!sibling) {
     return
   }
-  return U.emptySelection(U.SyntaxNode2Selection(sibling).start)
+  return vsUtils.emptySelection(tsUtils.SyntaxNode2Selection(sibling).start)
 }

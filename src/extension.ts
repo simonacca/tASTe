@@ -1,10 +1,10 @@
 import * as vscode from "vscode"
-import * as ParserLib from "./parser"
-import * as SelCmds from "./commands_selection"
-import * as EditCmds from "./commands_edit"
+import * as ParserLib from "./utils/tree_sitter"
+import * as SelCmds from "./commands/selection"
+import * as EditCmds from "./commands/edit"
 import TSParser from "web-tree-sitter"
-import { detectLanguage } from "./languageDetection"
-import { Command } from "./commands"
+import { detectLanguage } from "./utils/language_detection"
+import { Command } from "./commands/common"
 
 const initCommands = (
   context: vscode.ExtensionContext,

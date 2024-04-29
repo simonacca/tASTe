@@ -1,8 +1,15 @@
 import path from "path"
 import { TextDocument } from "vscode"
 
-type LanguageID = string
+export type LanguageID = string
 type Extension = string
+
+const languageIDTranslation: { [id: LanguageID]: LanguageID } = {
+  javascriptreact: "javascript",
+  shellscript: "bash",
+  terraform: "hcl",
+  jsonc: "json",
+}
 
 const languageId2Exts: { [languageID: LanguageID]: Extension[] } = {
   csv: ["csv"],
@@ -20,6 +27,9 @@ const ext2LanguageId = (() => {
 })()
 
 export const detectLanguage = (doc: TextDocument): string | undefined => {
+  if (languageIDTranslation[doc.languageId]) {
+    return languageIDTranslation[doc.languageId]
+  }
   if (doc.languageId !== "" && doc.languageId !== "plaintext") {
     return doc.languageId
   }
