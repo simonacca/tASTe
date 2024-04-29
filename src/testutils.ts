@@ -1,3 +1,5 @@
+import { expect, jest } from "@jest/globals"
+
 import * as vscode from "vscode"
 import * as vsj from "jest-mock-vscode"
 import { Command } from "./commands"
@@ -36,6 +38,7 @@ const text2VScodeObjs = (
   languageID: string,
   text: string,
 ): {
+  editor: vscode.TextEditor
   doc: vscode.TextDocument
   initialSel?: vscode.Selection
   finalSel?: vscode.Selection
@@ -46,6 +49,7 @@ const text2VScodeObjs = (
     filteredText,
     languageID,
   )
+  const editor = vsj.createMockTextEditor(jest, doc)
 
   const symbols = extractSelSymbols(text)
 
@@ -59,13 +63,7 @@ const text2VScodeObjs = (
     finalSel = new vscode.Selection(doc.positionAt(symbols[FSS]), doc.positionAt(symbols[FSE]))
   }
 
-  return { doc, initialSel, finalSel }
-}
-
-export interface SelectionChangeTest {
-  text: string
-  languageId: string
-  cmd: Command
+  return { editor, doc, initialSel, finalSel }
 }
 
 const loadParser = async (doc: vscode.TextDocument) => {
@@ -82,8 +80,14 @@ const loadParser = async (doc: vscode.TextDocument) => {
   return parser
 }
 
+export interface SelectionChangeTest {
+  text: string
+  languageId: string
+  cmd: Command
+}
+
 export const executeSelectionChangeTest = async (testCase: SelectionChangeTest) => {
-  const { doc, initialSel, finalSel } = text2VScodeObjs(testCase.languageId, testCase.text)
+  const { editor, doc, initialSel, finalSel } = text2VScodeObjs(testCase.languageId, testCase.text)
 
   if (!initialSel) {
     throw new Error("Could not find Initial Selection")
@@ -94,7 +98,7 @@ export const executeSelectionChangeTest = async (testCase: SelectionChangeTest) 
   }
 
   const parser = await loadParser(doc)
-  const newSel = testCase.cmd(doc, initialSel, parser.parse(doc.getText()))
+  const newSel = testCase.cmd(editor, doc, initialSel, parser.parse(doc.getText()))
 
   if (newSel && !finalSel.isEqual(newSel)) {
     console.log(

@@ -1,9 +1,15 @@
-import { TextDocument, Selection, window } from "vscode"
-import Parser, { SyntaxNode } from "web-tree-sitter"
+import { TextDocument, Selection, TextEditor } from "vscode"
+import Parser from "web-tree-sitter"
 import * as U from "./utils"
 import * as AST from "./ast"
+import { CommandRet } from "./commands"
 
-export const Raise = (doc: TextDocument, sel: Selection, tree: Parser.Tree) => {
+export const Raise = (
+  editor: TextEditor,
+  doc: TextDocument,
+  sel: Selection,
+  tree: Parser.Tree,
+): CommandRet => {
   const node = AST.Sel(tree.rootNode, sel)
   const parent = AST.enclosingParent(node)
 
@@ -12,14 +18,19 @@ export const Raise = (doc: TextDocument, sel: Selection, tree: Parser.Tree) => {
   }
 
   const parentSel = U.SyntaxNode2Selection(parent)
-  window.activeTextEditor?.edit((editBuilder) => {
+  editor.edit((editBuilder) => {
     editBuilder.replace(parentSel, node.text)
   })
 
   return U.emptySelection(parentSel.start)
 }
 
-export const SwapForward = (doc: TextDocument, sel: Selection, tree: Parser.Tree) => {
+export const SwapForward = (
+  editor: TextEditor,
+  doc: TextDocument,
+  sel: Selection,
+  tree: Parser.Tree,
+): CommandRet => {
   const node = AST.Sel(tree.rootNode, sel)
   const sibling = node?.nextNamedSibling
 
@@ -29,13 +40,18 @@ export const SwapForward = (doc: TextDocument, sel: Selection, tree: Parser.Tree
 
   const siblingText = sibling.text
 
-  window.activeTextEditor?.edit((editBuilder) => {
+  editor.edit((editBuilder) => {
     editBuilder.replace(U.SyntaxNode2Selection(sibling), node.text)
     editBuilder.replace(U.SyntaxNode2Selection(node), siblingText)
   })
 }
 
-export const SwapBackward = (doc: TextDocument, sel: Selection, tree: Parser.Tree) => {
+export const SwapBackward = (
+  editor: TextEditor,
+  doc: TextDocument,
+  sel: Selection,
+  tree: Parser.Tree,
+): CommandRet => {
   const node = AST.Sel(tree.rootNode, sel)
   const sibling = node?.previousNamedSibling
 
@@ -45,13 +61,18 @@ export const SwapBackward = (doc: TextDocument, sel: Selection, tree: Parser.Tre
 
   const nodeText = node.text
 
-  window.activeTextEditor?.edit((editBuilder) => {
+  editor.edit((editBuilder) => {
     editBuilder.replace(U.SyntaxNode2Selection(node), sibling.text)
     editBuilder.replace(U.SyntaxNode2Selection(sibling), nodeText)
   })
 }
 
-export const SlurpForward = (doc: TextDocument, sel: Selection, tree: Parser.Tree) => {
+export const SlurpForward = (
+  editor: TextEditor,
+  doc: TextDocument,
+  sel: Selection,
+  tree: Parser.Tree,
+): CommandRet => {
   sel = U.moveSelectionToFirstNonWhitespace(doc, sel)
   const child = AST.Sel(tree.rootNode, sel)
   if (!child) {
@@ -76,13 +97,18 @@ export const SlurpForward = (doc: TextDocument, sel: Selection, tree: Parser.Tre
 
   const insertionPoint = U.SyntaxNode2Selection(lastNamedChild).end
 
-  window.activeTextEditor?.edit((editBuilder) => {
+  editor.edit((editBuilder) => {
     editBuilder.replace(U.SyntaxNode2Selection(nextSibling), "")
     editBuilder.insert(insertionPoint, separator + nextSibling.text)
   })
 }
 
-export const BarfForward = (doc: TextDocument, sel: Selection, tree: Parser.Tree) => {
+export const BarfForward = (
+  editor: TextEditor,
+  doc: TextDocument,
+  sel: Selection,
+  tree: Parser.Tree,
+): CommandRet => {
   sel = U.moveSelectionToFirstNonWhitespace(doc, sel)
   const child = AST.Sel(tree.rootNode, sel)
   if (!child) {
@@ -106,7 +132,7 @@ export const BarfForward = (doc: TextDocument, sel: Selection, tree: Parser.Tree
 
   const insertionPoint = U.SyntaxNode2Selection(nextSibling).start
 
-  window.activeTextEditor?.edit((editBuilder) => {
+  editor.edit((editBuilder) => {
     editBuilder.replace(
       new Selection(
         U.SyntaxNode2Selection(lastNamedChild).start,

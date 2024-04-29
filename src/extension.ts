@@ -17,7 +17,8 @@ const initCommands = (
         if (!parser || !vscode.window.activeTextEditor) {
           return
         }
-        const doc = vscode.window.activeTextEditor.document
+        const editor = vscode.window.activeTextEditor
+        const doc = editor.document
         const selection = vscode.window.activeTextEditor.selection
 
         const language = detectLanguage(doc)
@@ -30,7 +31,7 @@ const initCommands = (
 
         const ASTtree = parser.parse(doc.getText())
 
-        const newSel = cmd[1](doc, selection, ASTtree)
+        const newSel = cmd[1](editor, doc, selection, ASTtree)
 
         if (!newSel) {
           return

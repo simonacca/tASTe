@@ -1,11 +1,14 @@
-import { TextDocument, Selection } from "vscode"
+import { TextDocument, Selection, TextEditor } from "vscode"
 import Parser from "web-tree-sitter"
 
+export type CommandRet = Selection | undefined
+
 export type Command = (
+  editor: TextEditor,
   doc: TextDocument,
   selection: Selection,
   tree: Parser.Tree,
-) => Selection | undefined | void
+) => CommandRet
 
 class SelectionStackByDoc {
   private state = new Map<TextDocument, Selection[]>()

@@ -1,10 +1,15 @@
-import { TextDocument, Selection, window } from "vscode"
+import { TextDocument, Selection, TextEditor } from "vscode"
 import Parser, { SyntaxNode } from "web-tree-sitter"
 import * as U from "./utils"
 import * as AST from "./ast"
-import { globalSelectionStack } from "./commands"
+import { CommandRet, globalSelectionStack } from "./commands"
 
-export const ExpandSelection = (doc: TextDocument, sel: Selection, tree: Parser.Tree) => {
+export const ExpandSelection = (
+  _: TextEditor,
+  doc: TextDocument,
+  sel: Selection,
+  tree: Parser.Tree,
+): CommandRet => {
   let parent: SyntaxNode | undefined | null = undefined
   if (sel.isEmpty) {
     sel = U.moveSelectionToFirstNonWhitespace(doc, sel)
@@ -35,11 +40,21 @@ export const ExpandSelection = (doc: TextDocument, sel: Selection, tree: Parser.
   return U.SyntaxNode2Selection(parent)
 }
 
-export const ContractSelection = (doc: TextDocument, sel: Selection, tree: Parser.Tree) => {
+export const ContractSelection = (
+  _: TextEditor,
+  doc: TextDocument,
+  sel: Selection,
+  tree: Parser.Tree,
+): CommandRet => {
   return globalSelectionStack.pop(doc)
 }
 
-export const SelectTopLevel = (doc: TextDocument, sel: Selection, tree: Parser.Tree) => {
+export const SelectTopLevel = (
+  _: TextEditor,
+  doc: TextDocument,
+  sel: Selection,
+  tree: Parser.Tree,
+): CommandRet => {
   let node = AST.Sel(tree.rootNode, sel)
   if (!node) {
     return
@@ -185,31 +200,66 @@ const GrowShrink = (
   return sel.isReversed ? U.reverse(newSel) : newSel
 }
 
-export const GrowSelectionAtEnd = (doc: TextDocument, sel: Selection, tree: Parser.Tree) => {
+export const GrowSelectionAtEnd = (
+  _: TextEditor,
+  doc: TextDocument,
+  sel: Selection,
+  tree: Parser.Tree,
+): CommandRet => {
   return GrowShrink(doc, sel, tree, "end", "right")
 }
 
-export const ShrinkSelectionAtEnd = (doc: TextDocument, sel: Selection, tree: Parser.Tree) => {
+export const ShrinkSelectionAtEnd = (
+  _: TextEditor,
+  doc: TextDocument,
+  sel: Selection,
+  tree: Parser.Tree,
+): CommandRet => {
   return GrowShrink(doc, sel, tree, "end", "left")
 }
 
-export const GrowSelectionAtStart = (doc: TextDocument, sel: Selection, tree: Parser.Tree) => {
+export const GrowSelectionAtStart = (
+  _: TextEditor,
+  doc: TextDocument,
+  sel: Selection,
+  tree: Parser.Tree,
+): CommandRet => {
   return GrowShrink(doc, sel, tree, "start", "left")
 }
 
-export const ShrinkSelectionAtStart = (doc: TextDocument, sel: Selection, tree: Parser.Tree) => {
+export const ShrinkSelectionAtStart = (
+  _: TextEditor,
+  doc: TextDocument,
+  sel: Selection,
+  tree: Parser.Tree,
+): CommandRet => {
   return GrowShrink(doc, sel, tree, "start", "right")
 }
 
-export const SelectForward = (doc: TextDocument, sel: Selection, tree: Parser.Tree) => {
+export const SelectForward = (
+  _: TextEditor,
+  doc: TextDocument,
+  sel: Selection,
+  tree: Parser.Tree,
+): CommandRet => {
   return GrowShrink(doc, sel, tree, "active", "right")
 }
 
-export const SelectBackward = (doc: TextDocument, sel: Selection, tree: Parser.Tree) => {
+export const SelectBackward = (
+  _: TextEditor,
+  doc: TextDocument,
+  sel: Selection,
+  tree: Parser.Tree,
+): CommandRet => {
   return GrowShrink(doc, sel, tree, "active", "left")
 }
 
-export const MoveCursorForward = (doc: TextDocument, sel: Selection, tree: Parser.Tree) => {
+export const MoveCursorForward = (
+  _: TextEditor,
+  doc: TextDocument,
+  sel: Selection,
+  tree: Parser.Tree,
+): CommandRet => {
   sel = U.moveSelectionToFirstNonWhitespace(doc, sel)
   const node = AST.Sel(tree.rootNode, sel)
 
@@ -224,7 +274,12 @@ export const MoveCursorForward = (doc: TextDocument, sel: Selection, tree: Parse
   return U.emptySelection(U.SyntaxNode2Selection(sibling).start)
 }
 
-export const MoveCursorBackward = (doc: TextDocument, sel: Selection, tree: Parser.Tree) => {
+export const MoveCursorBackward = (
+  _: TextEditor,
+  doc: TextDocument,
+  sel: Selection,
+  tree: Parser.Tree,
+): CommandRet => {
   const node = AST.Sel(tree.rootNode, sel)
 
   if (!node) {
