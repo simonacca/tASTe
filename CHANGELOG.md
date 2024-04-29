@@ -2,6 +2,10 @@
 
 All notable changes to the "taste" extension will be documented in this file.
 
+## 1.0.18
+
+- implement Slurp/Barf
+
 ## 1.0.17
 
 - Remove languages that don't work
