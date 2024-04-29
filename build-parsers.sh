@@ -99,6 +99,13 @@ if [ -n "${1:-}" ];
     fi
 
 
+if [ -n "${BUILDERS_COUNT:-}" ];
+then 
+    # wait for all builders to complete
+    parallel --id builder --wait
+fi
+
+
 echo "Done building parsers"
 rm -f a.out.js a.out.wasm
 
