@@ -135,4 +135,6 @@ const cases: TUtils.Test[] = [
   },
 ]
 
-describe("Commands", () => TUtils.executeTestCases(cases))
+describe("Commands", () => {
+  test.concurrent.each(cases)("%#", TUtils.executeSelectionChangeTest)
+})

@@ -596,4 +596,6 @@ a
   },
 ]
 
-describe("Languages", () => TUtils.executeTestCases(cases, "$languageId"))
+describe("Languages", () => {
+  test.concurrent.each(cases)("$languageId", TUtils.executeSelectionChangeTest)
+})

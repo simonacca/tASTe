@@ -4,61 +4,60 @@ import * as Cmd from "./commands"
 import * as ParserLib from "./parser"
 import { detectLanguage } from "./languageDetection"
 
-const re = /👉🏻|👈🏻|🫸🏻|🫷🏻/g
-const extractSymbols = (text: string) => {
-  const positions = Array.from(text.matchAll(re))
-  if (positions.length !== 4) {
-    throw new Error("Must have exactly 4 hand emojis")
-  }
+/**
+ * Each test case contains four markers describing the position of
+ * - the Initial selection (the selection before the command is applied)
+ * - the Final Selection (the selection after the command is applied)
+ * - 👉🏻 : Initial selection, Start
+ * - 👈🏻 : Initial selection, End
+ * - 🫸🏻 : Final selection,   Start
+ * - 🫷🏻 : Final selection,   End
+ */
 
+const ISS = "👉🏻"
+const ISE = "👈🏻"
+const FSS = "🫸🏻"
+const FSE = "🫷🏻"
+
+const selectionSymbolsRe = new RegExp(`${ISS}|${ISE}|${FSS}|${FSE}`, "g")
+
+const extractSelSymbols = (text: string) => {
   const symbols: { [symbol: string]: number } = {}
 
-  symbols[positions[0][0]] = positions[0].index
-  symbols[positions[1][0]] = positions[1].index - 4
-  symbols[positions[2][0]] = positions[2].index - 4 - 4
-  symbols[positions[3][0]] = positions[3].index - 4 - 4 - 4
-
-  if (!symbols["👉🏻"]) {
-    throw new Error("Missing symbol 👉🏻")
+  let count = 0
+  for (const pos of text.matchAll(selectionSymbolsRe)) {
+    symbols[pos[0]] = pos.index - 4 * count
+    count++
   }
-
-  if (!symbols["👈🏻"]) {
-    throw new Error("Missing symbol 👈🏻")
-  }
-
-  if (!symbols["🫸🏻"]) {
-    throw new Error("Missing symbol 🫸🏻")
-  }
-
-  if (!symbols["🫷🏻"]) {
-    throw new Error("Missing symbol 🫷🏻")
-  }
-
   return symbols
 }
 
 const text2VScodeObjs = (
   languageID: string,
   text: string,
-): { doc: vscode.TextDocument; initialSel: vscode.Selection; finalSel: vscode.Selection } => {
-  const filteredText = text.replace(re, "")
+): {
+  doc: vscode.TextDocument
+  initialSel?: vscode.Selection
+  finalSel?: vscode.Selection
+} => {
+  const filteredText = text.replace(selectionSymbolsRe, "")
   const doc = vsj.createTextDocument(
     vscode.Uri.parse("untitled:Untitled-1"),
     filteredText,
     languageID,
   )
 
-  const symbols = extractSymbols(text)
+  const symbols = extractSelSymbols(text)
 
-  const initialSel = new vscode.Selection(
-    doc.positionAt(symbols["👉🏻"]),
-    doc.positionAt(symbols["👈🏻"]),
-  )
+  let initialSel: vscode.Selection | undefined = undefined
+  if (symbols[ISS] && symbols[ISE]) {
+    initialSel = new vscode.Selection(doc.positionAt(symbols[ISS]), doc.positionAt(symbols[ISE]))
+  }
 
-  const finalSel = new vscode.Selection(
-    doc.positionAt(symbols["🫸🏻"]),
-    doc.positionAt(symbols["🫷🏻"]),
-  )
+  let finalSel: vscode.Selection | undefined = undefined
+  if (symbols[FSS] && symbols[FSE]) {
+    finalSel = new vscode.Selection(doc.positionAt(symbols[FSS]), doc.positionAt(symbols[FSE]))
+  }
 
   return { doc, initialSel, finalSel }
 }
@@ -69,46 +68,49 @@ export interface Test {
   cmd: Cmd.Command
 }
 
-/**
- * Each test case contains four markers describing the position of the
- * Initial selection (that is, the selection before the command is applied)
- * and of the Final Selection (that is, the selection after the command is applied)
- * - 👉🏻 : Initial selection, Start
- * - 👈🏻 : Initial selection, End
- * - 🫸🏻 : Final selection,   Start
- * - 🫷🏻 : Final selection,   End
- */
-export const executeTestCases = (cases: Test[], case2Name?: string) => {
-  test.concurrent.each(cases)(case2Name || "%#", async (c) => {
-    const parser = await ParserLib.initParser()
-    const { doc, initialSel, finalSel } = text2VScodeObjs(c.languageId, c.text)
+const loadParser = async (doc: vscode.TextDocument) => {
+  const parser = await ParserLib.initParser()
+  const language = detectLanguage(doc)
+  if (!language) {
+    throw new Error("Could not determine langauge")
+  }
+  await ParserLib.loadLanguage(process.cwd(), language)
+  if (!ParserLib.setParserLanguage(parser, language)) {
+    throw new Error("Could not set parser language")
+  }
 
-    const language = detectLanguage(doc)
-    if (!language) {
-      throw new Error("Could not determine langauge")
-    }
-    await ParserLib.loadLanguage(process.cwd(), language)
-    if (!ParserLib.setParserLanguage(parser, language)) {
-      throw new Error("Could not set parser language")
-    }
-    const res = c.cmd(doc, initialSel, parser.parse(doc.getText()))
+  return parser
+}
 
-    if (res && !finalSel.isEqual(res)) {
-      console.log(
-        "Want",
-        c.text,
-        "\n----------------\n",
-        "Have",
-        [
-          doc.getText().slice(0, doc.offsetAt(res.start)),
-          "🫸🏻",
-          doc.getText().slice(doc.offsetAt(res.start), doc.offsetAt(res.end)),
-          "🫷🏻",
-          doc.getText().slice(doc.offsetAt(res.start)),
-        ].join(""),
-      )
-    }
+export const executeSelectionChangeTest = async (testCase: Test) => {
+  const { doc, initialSel, finalSel } = text2VScodeObjs(testCase.languageId, testCase.text)
 
-    expect(res).toEqual(finalSel)
-  })
+  if (!initialSel) {
+    throw new Error("Could not find Initial Selection")
+  }
+
+  if (!finalSel) {
+    throw new Error("Could not find Final Selection")
+  }
+
+  const parser = await loadParser(doc)
+  const res = testCase.cmd(doc, initialSel, parser.parse(doc.getText()))
+
+  if (res && !finalSel.isEqual(res)) {
+    console.log(
+      "Want",
+      testCase.text,
+      "\n----------------\n",
+      "Have",
+      [
+        doc.getText().slice(0, doc.offsetAt(res.start)),
+        FSS,
+        doc.getText().slice(doc.offsetAt(res.start), doc.offsetAt(res.end)),
+        FSE,
+        doc.getText().slice(doc.offsetAt(res.start)),
+      ].join(""),
+    )
+  }
+
+  expect(res).toEqual(finalSel)
 }
