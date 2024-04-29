@@ -13,7 +13,7 @@ const initCommands = (
 ) => {
   for (const cmd of Object.entries(commands)) {
     context.subscriptions.push(
-      vscode.commands.registerCommand(cmd[0], () => {
+      vscode.commands.registerCommand(cmd[0], async () => {
         if (!parser || !vscode.window.activeTextEditor) {
           return
         }
@@ -31,7 +31,7 @@ const initCommands = (
 
         const ASTtree = parser.parse(doc.getText())
 
-        const newSel = cmd[1](editor, doc, selection, ASTtree)
+        const newSel = await cmd[1](editor, doc, selection, ASTtree)
 
         if (!newSel) {
           return

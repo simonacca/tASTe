@@ -4,7 +4,7 @@ import * as U from "./utils"
 import * as AST from "./ast"
 import { CommandRet } from "./commands"
 
-export const Raise = (
+export const Raise = async (
   editor: TextEditor,
   doc: TextDocument,
   sel: Selection,
@@ -18,14 +18,14 @@ export const Raise = (
   }
 
   const parentSel = U.SyntaxNode2Selection(parent)
-  editor.edit((editBuilder) => {
+  await editor.edit((editBuilder) => {
     editBuilder.replace(parentSel, node.text)
   })
 
   return U.emptySelection(parentSel.start)
 }
 
-export const SwapForward = (
+export const SwapForward = async (
   editor: TextEditor,
   doc: TextDocument,
   sel: Selection,
@@ -40,13 +40,13 @@ export const SwapForward = (
 
   const siblingText = sibling.text
 
-  editor.edit((editBuilder) => {
+  await editor.edit((editBuilder) => {
     editBuilder.replace(U.SyntaxNode2Selection(sibling), node.text)
     editBuilder.replace(U.SyntaxNode2Selection(node), siblingText)
   })
 }
 
-export const SwapBackward = (
+export const SwapBackward = async (
   editor: TextEditor,
   doc: TextDocument,
   sel: Selection,
@@ -61,13 +61,13 @@ export const SwapBackward = (
 
   const nodeText = node.text
 
-  editor.edit((editBuilder) => {
+  await editor.edit((editBuilder) => {
     editBuilder.replace(U.SyntaxNode2Selection(node), sibling.text)
     editBuilder.replace(U.SyntaxNode2Selection(sibling), nodeText)
   })
 }
 
-export const SlurpForward = (
+export const SlurpForward = async (
   editor: TextEditor,
   doc: TextDocument,
   sel: Selection,
@@ -97,13 +97,13 @@ export const SlurpForward = (
 
   const insertionPoint = U.SyntaxNode2Selection(lastNamedChild).end
 
-  editor.edit((editBuilder) => {
+  await editor.edit((editBuilder) => {
     editBuilder.replace(U.SyntaxNode2Selection(nextSibling), "")
     editBuilder.insert(insertionPoint, separator + nextSibling.text)
   })
 }
 
-export const BarfForward = (
+export const BarfForward = async (
   editor: TextEditor,
   doc: TextDocument,
   sel: Selection,
@@ -132,7 +132,7 @@ export const BarfForward = (
 
   const insertionPoint = U.SyntaxNode2Selection(nextSibling).start
 
-  editor.edit((editBuilder) => {
+  await editor.edit((editBuilder) => {
     editBuilder.replace(
       new Selection(
         U.SyntaxNode2Selection(lastNamedChild).start,

@@ -4,7 +4,7 @@ import * as U from "./utils"
 import * as AST from "./ast"
 import { CommandRet, globalSelectionStack } from "./commands"
 
-export const ExpandSelection = (
+export const ExpandSelection = async (
   _: TextEditor,
   doc: TextDocument,
   sel: Selection,
@@ -40,7 +40,7 @@ export const ExpandSelection = (
   return U.SyntaxNode2Selection(parent)
 }
 
-export const ContractSelection = (
+export const ContractSelection = async (
   _: TextEditor,
   doc: TextDocument,
   sel: Selection,
@@ -49,7 +49,7 @@ export const ContractSelection = (
   return globalSelectionStack.pop(doc)
 }
 
-export const SelectTopLevel = (
+export const SelectTopLevel = async (
   _: TextEditor,
   doc: TextDocument,
   sel: Selection,
@@ -200,7 +200,7 @@ const GrowShrink = (
   return sel.isReversed ? U.reverse(newSel) : newSel
 }
 
-export const GrowSelectionAtEnd = (
+export const GrowSelectionAtEnd = async (
   _: TextEditor,
   doc: TextDocument,
   sel: Selection,
@@ -209,7 +209,7 @@ export const GrowSelectionAtEnd = (
   return GrowShrink(doc, sel, tree, "end", "right")
 }
 
-export const ShrinkSelectionAtEnd = (
+export const ShrinkSelectionAtEnd = async (
   _: TextEditor,
   doc: TextDocument,
   sel: Selection,
@@ -218,7 +218,7 @@ export const ShrinkSelectionAtEnd = (
   return GrowShrink(doc, sel, tree, "end", "left")
 }
 
-export const GrowSelectionAtStart = (
+export const GrowSelectionAtStart = async (
   _: TextEditor,
   doc: TextDocument,
   sel: Selection,
@@ -227,7 +227,7 @@ export const GrowSelectionAtStart = (
   return GrowShrink(doc, sel, tree, "start", "left")
 }
 
-export const ShrinkSelectionAtStart = (
+export const ShrinkSelectionAtStart = async (
   _: TextEditor,
   doc: TextDocument,
   sel: Selection,
@@ -236,7 +236,7 @@ export const ShrinkSelectionAtStart = (
   return GrowShrink(doc, sel, tree, "start", "right")
 }
 
-export const SelectForward = (
+export const SelectForward = async (
   _: TextEditor,
   doc: TextDocument,
   sel: Selection,
@@ -245,7 +245,7 @@ export const SelectForward = (
   return GrowShrink(doc, sel, tree, "active", "right")
 }
 
-export const SelectBackward = (
+export const SelectBackward = async (
   _: TextEditor,
   doc: TextDocument,
   sel: Selection,
@@ -254,7 +254,7 @@ export const SelectBackward = (
   return GrowShrink(doc, sel, tree, "active", "left")
 }
 
-export const MoveCursorForward = (
+export const MoveCursorForward = async (
   _: TextEditor,
   doc: TextDocument,
   sel: Selection,
@@ -274,7 +274,7 @@ export const MoveCursorForward = (
   return U.emptySelection(U.SyntaxNode2Selection(sibling).start)
 }
 
-export const MoveCursorBackward = (
+export const MoveCursorBackward = async (
   _: TextEditor,
   doc: TextDocument,
   sel: Selection,

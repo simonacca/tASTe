@@ -98,7 +98,7 @@ export const executeSelectionChangeTest = async (testCase: SelectionChangeTest) 
   }
 
   const parser = await loadParser(doc)
-  const newSel = testCase.cmd(editor, doc, initialSel, parser.parse(doc.getText()))
+  const newSel = await testCase.cmd(editor, doc, initialSel, parser.parse(doc.getText()))
 
   if (newSel && !finalSel.isEqual(newSel)) {
     console.log(

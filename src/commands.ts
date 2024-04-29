@@ -1,7 +1,7 @@
 import { TextDocument, Selection, TextEditor } from "vscode"
 import Parser from "web-tree-sitter"
 
-export type CommandRet = Selection | undefined
+export type CommandRet = Promise<Selection | undefined>
 
 export type Command = (
   editor: TextEditor,
