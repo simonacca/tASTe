@@ -146,7 +146,7 @@
     "tree-sitter-matlab": "github:mstanciu552/tree-sitter-matlab",
     "tree-sitter-nix": "^0.0.2",
     "tree-sitter-objc": "github:jiyee/tree-sitter-objc",
-    "tree-sitter-php": "github:simonacca/tree-sitter-php",
+    "tree-sitter-php": "github:tree-sitter/tree-sitter-php#v0.22.2",
     "tree-sitter-python": "^0.21.0",
     "tree-sitter-qmljs": "^0.1.2",
     "tree-sitter-r": "github:r-lib/tree-sitter-r",
