@@ -31,13 +31,15 @@ const initCommands = (
 
         const ASTtree = parser.parse(doc.getText())
 
-        const newSel = await cmd[1](editor, doc, selection, ASTtree)
+        const ret = cmd[1](doc, selection, ASTtree)
 
-        if (!newSel) {
-          return
+        if (ret?.edit) {
+          editor.edit(ret.edit)
         }
 
-        vscode.window.activeTextEditor.selection = newSel
+        if (ret?.selection) {
+          vscode.window.activeTextEditor.selection = ret.selection
+        }
       }),
     )
   }

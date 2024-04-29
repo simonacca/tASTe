@@ -98,25 +98,25 @@ export const executeSelectionChangeTest = async (testCase: SelectionChangeTest) 
   }
 
   const parser = await loadParser(doc)
-  const newSel = await testCase.cmd(editor, doc, initialSel, parser.parse(doc.getText()))
+  const ret = await testCase.cmd(doc, initialSel, parser.parse(doc.getText()))
 
-  if (newSel && !finalSel.isEqual(newSel)) {
+  if (ret?.selection && !finalSel.isEqual(ret.selection)) {
     console.log(
       "Want",
       testCase.text,
       "\n----------------\n",
       "Have",
       [
-        doc.getText().slice(0, doc.offsetAt(newSel.start)),
+        doc.getText().slice(0, doc.offsetAt(ret.selection.start)),
         FSS,
-        doc.getText().slice(doc.offsetAt(newSel.start), doc.offsetAt(newSel.end)),
+        doc.getText().slice(doc.offsetAt(ret.selection.start), doc.offsetAt(ret.selection.end)),
         FSE,
-        doc.getText().slice(doc.offsetAt(newSel.start)),
+        doc.getText().slice(doc.offsetAt(ret.selection.start)),
       ].join(""),
     )
   }
 
-  expect(newSel).toEqual(finalSel)
+  expect(ret?.selection).toEqual(finalSel)
 }
 
 export interface EditTest {
@@ -141,7 +141,7 @@ export const executeEditTest = async (testCase: EditTest) => {
   }
 
   const parser = await loadParser(doc)
-  await testCase.cmd(editor, doc, initialSel, parser.parse(doc.getText()))
+  await testCase.cmd(doc, initialSel, parser.parse(doc.getText()))
 
   expect(editor.document.getText()).toEqual(testCase.finalText)
 }

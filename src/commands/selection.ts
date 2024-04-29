@@ -4,8 +4,7 @@ import * as vsUtils from "../utils/vscode"
 import * as tsUtils from "../utils/tree_sitter"
 import { CommandRet, globalSelectionStack } from "./common"
 
-export const ExpandSelection = async (
-  _: TextEditor,
+export const ExpandSelection = (
   doc: TextDocument,
   sel: Selection,
   tree: Parser.Tree,
@@ -37,20 +36,18 @@ export const ExpandSelection = async (
 
   globalSelectionStack.push(doc, sel)
 
-  return tsUtils.SyntaxNode2Selection(parent)
+  return { selection: tsUtils.SyntaxNode2Selection(parent) }
 }
 
-export const ContractSelection = async (
-  _: TextEditor,
+export const ContractSelection = (
   doc: TextDocument,
   sel: Selection,
   tree: Parser.Tree,
 ): CommandRet => {
-  return globalSelectionStack.pop(doc)
+  return { selection: globalSelectionStack.pop(doc) }
 }
 
-export const SelectTopLevel = async (
-  _: TextEditor,
+export const SelectTopLevel = (
   doc: TextDocument,
   sel: Selection,
   tree: Parser.Tree,
@@ -68,7 +65,7 @@ export const SelectTopLevel = async (
     node = node.parent
   }
 
-  return tsUtils.SyntaxNode2Selection(node)
+  return { selection: tsUtils.SyntaxNode2Selection(node) }
 }
 
 const growFromLeft = (sel: Selection, node: SyntaxNode) => {
@@ -104,7 +101,7 @@ const GrowShrink = (
   tree: Parser.Tree,
   side: "start" | "end" | "active" | "anchor",
   direction: "left" | "right",
-): Selection | undefined => {
+): CommandRet => {
   if (sel.isEmpty) {
     const node = tsUtils.SmallestNodeEnclosingSel(
       tree.rootNode,
@@ -115,9 +112,14 @@ const GrowShrink = (
     }
 
     if (direction === "right" && node) {
-      return tsUtils.SyntaxNode2Selection(node)
+      return { selection: tsUtils.SyntaxNode2Selection(node) }
     } else if (direction === "left" && node.previousNamedSibling) {
-      return new Selection(sel.end, tsUtils.SyntaxNode2Selection(node.previousNamedSibling).start)
+      return {
+        selection: new Selection(
+          sel.end,
+          tsUtils.SyntaxNode2Selection(node.previousNamedSibling).start,
+        ),
+      }
     }
   }
 
@@ -197,11 +199,10 @@ const GrowShrink = (
   if (!newSel) {
     return
   }
-  return sel.isReversed ? vsUtils.reverse(newSel) : newSel
+  return { selection: sel.isReversed ? vsUtils.reverse(newSel) : newSel }
 }
 
-export const GrowSelectionAtEnd = async (
-  _: TextEditor,
+export const GrowSelectionAtEnd = (
   doc: TextDocument,
   sel: Selection,
   tree: Parser.Tree,
@@ -209,8 +210,7 @@ export const GrowSelectionAtEnd = async (
   return GrowShrink(doc, sel, tree, "end", "right")
 }
 
-export const ShrinkSelectionAtEnd = async (
-  _: TextEditor,
+export const ShrinkSelectionAtEnd = (
   doc: TextDocument,
   sel: Selection,
   tree: Parser.Tree,
@@ -218,8 +218,7 @@ export const ShrinkSelectionAtEnd = async (
   return GrowShrink(doc, sel, tree, "end", "left")
 }
 
-export const GrowSelectionAtStart = async (
-  _: TextEditor,
+export const GrowSelectionAtStart = (
   doc: TextDocument,
   sel: Selection,
   tree: Parser.Tree,
@@ -227,8 +226,7 @@ export const GrowSelectionAtStart = async (
   return GrowShrink(doc, sel, tree, "start", "left")
 }
 
-export const ShrinkSelectionAtStart = async (
-  _: TextEditor,
+export const ShrinkSelectionAtStart = (
   doc: TextDocument,
   sel: Selection,
   tree: Parser.Tree,
@@ -236,17 +234,11 @@ export const ShrinkSelectionAtStart = async (
   return GrowShrink(doc, sel, tree, "start", "right")
 }
 
-export const SelectForward = async (
-  _: TextEditor,
-  doc: TextDocument,
-  sel: Selection,
-  tree: Parser.Tree,
-): CommandRet => {
+export const SelectForward = (doc: TextDocument, sel: Selection, tree: Parser.Tree): CommandRet => {
   return GrowShrink(doc, sel, tree, "active", "right")
 }
 
-export const SelectBackward = async (
-  _: TextEditor,
+export const SelectBackward = (
   doc: TextDocument,
   sel: Selection,
   tree: Parser.Tree,
@@ -254,8 +246,7 @@ export const SelectBackward = async (
   return GrowShrink(doc, sel, tree, "active", "left")
 }
 
-export const MoveCursorForward = async (
-  _: TextEditor,
+export const MoveCursorForward = (
   doc: TextDocument,
   sel: Selection,
   tree: Parser.Tree,
@@ -271,11 +262,10 @@ export const MoveCursorForward = async (
   if (!sibling) {
     return
   }
-  return vsUtils.emptySelection(tsUtils.SyntaxNode2Selection(sibling).start)
+  return { selection: vsUtils.emptySelection(tsUtils.SyntaxNode2Selection(sibling).start) }
 }
 
-export const MoveCursorBackward = async (
-  _: TextEditor,
+export const MoveCursorBackward = (
   doc: TextDocument,
   sel: Selection,
   tree: Parser.Tree,
@@ -290,5 +280,5 @@ export const MoveCursorBackward = async (
   if (!sibling) {
     return
   }
-  return vsUtils.emptySelection(tsUtils.SyntaxNode2Selection(sibling).start)
+  return { selection: vsUtils.emptySelection(tsUtils.SyntaxNode2Selection(sibling).start) }
 }

@@ -1,15 +1,10 @@
-import { TextDocument, Selection, TextEditor } from "vscode"
+import { TextDocument, Selection, TextEditor, TextEditorEdit } from "vscode"
 import Parser from "web-tree-sitter"
 import * as vsUtils from "../utils/vscode"
 import * as tsUtils from "../utils/tree_sitter"
 import { CommandRet } from "./common"
 
-export const Raise = async (
-  editor: TextEditor,
-  doc: TextDocument,
-  sel: Selection,
-  tree: Parser.Tree,
-): CommandRet => {
+export const Raise = (doc: TextDocument, sel: Selection, tree: Parser.Tree): CommandRet => {
   const node = tsUtils.SmallestNodeEnclosingSel(tree.rootNode, sel)
   const parent = tsUtils.enclosingParent(node)
 
@@ -18,19 +13,14 @@ export const Raise = async (
   }
 
   const parentSel = tsUtils.SyntaxNode2Selection(parent)
-  await editor.edit((editBuilder) => {
+  const edit = (editBuilder: TextEditorEdit) => {
     editBuilder.replace(parentSel, node.text)
-  })
+  }
 
-  return vsUtils.emptySelection(parentSel.start)
+  return { selection: vsUtils.emptySelection(parentSel.start), edit }
 }
 
-export const SwapForward = async (
-  editor: TextEditor,
-  doc: TextDocument,
-  sel: Selection,
-  tree: Parser.Tree,
-): CommandRet => {
+export const SwapForward = (doc: TextDocument, sel: Selection, tree: Parser.Tree): CommandRet => {
   const node = tsUtils.SmallestNodeEnclosingSel(tree.rootNode, sel)
   const sibling = node?.nextNamedSibling
 
@@ -40,18 +30,15 @@ export const SwapForward = async (
 
   const siblingText = sibling.text
 
-  await editor.edit((editBuilder) => {
+  const edit = (editBuilder: TextEditorEdit) => {
     editBuilder.replace(tsUtils.SyntaxNode2Selection(sibling), node.text)
     editBuilder.replace(tsUtils.SyntaxNode2Selection(node), siblingText)
-  })
+  }
+
+  return { edit }
 }
 
-export const SwapBackward = async (
-  editor: TextEditor,
-  doc: TextDocument,
-  sel: Selection,
-  tree: Parser.Tree,
-): CommandRet => {
+export const SwapBackward = (doc: TextDocument, sel: Selection, tree: Parser.Tree): CommandRet => {
   const node = tsUtils.SmallestNodeEnclosingSel(tree.rootNode, sel)
   const sibling = node?.previousNamedSibling
 
@@ -61,18 +48,15 @@ export const SwapBackward = async (
 
   const nodeText = node.text
 
-  await editor.edit((editBuilder) => {
+  const edit = (editBuilder: TextEditorEdit) => {
     editBuilder.replace(tsUtils.SyntaxNode2Selection(node), sibling.text)
     editBuilder.replace(tsUtils.SyntaxNode2Selection(sibling), nodeText)
-  })
+  }
+
+  return { edit }
 }
 
-export const SlurpForward = async (
-  editor: TextEditor,
-  doc: TextDocument,
-  sel: Selection,
-  tree: Parser.Tree,
-): CommandRet => {
+export const SlurpForward = (doc: TextDocument, sel: Selection, tree: Parser.Tree): CommandRet => {
   sel = vsUtils.moveSelectionToFirstNonWhitespace(doc, sel)
   const child = tsUtils.SmallestNodeEnclosingSel(tree.rootNode, sel)
   if (!child) {
@@ -108,18 +92,15 @@ export const SlurpForward = async (
 
   const insertionPoint = tsUtils.SyntaxNode2Selection(lastNamedChild).end
 
-  await editor.edit((editBuilder) => {
+  const edit = (editBuilder: TextEditorEdit) => {
     editBuilder.delete(deleteSel)
     editBuilder.insert(insertionPoint, separator + nextSibling.text)
-  })
+  }
+
+  return { edit }
 }
 
-export const BarfForward = async (
-  editor: TextEditor,
-  doc: TextDocument,
-  sel: Selection,
-  tree: Parser.Tree,
-): CommandRet => {
+export const BarfForward = (doc: TextDocument, sel: Selection, tree: Parser.Tree): CommandRet => {
   sel = vsUtils.moveSelectionToFirstNonWhitespace(doc, sel)
   const child = tsUtils.SmallestNodeEnclosingSel(tree.rootNode, sel)
   if (!child) {
@@ -143,7 +124,7 @@ export const BarfForward = async (
 
   const insertionPoint = tsUtils.SyntaxNode2Selection(nextSibling).start
 
-  await editor.edit((editBuilder) => {
+  const edit = (editBuilder: TextEditorEdit) => {
     editBuilder.replace(
       new Selection(
         tsUtils.SyntaxNode2Selection(lastNamedChild).start,
@@ -152,5 +133,7 @@ export const BarfForward = async (
       "",
     )
     editBuilder.insert(insertionPoint, lastNamedChild.text + separator)
-  })
+  }
+
+  return { edit }
 }
