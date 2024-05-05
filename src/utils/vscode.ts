@@ -34,6 +34,13 @@ const firstNonWhitespaceIdx = (s: string) => s.search(/\S|$/)
 const isWhitespaceString = (s: string) => !s.replace(/\s/g, "").length
 
 /**
+ * accomplishes the same as doc.validatePosition(posos)
+ * but works reliably
+ */
+const positionExistsInDoc = (doc: TextDocument, pos: Position) =>
+  doc.getText(selectCharAfter(pos)) !== ""
+
+/**
  * When selection is collapsed and occurs before any non-whitespace char
  *  moves it to an empty selection just before the first non-whitespace char.
  * Skips lines until it finds a non-whitespace char if necessary.
@@ -48,7 +55,7 @@ export const moveSelectionToFirstNonWhitespace = (
 
   let startPos = selection.start
   while (true) {
-    if (!doc.validatePosition(startPos)) {
+    if (!positionExistsInDoc(doc, startPos)) {
       return selection
     }
 

@@ -46,7 +46,6 @@ const text2VScodeObjs = (
 } => {
   const cleanText = text.replace(selectionSymbolsRe, "")
   const doc = vsj.createTextDocument(vscode.Uri.parse("untitled:Untitled-1"), cleanText, languageID)
-  const editor = vsj.createMockTextEditor(jest, doc)
 
   const symbols = extractSelSymbols(text)
 
@@ -56,7 +55,7 @@ const text2VScodeObjs = (
   }
 
   let finalSel: vscode.Selection | undefined = undefined
-  if (symbols[FSS] && symbols[FSE]) {
+  if (symbols[FSS] !== undefined && symbols[FSE] !== undefined) {
     finalSel = new vscode.Selection(doc.positionAt(symbols[FSS]), doc.positionAt(symbols[FSE]))
   }
 

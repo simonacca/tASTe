@@ -133,6 +133,7 @@ const cases: TUtils.SelectionChangeTest[] = [
 
     `,
   },
+  { cmd: Cmds.ExpandSelection, languageId: "typescript", text: `🫸🏻{"val": 1}🫷🏻👉🏻👈🏻` },
 ]
 
 describe("Commands", () => {
