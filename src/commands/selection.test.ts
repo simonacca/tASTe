@@ -142,7 +142,7 @@ const cases: TUtils.SelectionChangeTest[] = [
       "devDependencies": {
         "shadow-cljs": "2.26.7"
       },
-      👉🏻👈🏻"dependencies": 🫸🏻🫷🏻{
+      👉🏻👈🏻"dependencies":🫸🏻🫷🏻 {
         "snabbdom": "3.5.1"
       }
     }
