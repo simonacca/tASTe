@@ -134,6 +134,62 @@ const cases: TUtils.SelectionChangeTest[] = [
     `,
   },
   { cmd: Cmds.ExpandSelection, languageId: "typescript", text: `🫸🏻{"val": 1}🫷🏻👉🏻👈🏻` },
+  {
+    cmd: Cmds.MoveCursorForward,
+    languageId: "json",
+    text: `
+    {
+      "devDependencies": {
+        "shadow-cljs": "2.26.7"
+      },
+      👉🏻👈🏻"dependencies": 🫸🏻🫷🏻{
+        "snabbdom": "3.5.1"
+      }
+    }
+    `,
+  },
+  {
+    cmd: Cmds.MoveCursorForward,
+    languageId: "json",
+    text: `
+    {
+      "devDependencies": {
+        "shadow-cljs": "2.26.7"
+      },
+      "dependencies": 👉🏻👈🏻{
+        "snabbdom": "3.5.1"
+      }🫸🏻🫷🏻
+    }
+    `,
+  },
+  {
+    cmd: Cmds.MoveCursorForward,
+    languageId: "json",
+    text: `
+    {
+      "devDependencies": {
+        "shadow-cljs": "2.26.7"
+      },
+      "dependencies": 🫸🏻🫷🏻{
+        "snabbdom": "3.5.1"
+      }👉🏻👈🏻
+    }
+    `,
+  },
+  {
+    cmd: Cmds.MoveCursorForward,
+    languageId: "json",
+    text: `
+    {
+      "devDependencies": 🫸🏻🫷🏻{
+        "shadow-cljs": "2.26.7"
+      },
+      👉🏻👈🏻"dependencies": {
+        "snabbdom": "3.5.1"
+      }
+    }
+    `,
+  },
 ]
 
 describe("Commands", () => {
