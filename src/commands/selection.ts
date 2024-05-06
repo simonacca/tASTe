@@ -246,7 +246,7 @@ export const SelectBackward = (
   return GrowShrink(doc, sel, tree, "active", "left")
 }
 
-export const MoveCursorForward = (
+export const MoveCursorForwardToEndOfNode = (
   doc: TextDocument,
   sel: Selection,
   tree: Parser.Tree,
@@ -273,6 +273,39 @@ export const MoveCursorForward = (
   }
 }
 
+export const MoveCursorForwardToBeginningOfNextNode = (
+  doc: TextDocument,
+  sel: Selection,
+  tree: Parser.Tree,
+): CommandRet => {
+  sel = vsUtils.emptySelection(sel.end)
+  sel = vsUtils.moveSelectionToFirstNonWhitespace(doc, sel)
+
+  const deepestNode = tsUtils.SmallestNodeEnclosingSel(tree.rootNode, sel)
+  if (!deepestNode) {
+    return
+  }
+  let node: SyntaxNode | null = deepestNode
+
+  while (node) {
+    if (
+      node.nextNamedSibling &&
+      !sel.start.isEqual(tsUtils.SyntaxNode2Selection(node.nextNamedSibling).start)
+    ) {
+      return {
+        selection: vsUtils.emptySelection(
+          tsUtils.SyntaxNode2Selection(node.nextNamedSibling).start,
+        ),
+      }
+    }
+    node = node.parent
+  }
+
+  return {
+    selection: vsUtils.emptySelection(tsUtils.SyntaxNode2Selection(deepestNode).end),
+  }
+}
+
 export const MoveCursorBackward = (
   doc: TextDocument,
   sel: Selection,
@@ -285,7 +318,7 @@ export const MoveCursorBackward = (
 
   let node = tsUtils.SmallestNodeEnclosingSel(tree.rootNode, sel)
 
-  while (node && node !== node.tree.rootNode) {
+  while (node) {
     if (!sel.start.isEqual(tsUtils.SyntaxNode2Selection(node).start)) {
       return {
         selection: vsUtils.emptySelection(tsUtils.SyntaxNode2Selection(node).start),
@@ -296,10 +329,9 @@ export const MoveCursorBackward = (
           tsUtils.SyntaxNode2Selection(node.previousNamedSibling).start,
         ),
       }
-    } else if (node.parent) {
-      node = node.parent
-    } else {
-      return
     }
+    node = node.parent || undefined
   }
+
+  return { selection: sel }
 }

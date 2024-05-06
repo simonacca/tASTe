@@ -135,7 +135,7 @@ const cases: TUtils.SelectionChangeTest[] = [
   },
   { cmd: Cmds.ExpandSelection, languageId: "typescript", text: `🫸🏻{"val": 1}🫷🏻👉🏻👈🏻` },
   {
-    cmd: Cmds.MoveCursorForward,
+    cmd: Cmds.MoveCursorForwardToEndOfNode,
     languageId: "json",
     text: `
     {
@@ -149,7 +149,7 @@ const cases: TUtils.SelectionChangeTest[] = [
     `,
   },
   {
-    cmd: Cmds.MoveCursorForward,
+    cmd: Cmds.MoveCursorForwardToEndOfNode,
     languageId: "json",
     text: `
     {
@@ -163,7 +163,49 @@ const cases: TUtils.SelectionChangeTest[] = [
     `,
   },
   {
-    cmd: Cmds.MoveCursorForward,
+    cmd: Cmds.MoveCursorForwardToEndOfNode,
+    languageId: "json",
+    text: `
+    {
+      "devDependencies": {
+        "shadow-cljs": "2.26.7"
+      },
+      "dependencies": 👉🏻👈🏻{
+        "snabbdom": "3.5.1"
+      }🫸🏻🫷🏻
+    }
+    `,
+  },
+  {
+    cmd: Cmds.MoveCursorForwardToBeginningOfNextNode,
+    languageId: "json",
+    text: `
+    {
+      "devDependencies": {
+        "shadow-cljs": "2.26.7"
+      }👉🏻👈🏻,
+      🫸🏻🫷🏻"dependencies": {
+        "snabbdom": "3.5.1"
+      }
+    }
+    `,
+  },
+  {
+    cmd: Cmds.MoveCursorForwardToBeginningOfNextNode,
+    languageId: "json",
+    text: `
+    {
+      "devDependencies": {
+        "shadow-cljs": "2.26.7"
+      },
+      👉🏻👈🏻"dependencies": 🫸🏻🫷🏻{
+        "snabbdom": "3.5.1"
+      }
+    }
+    `,
+  },
+  {
+    cmd: Cmds.MoveCursorForwardToBeginningOfNextNode,
     languageId: "json",
     text: `
     {
