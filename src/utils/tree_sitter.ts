@@ -38,7 +38,7 @@ export const setParserLanguage = (parser: TSParser, languageId: LanguageID): boo
 const treeSitterInitSingleton = TSParser.init()
 
 /**
- * Finds the smallest SyntaxNode that fully encloses `selection`
+ * Finds the smallest **named** SyntaxNode that fully encloses `selection`
  */
 export const SmallestNodeEnclosingSel = (
   container: SyntaxNode,

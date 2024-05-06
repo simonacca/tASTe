@@ -80,8 +80,13 @@ export const activate = async (context: vscode.ExtensionContext) => {
     "taste.ShrinkSelectionAtStart": SelCmds.ShrinkSelectionAtStart,
     "taste.SelectForward": SelCmds.SelectForward,
     "taste.SelectBackward": SelCmds.SelectBackward,
-    "taste.MoveCursorBackward": MovementCmds.MoveCursorBackward,
-    "taste.MoveCursorForward": MovementCmds.MoveCursorForward,
+    "taste.MoveCursorForwardToEndOfNode": MovementCmds.MoveCursorForwardToEndOfNode,
+    "taste.MoveCursorForwardToBeginningOfNextNode":
+      MovementCmds.MoveCursorForwardToBeginningOfNextNode,
+    // In the past we didn't differentiate between the two "move cursor forward" behaviors.
+    // This cmd is kept for compatibility purposes (that is: not to break existing configs).
+    // It is intentionally not advertised in package.json anymore.
+    "taste.MoveCursorForward": MovementCmds.MoveCursorForwardToBeginningOfNextNode,
     "taste.Raise": EditCmds.Raise,
     "taste.SwapForward": EditCmds.SwapForward,
     "taste.SwapBackward": EditCmds.SwapBackward,
