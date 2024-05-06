@@ -3,9 +3,9 @@ import * as ParserLib from "./utils/tree_sitter"
 import TSParser from "web-tree-sitter"
 import { detectLanguage } from "./utils/language_detection"
 import { Command } from "./commands/common"
-import EditCmds from "./commands/editing"
-import SelCmds from "./commands/selection"
-import MovementCmds from "./commands/movement"
+import EditCmds from "./commands/editing/index"
+import SelCmds from "./commands/selection/index"
+import MovementCmds from "./commands/movement/index"
 
 const initCommands = (
   context: vscode.ExtensionContext,
