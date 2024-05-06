@@ -23,14 +23,13 @@ const cases: TUtils.SelectionChangeTest[] = [
       ]`,
   },
   {
-    // ensure moveSelectionToFirstNonWhitespace works across newlines
     cmd: Cmds.SelectForward,
     languageId: "typescript",
     text: `
     [
-        {a: 1},  👉🏻👈🏻  
+        {a: 1},  👉🏻👈🏻🫸🏻  
 
-        🫸🏻{b: 2}🫷🏻,
+        {b: 2}🫷🏻,
         {c: 3}
       ]`,
   },

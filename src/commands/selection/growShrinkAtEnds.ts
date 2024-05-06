@@ -3,6 +3,7 @@ import Parser, { SyntaxNode } from "web-tree-sitter"
 import * as vsUtils from "../../utils/vscode"
 import * as tsUtils from "../../utils/tree_sitter"
 import { CommandRet } from "../common"
+import { MoveCursorBackward, MoveCursorForwardToEndOfNode } from "../movement/forwardBackward"
 
 const growFromLeft = (sel: Selection, node: SyntaxNode) => {
   if (!node.previousNamedSibling) {
@@ -39,23 +40,12 @@ const GrowShrink = (
   direction: "left" | "right",
 ): CommandRet => {
   if (sel.isEmpty) {
-    const node = tsUtils.SmallestNodeEnclosingSel(
-      tree.rootNode,
-      vsUtils.selectCharAfter(vsUtils.moveSelectionToFirstNonWhitespace(doc, sel).start),
-    )
-    if (!node) {
-      return
-    }
-
-    if (direction === "right" && node) {
-      return { selection: tsUtils.SyntaxNode2Selection(node) }
-    } else if (direction === "left" && node.previousNamedSibling) {
-      return {
-        selection: new Selection(
-          sel.end,
-          tsUtils.SyntaxNode2Selection(node.previousNamedSibling).start,
-        ),
-      }
+    if (direction === "right") {
+      const r = MoveCursorForwardToEndOfNode(doc, sel, tree)
+      return { selection: r?.selection && new Selection(sel.start, r.selection.end) }
+    } else if (direction === "left") {
+      const r = MoveCursorBackward(doc, sel, tree)
+      return { selection: r?.selection && new Selection(sel.start, r.selection.start) }
     }
   }
 
