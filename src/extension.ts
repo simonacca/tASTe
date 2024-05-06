@@ -80,6 +80,7 @@ export const activate = async (context: vscode.ExtensionContext) => {
     "taste.ShrinkSelectionAtStart": SelCmds.ShrinkSelectionAtStart,
     "taste.SelectForward": SelCmds.SelectForward,
     "taste.SelectBackward": SelCmds.SelectBackward,
+    "taste.MoveCursorBackward": MovementCmds.MoveCursorBackward,
     "taste.MoveCursorForwardToEndOfNode": MovementCmds.MoveCursorForwardToEndOfNode,
     "taste.MoveCursorForwardToBeginningOfNextNode":
       MovementCmds.MoveCursorForwardToBeginningOfNextNode,
