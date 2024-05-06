@@ -1,10 +1,11 @@
 import * as vscode from "vscode"
 import * as ParserLib from "./utils/tree_sitter"
-import * as SelCmds from "./commands/selection"
-import * as EditCmds from "./commands/edit"
 import TSParser from "web-tree-sitter"
 import { detectLanguage } from "./utils/language_detection"
 import { Command } from "./commands/common"
+import EditCmds from "./commands/editing"
+import SelCmds from "./commands/selection"
+import MovementCmds from "./commands/movement"
 
 const initCommands = (
   context: vscode.ExtensionContext,
@@ -79,8 +80,8 @@ export const activate = async (context: vscode.ExtensionContext) => {
     "taste.ShrinkSelectionAtStart": SelCmds.ShrinkSelectionAtStart,
     "taste.SelectForward": SelCmds.SelectForward,
     "taste.SelectBackward": SelCmds.SelectBackward,
-    "taste.MoveCursorBackward": SelCmds.MoveCursorBackward,
-    "taste.MoveCursorForward": SelCmds.MoveCursorForward,
+    "taste.MoveCursorBackward": MovementCmds.MoveCursorBackward,
+    "taste.MoveCursorForward": MovementCmds.MoveCursorForward,
     "taste.Raise": EditCmds.Raise,
     "taste.SwapForward": EditCmds.SwapForward,
     "taste.SwapBackward": EditCmds.SwapBackward,

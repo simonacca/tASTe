@@ -1,4 +1,4 @@
-import * as Cmds from "./selection"
+import Cmds from "./selection"
 import * as TUtils from "../utils/test"
 
 // These tests are solely meant to validate
