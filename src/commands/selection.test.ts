@@ -142,7 +142,7 @@ const cases: TUtils.SelectionChangeTest[] = [
       "devDependencies": {
         "shadow-cljs": "2.26.7"
       },
-      👉🏻👈🏻"dependencies":🫸🏻🫷🏻 {
+      👉🏻👈🏻"dependencies"🫸🏻🫷🏻: {
         "snabbdom": "3.5.1"
       }
     }
@@ -163,7 +163,7 @@ const cases: TUtils.SelectionChangeTest[] = [
     `,
   },
   {
-    cmd: Cmds.MoveCursorForward,
+    cmd: Cmds.MoveCursorBackward,
     languageId: "json",
     text: `
     {
@@ -177,11 +177,11 @@ const cases: TUtils.SelectionChangeTest[] = [
     `,
   },
   {
-    cmd: Cmds.MoveCursorForward,
+    cmd: Cmds.MoveCursorBackward,
     languageId: "json",
     text: `
     {
-      "devDependencies": 🫸🏻🫷🏻{
+      🫸🏻🫷🏻"devDependencies": {
         "shadow-cljs": "2.26.7"
       },
       👉🏻👈🏻"dependencies": {

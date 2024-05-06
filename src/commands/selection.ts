@@ -251,18 +251,26 @@ export const MoveCursorForward = (
   sel: Selection,
   tree: Parser.Tree,
 ): CommandRet => {
+  sel = vsUtils.emptySelection(sel.end)
   sel = vsUtils.moveSelectionToFirstNonWhitespace(doc, sel)
-  const node = tsUtils.SmallestNodeEnclosingSel(tree.rootNode, sel)
 
-  if (!node) {
-    return
-  }
+  let node = tsUtils.SmallestNodeEnclosingSel(tree.rootNode, sel)
 
-  const sibling = node.nextNamedSibling
-  if (!sibling) {
-    return
+  while (node && node !== node.tree.rootNode) {
+    if (!sel.end.isEqual(tsUtils.SyntaxNode2Selection(node).end)) {
+      return {
+        selection: vsUtils.emptySelection(tsUtils.SyntaxNode2Selection(node).end),
+      }
+    } else if (node.nextNamedSibling) {
+      return {
+        selection: vsUtils.emptySelection(tsUtils.SyntaxNode2Selection(node.nextNamedSibling).end),
+      }
+    } else if (node.parent) {
+      node = node.parent
+    } else {
+      return
+    }
   }
-  return { selection: vsUtils.emptySelection(tsUtils.SyntaxNode2Selection(sibling).start) }
 }
 
 export const MoveCursorBackward = (
@@ -270,15 +278,28 @@ export const MoveCursorBackward = (
   sel: Selection,
   tree: Parser.Tree,
 ): CommandRet => {
-  const node = tsUtils.SmallestNodeEnclosingSel(tree.rootNode, sel)
+  sel = vsUtils.emptySelection(sel.start)
 
-  if (!node) {
-    return
-  }
+  // TODO: implement this in the opposite direction
+  // sel = vsUtils.moveSelectionToFirstNonWhitespace(doc, sel)
 
-  const sibling = node.previousNamedSibling
-  if (!sibling) {
-    return
+  let node = tsUtils.SmallestNodeEnclosingSel(tree.rootNode, sel)
+
+  while (node && node !== node.tree.rootNode) {
+    if (!sel.start.isEqual(tsUtils.SyntaxNode2Selection(node).start)) {
+      return {
+        selection: vsUtils.emptySelection(tsUtils.SyntaxNode2Selection(node).start),
+      }
+    } else if (node.previousNamedSibling) {
+      return {
+        selection: vsUtils.emptySelection(
+          tsUtils.SyntaxNode2Selection(node.previousNamedSibling).start,
+        ),
+      }
+    } else if (node.parent) {
+      node = node.parent
+    } else {
+      return
+    }
   }
-  return { selection: vsUtils.emptySelection(tsUtils.SyntaxNode2Selection(sibling).start) }
 }
