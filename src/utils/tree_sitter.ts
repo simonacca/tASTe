@@ -128,3 +128,14 @@ export const SyntaxNode2Selection = (node: SyntaxNode) => {
     new Position(node.endPosition.row, node.endPosition.column),
   )
 }
+
+export const debugPrintTree = (n: SyntaxNode, depth: number = 0) => {
+  console.log(
+    " ".repeat(depth),
+    `[${n.startIndex} ${n.endIndex}]`,
+    n.isNamed ? "NAMED" : "",
+    "->",
+    Utils.escapeNewlines(n.text),
+  )
+  n.children.forEach((c) => debugPrintTree(c, depth + 1))
+}
