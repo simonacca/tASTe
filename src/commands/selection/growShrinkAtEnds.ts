@@ -40,6 +40,8 @@ const GrowShrink = (
   direction: "left" | "right",
 ): CommandRet => {
   if (sel.isEmpty) {
+    // here we use code from the movement/forwardBacward command not just for convenience
+    // but to ensure that the behavior is consistent between movement and selection
     if (direction === "right") {
       const r = MoveCursorForwardToEndOfNode(doc, sel, tree)
       return { selection: r?.selection && new Selection(sel.start, r.selection.end) }
