@@ -2,6 +2,13 @@
 
 All notable changes to the "taste" extension will be documented in this file.
 
+## 1.0.21
+
+- fix bug occurring when cursor is at EOF
+- implement `taste.MoveCursorForwardToEndOfNode`
+- implement `taste.MoveCursorForwardToBeginningOfNextNode`
+- ensure consistent behavior between `MoveCursor*` and `GrowShrink`
+
 ## 1.0.18
 
 - implement Slurp/Barf
